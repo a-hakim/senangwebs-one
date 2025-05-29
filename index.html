@@ -96,8 +96,8 @@
             <!-- Right Pane (Preview + Console) -->
             <div id="right-pane" class="h-full flex flex-col flex-grow relative">
                 <!-- Preview Pane -->
-                <div id="preview-pane-container" class="flex flex-col flex-grow rounded-md overflow-hidden bg-neutral-800 border border-white/10">
-                    <div class="flex-grow bg-white">
+                <div id="preview-pane-container" class="flex flex-col flex-grow justify-center bg-darker">
+                    <div id="preview-devices-container" class="bg-white mx-auto rounded-md overflow-hidden" style="width: 100%; height: 100%;">
                         <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
                     </div>
                 </div>
@@ -121,13 +121,13 @@
         </section>
         <section id="panelControl" class="flex justify-between h-12 bg-dark text-neutral-400 text-sm">
             <div class="flex">
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device computer')">
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="resizePreviewDevice('100%', '100%')">
                     <i class="fas fa-desktop"></i>
                 </button>
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device tablet')">
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="resizePreviewDevice('1070px', '100%')">
                     <i class="fas fa-tablet-alt"></i>
                 </button>
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device phone')">
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="resizePreviewDevice('390px', '844px')">
                     <i class="fas fa-mobile-alt"></i>
                 </button>
             </div>
@@ -175,6 +175,8 @@
             const toggleConsoleBtn = document.getElementById('toggle-console-btn');
             const toggleCodeEditorBtn = document.getElementById('toggle-code-editor-btn');
 
+            const previewDevicesContainer = document.getElementById('preview-devices-container'); // Get the preview-devices-container
+
             const activeClasses = ['bg-black', 'bg-opacity-20', 'text-primary'];
 
             function updateButtonActiveState(button, isActive) {
@@ -185,17 +187,21 @@
                 }
             }
 
-            // Initial state check
-            // Assuming editorPane and consoleContainer are visible by default as per current setup
-            updateButtonActiveState(toggleCodeEditorBtn, editorPane.style.display !== 'none');
-            updateButtonActiveState(toggleConsoleBtn, consoleContainer.style.display !== 'none');
-
+            // Initial state setup
             editorPane.style.width = '50%';
 
-            const rightPaneHeight = rightPane.offsetHeight;
-            const resizeHandleConsoleHeight = resizeHandleConsole.offsetHeight;
-            previewPaneContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.66}px`;
-            consoleContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.34}px`;
+            // Hide console elements by default and update button state
+            const consoleElements = document.getElementsByClassName('console-ui');
+            Array.from(consoleElements).forEach(element => {
+                element.style.display = 'none';
+            });
+            updateButtonActiveState(toggleConsoleBtn, false); // Console is initially hidden
+
+            // Preview pane takes full height of the right pane initially
+            previewPaneContainer.style.height = `${rightPane.offsetHeight}px`;
+
+            // Ensure editor is visible and its button state is correct
+            updateButtonActiveState(toggleCodeEditorBtn, editorPane.style.display !== 'none');
 
             const initialCode = `<!DOCTYPE html>
 <html lang="en">
@@ -337,17 +343,43 @@
             }
             window.updatePreview = updatePreview;
 
+            function resizePreviewDevice(width, height) {
+                if (previewDevicesContainer) {
+                    previewDevicesContainer.style.maxWidth = width;
+                    previewDevicesContainer.style.height = height;
+                    // Optional: Add/remove classes to center the iframe if it's not full width
+                    if (width !== '100%') {
+                        previewDevicesContainer.style.margin = '0 auto';
+                    } else {
+                        previewDevicesContainer.style.margin = ''; // Reset margin
+                    }
+                }
+            }
+            window.resizePreviewDevice = resizePreviewDevice;
+
             function toggleConsole() {
                 const consoleElements = document.getElementsByClassName('console-ui');
-                let isConsoleVisible = false;
+                // Check current visibility of the consoleContainer to determine the new state
+                const consoleIsCurrentlyVisible = consoleContainer.style.display !== 'none';
+
                 Array.from(consoleElements).forEach(element => {
-                    const newDisplay = element.style.display === 'none' ? 'flex' : 'none';
-                    element.style.display = newDisplay;
-                    if (element === consoleContainer && newDisplay !== 'none') {
-                        isConsoleVisible = true;
-                    }
+                    element.style.display = consoleIsCurrentlyVisible ? 'none' : 'flex';
                 });
-                updateButtonActiveState(toggleConsoleBtn, isConsoleVisible);
+
+                const isConsoleVisibleAfterToggle = !consoleIsCurrentlyVisible;
+                updateButtonActiveState(toggleConsoleBtn, isConsoleVisibleAfterToggle);
+
+                // Adjust heights
+                const rightPaneHeight = rightPane.offsetHeight;
+                if (isConsoleVisibleAfterToggle) {
+                    // Console is now visible, set heights for preview and console
+                    const resizeHandleConsoleHeight = resizeHandleConsole.offsetHeight;
+                    previewPaneContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.66}px`;
+                    consoleContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.34}px`;
+                } else {
+                    // Console is now hidden, preview takes full height
+                    previewPaneContainer.style.height = `${rightPaneHeight}px`;
+                }
             }
             window.toggleConsole = toggleConsole;
 
