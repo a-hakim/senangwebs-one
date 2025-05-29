@@ -6,9 +6,28 @@
     <title>Vanilla JS Code Editor with Resizable Panes</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00FF99',
+                        secondary: '#007370',
+                        dark: '#18181B',
+                        darker: '#09090B',
+                    }
+                }
+            }
+        }
+    </script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/hopscotch.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/xml/xml.min.js"></script>
@@ -26,17 +45,31 @@
         }
         body {
             overflow: hidden;
+            font-family: 'Outfit', sans-serif;
         }
+        .CodeMirror-scrollbar-filler{
+            opacity: 0!important;
+        }
+        .CodeMirror-vscrollbar::-webkit-scrollbar,
         #console-output::-webkit-scrollbar {
             width: 8px;
         }
+        .CodeMirror-hscrollbar::-webkit-scrollbar{
+            height: 8px;
+        }
+        .CodeMirror-vscrollbar::-webkit-scrollbar-track,
+        .CodeMirror-hscrollbar::-webkit-scrollbar-track,
         #console-output::-webkit-scrollbar-track {
             background: #2d3748; /* gray-800 */
         }
+        .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
+        .CodeMirror-hscrollbar::-webkit-scrollbar-thumb,
         #console-output::-webkit-scrollbar-thumb {
             background: #4a5568; /* gray-600 */
             border-radius: 4px;
         }
+        .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
+        .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover,
         #console-output::-webkit-scrollbar-thumb:hover {
             background: #718096; /* gray-500 */
         }
@@ -46,48 +79,63 @@
         }
     </style>
 </head>
-<body class="bg-gray-800 text-white">
-
-    <div class="flex h-screen">
-        <!-- Editor Pane -->
-        <div id="editor-pane" class="h-full flex flex-col" style="flex-shrink: 0;"> <!-- Removed w-1/2, border-r -->
-            <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex items-center">
-                HTML / CSS / JavaScript
-            </div>
-            <div class="flex-grow h-[calc(100%-2.5rem)]">
-                <textarea id="code-editor"></textarea>
-            </div>
-        </div>
-
-        <!-- Resize Handle -->
-        <div id="resize-handle" class="w-2 h-full bg-gray-700 hover:bg-gray-600 cursor-col-resize flex-shrink-0"></div>
-
-        <!-- Right Pane (Preview + Console) -->
-        <div id="right-pane" class="h-full flex flex-col flex-grow relative"> <!-- Removed w-1/2, added flex-grow -->
-            <!-- Preview Pane -->
-            <div class="h-2/3 flex flex-col">
-                <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex items-center">
-                    Preview
-                </div>
-                <div class="flex-grow bg-white h-[calc(100%-2.5rem)]">
-                    <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
+<body class="bg-darker text-white">
+    <main class="flex flex-col h-screen">
+        <section id="panelEditor" class="flex flex-grow p-2 h-[calc(100%-3rem)]">
+            <!-- Editor Pane -->
+            <div id="editor-pane" class="h-full flex flex-col rounded-xl overflow-hidden" style="flex-shrink: 0;"> <!-- Removed w-1/2, border-r -->
+                <div class="flex-grow h-[calc(100%-3rem)]">
+                    <textarea id="code-editor"></textarea>
                 </div>
             </div>
-
-            <!-- Console Pane -->
-            <div id="console-container" class="h-1/3 bg-gray-800 border-t border-gray-700 flex flex-col">
-                <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex justify-between items-center">
-                    <span>Console</span>
-                    <button id="clear-console-btn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
+    
+            <!-- Resize Handle -->
+            <div id="resize-handle" class="w-2 h-full bg-transparent cursor-col-resize flex-shrink-0"></div>
+    
+            <!-- Right Pane (Preview + Console) -->
+            <div id="right-pane" class="h-full flex flex-col flex-grow relative rounded-xl overflow-hidden"> <!-- Removed w-1/2, added flex-grow -->
+                <!-- Preview Pane -->
+                <div class="h-2/3 flex flex-col">
+                    <div class="flex-grow bg-white h-[calc(100%-2.5rem)]">
+                        <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
+                    </div>
                 </div>
-                <div id="console-output" class="flex-grow p-2 overflow-y-auto text-xs font-mono">
-                    <!-- Console messages will appear here -->
+    
+                <!-- Console Pane -->
+                <div id="console-container" class="h-1/3 bg-gray-800 border-t border-gray-700 flex flex-col">
+                    <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex justify-between items-center">
+                        <span>Console</span>
+                        <button id="clear-console-btn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
+                    </div>
+                    <div id="console-output" class="flex-grow p-2 overflow-y-auto text-xs font-mono">
+                        <!-- Console messages will appear here -->
+                    </div>
                 </div>
+    
+                <div id="preview-frame-cover-resizeable" class="absolute w-full h-full bg-black opacity-0 z-50 hidden"></div>
             </div>
-
-            <div id="preview-frame-cover-resizeable" class="absolute w-full h-full bg-black opacity-0 z-50 hidden"></div>
-        </div>
-    </div>
+        </section>
+        <section id="panelControl" class="flex justify-between h-12 bg-dark">
+            <div class="flex">
+                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('layout')">
+                    <i class="fas fa-columns"></i>
+                </button>
+            </div>
+            <div class="flex">
+                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('save')">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('open')">
+                    <i class="fas fa-folder-open"></i>
+                </button>
+            </div>
+            <div class="flex">
+                <button class="w-12 h-12 flex items-center justify-center" style="font-size: 1rem;" onclick="alert('menu')">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </section>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
