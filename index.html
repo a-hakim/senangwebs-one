@@ -23,7 +23,7 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/hopscotch.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,8 +84,8 @@
     <main class="flex flex-col h-screen">
         <section id="panelEditor" class="flex flex-grow p-2 h-[calc(100%-3rem)]">
             <!-- Editor Pane -->
-            <div id="editor-pane" class="h-full flex flex-col rounded-xl overflow-hidden" style="flex-shrink: 0;"> <!-- Removed w-1/2, border-r -->
-                <div class="flex-grow h-[calc(100%-3rem)]">
+            <div id="editor-pane" class="h-full flex flex-col rounded-md overflow-hidden bg-neutral-800 border border-white/10" style="flex-shrink: 0;">
+                <div class="flex-grow h-[calc(100%-4rem)]">
                     <textarea id="code-editor"></textarea>
                 </div>
             </div>
@@ -94,10 +94,10 @@
             <div id="resize-handle" class="w-2 h-full bg-transparent cursor-col-resize flex-shrink-0"></div>
     
             <!-- Right Pane (Preview + Console) -->
-            <div id="right-pane" class="h-full flex flex-col flex-grow relative"> <!-- Removed w-1/2, added flex-grow -->
+            <div id="right-pane" class="h-full flex flex-col flex-grow relative">
                 <!-- Preview Pane -->
-                <div id="preview-pane-container" class="flex flex-col rounded-xl overflow-hidden"> <!-- MODIFIED: Added id, Removed h-2/3 -->
-                    <div class="flex-grow bg-white h-[calc(100%-2.5rem)]">
+                <div id="preview-pane-container" class="flex flex-col rounded-md overflow-hidden bg-neutral-800 border border-white/10">
+                    <div class="flex-grow bg-white">
                         <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
                     </div>
                 </div>
@@ -106,10 +106,10 @@
                 <div id="resize-handle-console" class="h-2 w-full bg-transparent cursor-row-resize flex-shrink-0"></div>
     
                 <!-- Console Pane -->
-                <div id="console-container" class="bg-gray-800 border-t border-gray-700 flex flex-col rounded-xl overflow-hidden">
-                    <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex justify-between items-center">
-                        <span>Console</span>
-                        <button id="clear-console-btn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
+                <div id="console-container" class="bg-dark border border-white/10 flex flex-col rounded-md overflow-hidden">
+                    <div class="bg-white/10 pl-3 p-2 text-sm font-semibold h-10 flex justify-between items-center">
+                        <span class="font-mono">Console</span>
+                        <button id="clear-console-btn" class="text-xs bg-neutral-700 hover:bg-neutral-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
                     </div>
                     <div id="console-output" class="flex-grow p-2 overflow-y-auto text-xs font-mono">
                         <!-- Console messages will appear here -->
@@ -119,22 +119,37 @@
                 <div id="preview-frame-cover-resizeable" class="absolute w-full h-full bg-black opacity-0 z-50 hidden"></div>
             </div>
         </section>
-        <section id="panelControl" class="flex justify-between h-12 bg-dark">
+        <section id="panelControl" class="flex justify-between h-12 bg-dark text-neutral-400">
             <div class="flex">
-                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('layout')">
-                    <i class="fas fa-columns"></i>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device computer')">
+                    <i class="fas fa-desktop"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device tablet')">
+                    <i class="fas fa-tablet-alt"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('preview frame width device phone')">
+                    <i class="fas fa-mobile-alt"></i>
                 </button>
             </div>
             <div class="flex">
-                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('save')">
-                    <i class="fas fa-save"></i>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('refresh preview frame')">
+                    <i class="fas fa-share-alt"></i>
                 </button>
-                <button class="w-12 h-12 flex items-center justify-center" onclick="alert('open')">
-                    <i class="fas fa-folder-open"></i>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('refresh preview frame')">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('show/hide preview console')">
+                    <i class="fas fa-terminal"></i>
                 </button>
             </div>
             <div class="flex">
-                <button class="w-12 h-12 flex items-center justify-center" style="font-size: 1rem;" onclick="alert('menu')">
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open preview in new tab')">
+                    <i class="fas fa-bolt"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('show/hide code editor')">
+                    <i class="fas fa-code"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" style="font-size: 1rem;" onclick="alert('menu')">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
@@ -316,8 +331,8 @@
                 const data = event.data;
                 if (data.type === 'iframe-console') {
                     const messageLine = document.createElement('div');
-                    messageLine.classList.add('p-1', 'border-b', 'border-gray-700', 'flex', 'items-start');
-                    let methodColor = 'text-gray-300', methodIcon = '➡️';
+                    messageLine.classList.add('p-1', 'border-b', 'border-neutral-700', 'flex', 'items-start');
+                    let methodColor = 'text-neutral-300', methodIcon = '➡️';
                     switch (data.method) {
                         case 'error': methodColor = 'text-red-400'; methodIcon = '❌'; break;
                         case 'warn': methodColor = 'text-yellow-400'; methodIcon = '⚠️'; break;
@@ -326,7 +341,7 @@
                         case 'clear':
                             consoleOutput.innerHTML = '';
                             const clearedMsg = document.createElement('div');
-                            clearedMsg.className = 'p-1 text-gray-500 italic';
+                            clearedMsg.className = 'p-1 text-neutral-500 italic';
                             clearedMsg.textContent = 'Console cleared by iframe.';
                             consoleOutput.appendChild(clearedMsg);
                             consoleOutput.scrollTop = consoleOutput.scrollHeight;
@@ -355,7 +370,7 @@
                 } else if (data.type === 'iframe-ready') {
                     const readyMsg = document.createElement('div');
                     readyMsg.className = 'p-1 text-green-400 italic';
-                    readyMsg.textContent = 'iframe console connected.';
+                    readyMsg.textContent = 'console connected.';
                     consoleOutput.appendChild(readyMsg);
                     consoleOutput.scrollTop = consoleOutput.scrollHeight;
                 }
@@ -364,7 +379,7 @@
             clearConsoleBtn.addEventListener('click', () => {
                 consoleOutput.innerHTML = '';
                 const clearedMsg = document.createElement('div');
-                clearedMsg.className = 'p-1 text-gray-500 italic';
+                clearedMsg.className = 'p-1 text-neutral-500 italic';
                 clearedMsg.textContent = 'Console cleared by editor.';
                 consoleOutput.appendChild(clearedMsg);
             });
