@@ -54,7 +54,8 @@
         #console-output::-webkit-scrollbar {
             width: 8px;
         }
-        .CodeMirror-hscrollbar::-webkit-scrollbar{
+        .CodeMirror-hscrollbar::-webkit-scrollbar,
+        #console-output::-webkit-scrollbar {
             height: 8px;
         }
         .CodeMirror-vscrollbar::-webkit-scrollbar-track,
@@ -93,16 +94,19 @@
             <div id="resize-handle" class="w-2 h-full bg-transparent cursor-col-resize flex-shrink-0"></div>
     
             <!-- Right Pane (Preview + Console) -->
-            <div id="right-pane" class="h-full flex flex-col flex-grow relative rounded-xl overflow-hidden"> <!-- Removed w-1/2, added flex-grow -->
+            <div id="right-pane" class="h-full flex flex-col flex-grow relative"> <!-- Removed w-1/2, added flex-grow -->
                 <!-- Preview Pane -->
-                <div class="h-2/3 flex flex-col">
+                <div id="preview-pane-container" class="flex flex-col rounded-xl overflow-hidden"> <!-- MODIFIED: Added id, Removed h-2/3 -->
                     <div class="flex-grow bg-white h-[calc(100%-2.5rem)]">
                         <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
                     </div>
                 </div>
+
+                <!-- Resize Handle Console -->
+                <div id="resize-handle-console" class="h-2 w-full bg-transparent cursor-row-resize flex-shrink-0"></div>
     
                 <!-- Console Pane -->
-                <div id="console-container" class="h-1/3 bg-gray-800 border-t border-gray-700 flex flex-col">
+                <div id="console-container" class="bg-gray-800 border-t border-gray-700 flex flex-col rounded-xl overflow-hidden">
                     <div class="bg-gray-900 p-2 text-sm font-semibold border-b border-gray-700 h-10 flex justify-between items-center">
                         <span>Console</span>
                         <button id="clear-console-btn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
@@ -147,10 +151,18 @@
             const editorPane = document.getElementById('editor-pane');
             const rightPane = document.getElementById('right-pane');
             const resizeHandle = document.getElementById('resize-handle');
-            const previewFrameCover = document.getElementById('preview-frame-cover-resizeable'); // Added this line
+            const previewFrameCover = document.getElementById('preview-frame-cover-resizeable');
             
-            // Set initial width for the editor pane (left pane)
+            const resizeHandleConsole = document.getElementById('resize-handle-console');
+            const previewPaneContainer = document.getElementById('preview-pane-container');
+            const consoleContainer = document.getElementById('console-container');
+
             editorPane.style.width = '50%';
+
+            const rightPaneHeight = rightPane.offsetHeight;
+            const resizeHandleConsoleHeight = resizeHandleConsole.offsetHeight;
+            previewPaneContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.66}px`;
+            consoleContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.34}px`;
 
             const initialCode = `<!DOCTYPE html>
 <html lang="en">
@@ -159,18 +171,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Preview</title>
     <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 20px;
-            margin: 0;
-        }
+        body { font-family: sans-serif; background-color: #f0f0f0; color: #333; padding: 20px; margin: 0; }
         h1 { color: steelblue; }
-        button {
-            background-color: steelblue; color: white; padding: 10px 15px;
-            border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;
-        }
+        button { background-color: steelblue; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
         button:hover { background-color: darkslateblue; }
         .output { margin-top: 10px; padding: 10px; border: 1px solid #ccc; background-color: #fff; min-height: 20px; }
         .note { font-size: 0.9em; color: #555; margin-top:15px; }
@@ -179,24 +182,17 @@
 <body>
     <h1>Hello Resizable World!</h1>
     <p>Check the console below the preview for messages. Try resizing the panes!</p>
-    
     <button id="testBtn">Log Message</button>
     <button id="errorBtn">Log Error</button>
     <div id="outputDiv" class="output"></div>
-
-    <p class="note">
-        <code>localStorage</code>, <code>alert</code>, etc., are restricted by the sandbox.
-    </p>
-
+    <p class="note"><code>localStorage</code>, <code>alert</code>, etc., are restricted by the sandbox.</p>
     <script>
         console.log("Iframe script loaded!", { a: 1, b: "text" });
         console.warn("This is a warning from iframe.");
-
         const testBtn = document.getElementById('testBtn');
         const errorBtn = document.getElementById('errorBtn');
         const outputDiv = document.getElementById('outputDiv');
         let clickCount = 0;
-
         if (testBtn) {
             testBtn.addEventListener('click', () => {
                 clickCount++;
@@ -205,7 +201,6 @@
                 if(outputDiv) outputDiv.textContent = "Logged to console. Click: " + clickCount;
             });
         }
-
         if (errorBtn) {
             errorBtn.addEventListener('click', () => {
                 console.error("This is a test error!", new Error("Something went wrong"));
@@ -237,10 +232,9 @@
     methods.forEach(method => {
         originalConsole[method] = console[method] ? console[method].bind(console) : () => {};
     });
-
     function formatArgsForPostMessage(args) {
         return Array.from(args).map(arg => {
-            if (arg instanceof Error) return \`Error: \${arg.message}\${arg.stack ? \`\\nStack: \${arg.stack}\` : ''}\`;
+            if (arg instanceof Error) return \`Error: \${arg.message}\${arg.stack ? \`\nStack: \${arg.stack}\` : ''}\`;
             if (arg instanceof HTMLElement) {
                 let attrs = Array.from(arg.attributes).map(attr => \`\${attr.name}="\${attr.value}"\`).join(' ');
                 return \`<\${arg.tagName.toLowerCase()}\${attrs ? ' ' + attrs : ''}>...\`;
@@ -263,7 +257,6 @@
             return String(arg);
         });
     }
-
     methods.forEach(methodName => {
         if (methodName === 'clear') {
             console.clear = function() {
@@ -279,22 +272,19 @@
             };
         }
     });
-
     window.addEventListener('error', function(event) {
         const errorArgs = [\`Unhandled error: \${event.message}\`, \`at \${event.filename || 'unknown'}:\${event.lineno || 0}:\${event.colno || 0}\`];
         if (originalConsole.error) originalConsole.error(...errorArgs);
         try { window.parent.postMessage({ type: 'iframe-console', method: 'error', args: errorArgs }, '*'); }
         catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (onerror):', e); }
     });
-
     window.addEventListener('unhandledrejection', function(event) {
-        const reason = event.reason instanceof Error ? \`\${event.reason.message}\\n\${event.reason.stack}\` : String(event.reason);
+        const reason = event.reason instanceof Error ? \`\${event.reason.message}\n\${event.reason.stack}\` : String(event.reason);
         const rejectionArgs = ['Unhandled promise rejection:', reason];
         if (originalConsole.warn) originalConsole.warn(...rejectionArgs);
         try { window.parent.postMessage({ type: 'iframe-console', method: 'warn', args: rejectionArgs }, '*'); }
         catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (unhandledrejection):', e); }
     });
-    
     setTimeout(() => {
         try { 
             window.parent.postMessage({ type: 'iframe-ready' }, '*');
@@ -308,7 +298,6 @@
             function updatePreview() {
                 const userCode = cmEditor.getValue();
                 const fullCode = iframeConsoleBridgeScript + userCode;
-                
                 if (previewFrame) {
                     previewFrame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(fullCode);
                 }
@@ -325,7 +314,6 @@
             window.addEventListener('message', (event) => {
                 if (event.source !== previewFrame.contentWindow || !event.data) return;
                 const data = event.data;
-
                 if (data.type === 'iframe-console') {
                     const messageLine = document.createElement('div');
                     messageLine.classList.add('p-1', 'border-b', 'border-gray-700', 'flex', 'items-start');
@@ -381,73 +369,100 @@
                 consoleOutput.appendChild(clearedMsg);
             });
 
-            // Pane resizing logic
+            // Pane resizing logic (Horizontal: Editor vs RightPane)
             let isResizing = false;
             let initialMouseX = 0;
             let initialEditorWidth = 0;
+
+            // Hoisted function declarations for resize handlers
+            function handlePaneMouseMove(e) {
+                if (!isResizing) return;
+                const deltaX = e.clientX - initialMouseX;
+                let newEditorWidth = initialEditorWidth + deltaX; // This is correct for this function
+                const totalWidth = editorPane.parentElement.offsetWidth;
+                const handleWidth = resizeHandle.offsetWidth;
+                const minPixelWidthEditor = Math.max(100, totalWidth * 0.15);
+                const minPixelWidthRight = Math.max(100, totalWidth * 0.15);
+                const maxPixelWidthEditor = totalWidth - minPixelWidthRight - handleWidth;
+                newEditorWidth = Math.max(minPixelWidthEditor, Math.min(newEditorWidth, maxPixelWidthEditor));
+                editorPane.style.width = `${newEditorWidth}px`;
+            }
+
+            function handlePaneMouseUp() {
+                if (!isResizing) return;
+                isResizing = false;
+                if (previewFrameCover) {
+                    previewFrameCover.classList.add('hidden');
+                }
+                document.body.style.cursor = 'default';
+                document.body.style.userSelect = '';
+                document.removeEventListener('mousemove', handlePaneMouseMove);
+                document.removeEventListener('mouseup', handlePaneMouseUp);
+            }
 
             resizeHandle.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 isResizing = true;
                 initialMouseX = e.clientX;
                 initialEditorWidth = editorPane.offsetWidth;
-
-                if (previewFrameCover) { // Added this block
+                if (previewFrameCover) {
                     previewFrameCover.classList.remove('hidden');
                 }
-
                 document.body.style.cursor = 'col-resize';
                 document.body.style.userSelect = 'none';
-
                 document.addEventListener('mousemove', handlePaneMouseMove);
                 document.addEventListener('mouseup', handlePaneMouseUp);
             });
 
-            function handlePaneMouseMove(e) {
-                if (!isResizing) return;
+            // Console resizing logic (Vertical: Preview vs Console)
+            let isResizingConsole = false;
+            let initialMouseYConsole = 0;
+            let initialPreviewHeight = 0;
 
-                const deltaX = e.clientX - initialMouseX;
-                let newEditorWidth = initialEditorWidth + deltaX;
-
-                const totalWidth = editorPane.parentElement.offsetWidth;
-                const handleWidth = resizeHandle.offsetWidth;
-                // Min width for editor pane, e.g., 15% of total, or a fixed pixel value
-                const minPixelWidthEditor = Math.max(100, totalWidth * 0.15); 
-                // Min width for right pane (preview + console)
-                const minPixelWidthRight = Math.max(100, totalWidth * 0.15); 
-
-                // Calculate max width for editor pane based on min width for right pane
-                const maxPixelWidthEditor = totalWidth - minPixelWidthRight - handleWidth;
-                
-                newEditorWidth = Math.max(minPixelWidthEditor, Math.min(newEditorWidth, maxPixelWidthEditor));
-                
-                editorPane.style.width = `${newEditorWidth}px`;
-                // Right pane width will adjust due to flex-grow
+            // Hoisted function declarations for console resize handlers
+            function handleConsoleResizeMouseMove(e) {
+                if (!isResizingConsole) return;
+                const deltaY = e.clientY - initialMouseYConsole;
+                let newPreviewHeightLocal = initialPreviewHeight + deltaY; // CORRECTED: Use local var, not newEditorWidth
+                const totalHeight = rightPane.offsetHeight;
+                const handleHeight = resizeHandleConsole.offsetHeight;
+                const minPaneHeight = Math.max(50, totalHeight * 0.10);
+                const maxPreviewHeightPossible = totalHeight - minPaneHeight - handleHeight;
+                newPreviewHeightLocal = Math.max(minPaneHeight, Math.min(newPreviewHeightLocal, maxPreviewHeightPossible));
+                const newConsoleHeight = totalHeight - newPreviewHeightLocal - handleHeight;
+                previewPaneContainer.style.height = `${newPreviewHeightLocal}px`;
+                consoleContainer.style.height = `${newConsoleHeight}px`;
             }
 
-            function handlePaneMouseUp() {
-                if (!isResizing) return;
-                isResizing = false;
-
-                if (previewFrameCover) { // Added this block
+            function handleConsoleResizeMouseUp() {
+                if (!isResizingConsole) return;
+                isResizingConsole = false;
+                if (previewFrameCover) {
                     previewFrameCover.classList.add('hidden');
                 }
-
-                document.body.style.cursor = '';
+                document.body.style.cursor = 'default';
                 document.body.style.userSelect = '';
-
-                document.removeEventListener('mousemove', handlePaneMouseMove);
-                document.removeEventListener('mouseup', handlePaneMouseUp);
-
-                // Refresh CodeMirror editor after resizing is complete
-                if (cmEditor) {
-                    cmEditor.refresh();
-                }
+                document.removeEventListener('mousemove', handleConsoleResizeMouseMove);
+                document.removeEventListener('mouseup', handleConsoleResizeMouseUp);
             }
 
-            updatePreview(); // Initial load
+            resizeHandleConsole.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                isResizingConsole = true;
+                initialMouseYConsole = e.clientY;
+                initialPreviewHeight = previewPaneContainer.offsetHeight;
+                if (previewFrameCover) {
+                    previewFrameCover.classList.remove('hidden');
+                }
+                document.body.style.cursor = 'row-resize';
+                document.body.style.userSelect = 'none';
+                document.addEventListener('mousemove', handleConsoleResizeMouseMove);
+                document.addEventListener('mouseup', handleConsoleResizeMouseUp); // This should now be defined
+            });
+
+            // Initial update
+            debouncedUpdatePreview();
         });
     </script>
-
 </body>
 </html>
