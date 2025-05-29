@@ -138,7 +138,8 @@
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
                 </button>
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open preview in new tab')">
+                <!-- MODIFIED BUTTON HERE -->
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="openPreviewInNewTab()">
                     <i class="fas fa-bolt"></i>
                 </button>
             </div>
@@ -296,40 +297,56 @@
             return String(arg);
         });
     }
+    // Only attempt to postMessage if running in an iframe that is not the top window
+    const isNotInTopWindow = window.self !== window.top;
+
     methods.forEach(methodName => {
         if (methodName === 'clear') {
             console.clear = function() {
                 if (originalConsole.clear) originalConsole.clear();
-                try { window.parent.postMessage({ type: 'iframe-console', method: 'clear' }, '*'); }
-                catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (clear):', e); }
+                if (isNotInTopWindow) {
+                    try { window.parent.postMessage({ type: 'iframe-console', method: 'clear' }, '*'); }
+                    catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (clear):', e); }
+                }
             };
         } else {
             console[methodName] = function(...args) {
                 if (originalConsole[methodName]) originalConsole[methodName](...args);
-                try { window.parent.postMessage({ type: 'iframe-console', method: methodName, args: formatArgsForPostMessage(args) }, '*'); }
-                catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error ('+methodName+'):', e); }
+                if (isNotInTopWindow) {
+                    try { window.parent.postMessage({ type: 'iframe-console', method: methodName, args: formatArgsForPostMessage(args) }, '*'); }
+                    catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error ('+methodName+'):', e); }
+                }
             };
         }
     });
     window.addEventListener('error', function(event) {
         const errorArgs = [\`Unhandled error: \${event.message}\`, \`at \${event.filename || 'unknown'}:\${event.lineno || 0}:\${event.colno || 0}\`];
         if (originalConsole.error) originalConsole.error(...errorArgs);
-        try { window.parent.postMessage({ type: 'iframe-console', method: 'error', args: errorArgs }, '*'); }
-        catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (onerror):', e); }
+        if (isNotInTopWindow) {
+            try { window.parent.postMessage({ type: 'iframe-console', method: 'error', args: errorArgs }, '*'); }
+            catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (onerror):', e); }
+        }
     });
     window.addEventListener('unhandledrejection', function(event) {
         const reason = event.reason instanceof Error ? \`\${event.reason.message}\n\${event.reason.stack}\` : String(event.reason);
         const rejectionArgs = ['Unhandled promise rejection:', reason];
         if (originalConsole.warn) originalConsole.warn(...rejectionArgs);
-        try { window.parent.postMessage({ type: 'iframe-console', method: 'warn', args: rejectionArgs }, '*'); }
-        catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (unhandledrejection):', e); }
+        if (isNotInTopWindow) {
+            try { window.parent.postMessage({ type: 'iframe-console', method: 'warn', args: rejectionArgs }, '*'); }
+            catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (unhandledrejection):', e); }
+        }
     });
-    setTimeout(() => {
-        try { 
-            window.parent.postMessage({ type: 'iframe-ready' }, '*');
-            if (originalConsole.log) originalConsole.log("Console bridge initialized in iframe.");
-        } catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (ready):', e); }
-    }, 0);
+    // Only send iframe-ready if it's not the top window (i.e., it's in the editor's iframe)
+    if (isNotInTopWindow) {
+        setTimeout(() => {
+            try { 
+                window.parent.postMessage({ type: 'iframe-ready' }, '*');
+                if (originalConsole.log) originalConsole.log("Console bridge initialized in iframe.");
+            } catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (ready):', e); }
+        }, 0);
+    } else {
+        if (originalConsole.log) originalConsole.log("Preview loaded in new tab. Console bridge active for local logging.");
+    }
 })();
 <\/script>
 `;
@@ -342,6 +359,37 @@
                 }
             }
             window.updatePreview = updatePreview;
+
+            // NEW FUNCTION to open preview in a new tab
+            function openPreviewInNewTab() {
+                const userCode = cmEditor.getValue();
+                const fullCode = iframeConsoleBridgeScript + userCode;
+                
+                const blob = new Blob([fullCode], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                
+                const newTab = window.open(url, '_blank');
+                
+                // It's good practice to revoke the object URL when it's no longer needed.
+                // However, revoking too soon can prevent the new tab from loading.
+                // A common approach is to revoke after a delay.
+                // If the popup was blocked, newTab will be null.
+                if (newTab) {
+                    // Optionally, focus the new tab if it didn't open in foreground
+                    // newTab.focus(); 
+                    
+                    // Revoke the object URL after a short delay to allow the new tab to load.
+                    // You might also listen for the 'unload' event of the new tab, but that's more complex.
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                    }, 5000); // 5 seconds delay, adjust if needed
+                } else {
+                    // If window.open was blocked by a popup blocker
+                    URL.revokeObjectURL(url); // Revoke immediately
+                    alert('Popup blocked! Please allow popups for this site to open the preview in a new tab.');
+                }
+            }
+            window.openPreviewInNewTab = openPreviewInNewTab; // Expose to global scope for onclick
 
             function resizePreviewDevice(width, height) {
                 if (previewDevicesContainer) {
@@ -517,7 +565,7 @@
             function handleConsoleResizeMouseMove(e) {
                 if (!isResizingConsole) return;
                 const deltaY = e.clientY - initialMouseYConsole;
-                let newPreviewHeightLocal = initialPreviewHeight + deltaY; // CORRECTED: Use local var, not newEditorWidth
+                let newPreviewHeightLocal = initialPreviewHeight + deltaY; 
                 const totalHeight = rightPane.offsetHeight;
                 const handleHeight = resizeHandleConsole.offsetHeight;
                 const minPaneHeight = Math.max(50, totalHeight * 0.10);
@@ -551,7 +599,7 @@
                 document.body.style.cursor = 'row-resize';
                 document.body.style.userSelect = 'none';
                 document.addEventListener('mousemove', handleConsoleResizeMouseMove);
-                document.addEventListener('mouseup', handleConsoleResizeMouseUp); // This should now be defined
+                document.addEventListener('mouseup', handleConsoleResizeMouseUp); 
             });
 
             // Initial update
