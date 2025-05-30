@@ -36,6 +36,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closetag.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
 
     <style>
         .CodeMirror {
@@ -175,8 +176,9 @@
 
             const toggleConsoleBtn = document.getElementById('toggle-console-btn');
             const toggleCodeEditorBtn = document.getElementById('toggle-code-editor-btn');
+            const codePrettierBtn = document.getElementById('code-prettier-btn'); // Get the prettier button
 
-            const previewDevicesContainer = document.getElementById('preview-devices-container'); // Get the preview-devices-container
+            const previewDevicesContainer = document.getElementById('preview-devices-container'); 
 
             const activeClasses = ['bg-black', 'bg-opacity-20', 'text-primary'];
 
@@ -188,20 +190,15 @@
                 }
             }
 
-            // Initial state setup
             editorPane.style.width = '50%';
 
-            // Hide console elements by default and update button state
             const consoleElements = document.getElementsByClassName('console-ui');
             Array.from(consoleElements).forEach(element => {
                 element.style.display = 'none';
             });
-            updateButtonActiveState(toggleConsoleBtn, false); // Console is initially hidden
+            updateButtonActiveState(toggleConsoleBtn, false); 
 
-            // Preview pane takes full height of the right pane initially
             previewPaneContainer.style.height = `${rightPane.offsetHeight}px`;
-
-            // Ensure editor is visible and its button state is correct
             updateButtonActiveState(toggleCodeEditorBtn, editorPane.style.display !== 'none');
 
             const initialCode = `<!DOCTYPE html>
@@ -263,6 +260,45 @@
                 indentUnit: 2,
             });
 
+            // Add click listener for the code prettier button
+            if (codePrettierBtn) {
+                if (typeof html_beautify === 'function') {
+                    codePrettierBtn.addEventListener('click', () => {
+                        const currentCode = cmEditor.getValue();
+                        const options = {
+                            // preserve_newlines: true, // Default is true
+                            // max_preserve_newlines: 1, // Example: limit blank lines
+                            wrap_line_length: 0, // 0 to disable line wrapping by beautifier
+                            // unformatted: ['a', 'span', 'img', 'code', 'pre'], // tags that shouldn't be reformatted
+                            // indent_scripts: "keep" // "normal" or "separate"
+                        };
+
+                        if (cmEditor.getOption("indentWithTabs")) {
+                            options.indent_with_tabs = true;
+                        } else {
+                            options.indent_with_tabs = false;
+                            options.indent_size = cmEditor.getOption("indentUnit") || 2;
+                            options.indent_char = ' ';
+                        }
+                        
+                        try {
+                            const formattedCode = html_beautify(currentCode, options);
+                            cmEditor.setValue(formattedCode);
+                        } catch (e) {
+                            console.error("Error during code formatting with js-beautify:", e);
+                            alert("Could not format the code. Check console for errors.");
+                        }
+                    });
+                } else {
+                    // js-beautify not loaded
+                    codePrettierBtn.disabled = true;
+                    codePrettierBtn.title = "Formatting library (js-beautify) not loaded";
+                    codePrettierBtn.style.opacity = '0.5';
+                    console.warn('html_beautify function not found. The "Prettier" button will be disabled. Make sure js-beautify library is loaded.');
+                }
+            }
+
+
             const iframeConsoleBridgeScript = `
 <script id="iframe-console-bridge">
 (function() {
@@ -297,7 +333,6 @@
             return String(arg);
         });
     }
-    // Only attempt to postMessage if running in an iframe that is not the top window
     const isNotInTopWindow = window.self !== window.top;
 
     methods.forEach(methodName => {
@@ -336,7 +371,6 @@
             catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (unhandledrejection):', e); }
         }
     });
-    // Only send iframe-ready if it's not the top window (i.e., it's in the editor's iframe)
     if (isNotInTopWindow) {
         setTimeout(() => {
             try { 
@@ -360,7 +394,6 @@
             }
             window.updatePreview = updatePreview;
 
-            // NEW FUNCTION to open preview in a new tab
             function openPreviewInNewTab() {
                 const userCode = cmEditor.getValue();
                 const fullCode = iframeConsoleBridgeScript + userCode;
@@ -370,36 +403,25 @@
                 
                 const newTab = window.open(url, '_blank');
                 
-                // It's good practice to revoke the object URL when it's no longer needed.
-                // However, revoking too soon can prevent the new tab from loading.
-                // A common approach is to revoke after a delay.
-                // If the popup was blocked, newTab will be null.
                 if (newTab) {
-                    // Optionally, focus the new tab if it didn't open in foreground
-                    // newTab.focus(); 
-                    
-                    // Revoke the object URL after a short delay to allow the new tab to load.
-                    // You might also listen for the 'unload' event of the new tab, but that's more complex.
                     setTimeout(() => {
                         URL.revokeObjectURL(url);
-                    }, 5000); // 5 seconds delay, adjust if needed
+                    }, 5000); 
                 } else {
-                    // If window.open was blocked by a popup blocker
-                    URL.revokeObjectURL(url); // Revoke immediately
+                    URL.revokeObjectURL(url); 
                     alert('Popup blocked! Please allow popups for this site to open the preview in a new tab.');
                 }
             }
-            window.openPreviewInNewTab = openPreviewInNewTab; // Expose to global scope for onclick
+            window.openPreviewInNewTab = openPreviewInNewTab; 
 
             function resizePreviewDevice(width, height) {
                 if (previewDevicesContainer) {
                     previewDevicesContainer.style.maxWidth = width;
                     previewDevicesContainer.style.height = height;
-                    // Optional: Add/remove classes to center the iframe if it's not full width
                     if (width !== '100%') {
                         previewDevicesContainer.style.margin = '0 auto';
                     } else {
-                        previewDevicesContainer.style.margin = ''; // Reset margin
+                        previewDevicesContainer.style.margin = ''; 
                     }
                 }
             }
@@ -407,7 +429,6 @@
 
             function toggleConsole() {
                 const consoleElements = document.getElementsByClassName('console-ui');
-                // Check current visibility of the consoleContainer to determine the new state
                 const consoleIsCurrentlyVisible = consoleContainer.style.display !== 'none';
 
                 Array.from(consoleElements).forEach(element => {
@@ -417,15 +438,12 @@
                 const isConsoleVisibleAfterToggle = !consoleIsCurrentlyVisible;
                 updateButtonActiveState(toggleConsoleBtn, isConsoleVisibleAfterToggle);
 
-                // Adjust heights
                 const rightPaneHeight = rightPane.offsetHeight;
                 if (isConsoleVisibleAfterToggle) {
-                    // Console is now visible, set heights for preview and console
                     const resizeHandleConsoleHeight = resizeHandleConsole.offsetHeight;
                     previewPaneContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.66}px`;
                     consoleContainer.style.height = `${(rightPaneHeight - resizeHandleConsoleHeight) * 0.34}px`;
                 } else {
-                    // Console is now hidden, preview takes full height
                     previewPaneContainer.style.height = `${rightPaneHeight}px`;
                 }
             }
@@ -511,16 +529,14 @@
                 consoleOutput.appendChild(clearedMsg);
             });
 
-            // Pane resizing logic (Horizontal: Editor vs RightPane)
             let isResizing = false;
             let initialMouseX = 0;
             let initialEditorWidth = 0;
 
-            // Hoisted function declarations for resize handlers
             function handlePaneMouseMove(e) {
                 if (!isResizing) return;
                 const deltaX = e.clientX - initialMouseX;
-                let newEditorWidth = initialEditorWidth + deltaX; // This is correct for this function
+                let newEditorWidth = initialEditorWidth + deltaX; 
                 const totalWidth = editorPane.parentElement.offsetWidth;
                 const handleWidth = resizeHandle.offsetWidth;
                 const minPixelWidthEditor = Math.max(100, totalWidth * 0.15);
@@ -556,12 +572,10 @@
                 document.addEventListener('mouseup', handlePaneMouseUp);
             });
 
-            // Console resizing logic (Vertical: Preview vs Console)
             let isResizingConsole = false;
             let initialMouseYConsole = 0;
             let initialPreviewHeight = 0;
 
-            // Hoisted function declarations for console resize handlers
             function handleConsoleResizeMouseMove(e) {
                 if (!isResizingConsole) return;
                 const deltaY = e.clientY - initialMouseYConsole;
@@ -602,7 +616,6 @@
                 document.addEventListener('mouseup', handleConsoleResizeMouseUp); 
             });
 
-            // Initial update
             debouncedUpdatePreview();
         });
     </script>
