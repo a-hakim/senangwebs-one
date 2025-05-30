@@ -134,6 +134,12 @@
                 </button>
             </div>
             <div class="flex">
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="undo()">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="redo()">
+                    <i class="fas fa-redo"></i>
+                </button>
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
                 </button>
@@ -190,7 +196,7 @@
                 }
             }
 
-            editorPane.style.width = '50%';
+            editorPane.style.width = 'calc(50% - 4px)';
 
             const consoleElements = document.getElementsByClassName('console-ui');
             Array.from(consoleElements).forEach(element => {
