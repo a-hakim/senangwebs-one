@@ -154,22 +154,31 @@
                 <button id="redo-btn" class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="redo()">
                     <i class="fas fa-redo"></i>
                 </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('save')">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="openPreviewInNewTab()">
+                    <i class="fas fa-eye"></i>
+                </button>
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
                 </button>
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="openPreviewInNewTab()">
-                    <i class="fas fa-bolt"></i>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('import')">
+                    <i class="fas fa-folder-open"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('asset')">
+                    <i class="fas fa-image"></i>
                 </button>
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open sharing modal')">
                     <i class="fas fa-share-alt"></i>
                 </button>
             </div>
             <div class="flex">
-                <button id="toggle-code-editor-btn" class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="toggleCodeEditor()">
-                    <i class="fas fa-code"></i>
-                </button>
                 <button id="toggle-console-btn" class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="toggleConsole()">
                     <i class="fas fa-terminal"></i>
+                </button>
+                <button id="toggle-code-editor-btn" class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="toggleCodeEditor()">
+                    <i class="fas fa-code"></i>
                 </button>
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('menu')">
                     <i class="fas fa-bars"></i>
