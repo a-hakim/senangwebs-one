@@ -84,10 +84,11 @@
     <main class="flex flex-col h-screen">
         <section id="panelEditor" class="flex flex-grow p-2 h-[calc(100%-3rem)]">
             <!-- Editor Pane -->
-            <div id="editor-pane" class="h-full flex flex-col rounded-md overflow-hidden bg-neutral-800 border border-white/10 code-editor-ui" style="flex-shrink: 0;">
+            <div id="editor-pane" class="h-full flex flex-col rounded-md overflow-hidden bg-neutral-800 border border-white/10 code-editor-ui relative" style="flex-shrink: 0;">
                 <div class="flex-grow h-[calc(100%-4rem)]">
                     <textarea id="code-editor"></textarea>
                 </div>
+                <button id="code-prettier-btn" class="top-2 right-4 absolute bg-black opacity-70 hover:opacity-100 text-xs font-mono font-bold rounded-full px-2 py-1">PRETTIER</button>
             </div>
     
             <!-- Resize Handle -->
@@ -132,15 +133,14 @@
                 </button>
             </div>
             <div class="flex">
-                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open sharing modal')">
-                    <i class="fas fa-share-alt"></i>
-                </button>
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
                 </button>
-                <!-- MODIFIED BUTTON HERE -->
                 <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="openPreviewInNewTab()">
                     <i class="fas fa-bolt"></i>
+                </button>
+                <button class="w-12 h-12 flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open sharing modal')">
+                    <i class="fas fa-share-alt"></i>
                 </button>
             </div>
             <div class="flex">
