@@ -147,7 +147,6 @@
                 </button>
             </div>
             <div class="flex flex-grow justify-center">
-                <input id="url-address-bar" readonly class="w-full max-w-xl border border-white/10 bg-darker text-neutral-400 h-8 rounded-md my-auto flex item-center px-2">
                 <button class="w-12 h-12 aspect-square flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
                 </button>                
@@ -192,7 +191,6 @@
             const EDITOR_CONTENT_STORAGE_KEY = 'senangwebs-one-editor-content-v1';
 
             const activeClasses = ['bg-black', 'bg-opacity-20', 'text-primary'];
-            const urlAddressBar = document.getElementById('url-address-bar');
 
             function updateButtonActiveState(button, isActive) {
                 if (isActive) {
@@ -430,9 +428,6 @@
                 const fullCode = iframeConsoleBridgeScript + userCode;
                 if (previewFrame) {
                     previewFrame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(fullCode);
-                    if (urlAddressBar) {
-                        urlAddressBar.value = location.href;
-                    }
                 }
             }
             window.updatePreview = updatePreview;

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SenangWebs One - JavaScript Initialization Example</title>
+
+    <!-- SWO Library CSS -->
+    <link rel="stylesheet" href="../dist/swo.css">
+
+    <!-- External Dependencies (Required by SWO) -->
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/theme/hopscotch.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closebrackets.min.js"></script>
+    
+    <!-- js-beautify (for Prettier button) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        #swo-editor-js {
+            height: 70vh; /* Give the container a specific height */
+            border: 1px solid #bbf;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SenangWebs One - JavaScript Initialization</h1>
+        <p>
+            This instance of SWO is initialized manually using JavaScript.
+            This allows for passing custom options, such as initial code content.
+        </p>
+
+        <div id="swo-editor-js">
+            <!-- SWO will populate this target div -->
+        </div>
+        
+        <p style="margin-top: 20px;">
+            The script below waits for the DOM to be ready, then creates a new
+            <code>SWO</code> instance, targeting the <code>#swo-editor-js</code> div.
+        </p>
+    </div>
+
+    <!-- SWO Library JS (load after dependency scripts and target div) -->
+    <script src="../dist/swo.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof SWO !== 'undefined') {
+                const customInitialCode = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Initialized Page</title>
+    <style>
+        body { 
+            background-color: lightgoldenrodyellow; 
+            color: darkgreen; 
+            font-family: 'Arial', sans-serif;
+            padding: 30px;
+            text-align: center;
+        }
+        h1 { font-size: 2em; }
+        button { 
+            padding: 10px 20px; 
+            background-color: darkgreen; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover { background-color: green; }
+    </style>
+</head>
+<body>
+    <h1>Hello from JavaScript!</h1>
+    <p>This content was provided during SWO initialization.</p>
+    <button onclick="alert('Button in JS-initialized preview clicked!'); console.log('JS Init Button Clicked!')">Click Me!</button>
+    <script>
+        console.log("Script from JS-initialized code is running!");
+    <\/script>
+</body>
+</html>`;
+
+                // Target the div by its ID
+                const swoJsContainer = document.getElementById('swo-editor-js');
+
+                if (swoJsContainer) {
+                    // Initialize SWO on the target element with custom options
+                    new SWO(swoJsContainer, { // Or use '#swo-editor-js' as selector
+                        code: customInitialCode,
+                        storageKey: 'swo-example-js-init' // Unique key for this instance
+                    });
+                } else {
+                    console.error("SWO: Target element for JS initialization not found.");
+                }
+
+            } else {
+                console.error("SWO library (SWO) not loaded or defined.");
+            }
+        });
+    </script>
+</body>
+</html>
