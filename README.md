@@ -22,6 +22,10 @@ SenangWebs One (SWO) is a versatile, embeddable web development environment that
 
 [https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html)
 
+## Preview
+
+[SenangWebs One Preview](https://unpkg.com/senangwebs-one@latest/preview.png)
+
 ## Dependencies
 
 SWO relies on a few external libraries that you need to include separately (typically via CDN) for full functionality:
