@@ -253,7 +253,6 @@
     background-color: #000000;
     opacity: 0; /* Will be shown by JS if needed during resize, but typically not needed if user-select: none is on body */
     z-index: 50; /* Must be above iframe */
-    display: none; /* hidden */
 }
 
 /* Control Panel */

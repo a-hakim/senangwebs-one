@@ -4,19 +4,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     swo: './src/js/swo.js',
-    // We will import swo.css into swo.js so webpack processes it
-    // styles: './src/css/swo.css' // Remove this line if CSS is imported in JS
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     library: {
       name: 'SWO',
-      type: 'umd', // Universal Module Definition
+      type: 'umd', 
       export: 'default'
     },
-    globalObject: 'this', // Important for UMD compatibility
-    publicPath: '', // Ensure assets are loaded correctly
+    globalObject: 'this', 
+    publicPath: '', 
   },
   module: {
     rules: [
@@ -38,7 +36,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'swo.css' // Output CSS filename
+      filename: 'swo.css' 
     })
   ]
 };

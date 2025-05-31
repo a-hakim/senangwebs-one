@@ -70,7 +70,7 @@ class SWO {
                             <div class="swo-console-output"></div>
                         </div>
             
-                        <div class="swo-preview-frame-cover-resizeable"></div>
+                        <div class="swo-preview-frame-cover-resizeable swo-hidden"></div>
                     </div>
                 </section>
                 <section class="swo-panel-control">
