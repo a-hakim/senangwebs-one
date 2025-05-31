@@ -1,7 +1,7 @@
 {
   "name": "senangwebs-one",
   "version": "1.0.0",
-  "description": "A web-based code editor and live previewer.",
+  "description": "A web-based code editor and live previewer, inspired by Glitch and CodePen.",
   "main": "dist/swo.js",
   "scripts": {
     "build": "webpack --mode=production",
