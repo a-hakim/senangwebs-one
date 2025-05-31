@@ -1,5 +1,3 @@
-Okay, here's a README.md for SenangWebs One (SWO), structured similarly to your example.
-
 # SenangWebs One (SWO)
 
 SenangWebs One (SWO) is a versatile, embeddable web development environment that provides a live HTML/CSS/JS code editor, a real-time preview pane, and an integrated console. It's designed for quick prototyping, live demonstrations, and educational purposes, allowing users to see their code changes reflected instantly.
