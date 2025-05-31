@@ -39,7 +39,23 @@ SWO relies on a few external libraries that you need to include separately (typi
 
 ## Installation
 
-### 1. Get SWO Files
+There are a couple of ways to integrate SenangWebs One into your project:
+
+### Using a CDN
+For the quickest setup, you can include SenangWebs One's core CSS and JavaScript files directly from a CDN like unpkg. This is often the easiest way to get started.
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/senangwebs-one@latest/dist/swo.css">
+<script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
+```
+
+You will then include these links in your HTML page as shown in the "Include Files in Your HTML Page" section below.
+
+### Setting Up with Local Files
+
+If you prefer to host the files yourself, want to work offline, or need to build from source:
+
+**1. Get SWO Files**
 
 **Option A: Build from Source (Recommended for development)**
 
@@ -56,11 +72,11 @@ This will generate `dist/swo.js` and `dist/swo.css`.
 
 **Option B: Using Pre-built Files (If available)**
 
-If pre-built `dist` files are provided, you can download them directly.
+If pre-built `dist` files are provided with a release, you can download them directly. These are typically `swo.js` and `swo.css` found in a `dist` folder.
 
-### 2. Include Files in Your HTML
+### 2. Include Files in Your HTML Page
 
-Place the SWO CSS and JS files, along with its dependencies, in your HTML:
+Place the SWO CSS and JS files (either from the CDN links above or your local `dist` folder), along with its dependencies, in your HTML's `<head>` and `<body>` sections.
 
 ```html
 <!DOCTYPE html>
@@ -70,7 +86,10 @@ Place the SWO CSS and JS files, along with its dependencies, in your HTML:
     <title>My SWO Project</title>
 
     <!-- SWO Library CSS -->
-    <link rel="stylesheet" href="path/to/your/dist/swo.css">
+    <!-- Using CDN (recommended for quick start): -->
+    <link rel="stylesheet" href="https://unpkg.com/senangwebs-one@latest/dist/swo.css">
+    <!-- Or, if using local files: -->
+    <!-- <link rel="stylesheet" href="path/to/your/dist/swo.css"> -->
 
     <!-- External Dependencies (Order might matter for some libraries) -->
     <!-- CodeMirror Core -->
@@ -109,9 +128,12 @@ Place the SWO CSS and JS files, along with its dependencies, in your HTML:
     </div>
 
     <!-- SWO Library JS (Load after dependencies and target element) -->
-    <script src="path/to/your/dist/swo.js"></script>
+    <!-- Using CDN (recommended for quick start): -->
+    <script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
+    <!-- Or, if using local files: -->
+    <!-- <script src="path/to/your/dist/swo.js"></script> -->
     <script>
-        // Optional: JavaScript initialization (see below)
+        // Optional: JavaScript initialization (see Usage section)
     </script>
 </body>
 </html>
