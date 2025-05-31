@@ -36,6 +36,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closetag.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
 
     <style>
         .CodeMirror {
@@ -61,33 +62,47 @@
         .CodeMirror-vscrollbar::-webkit-scrollbar-track,
         .CodeMirror-hscrollbar::-webkit-scrollbar-track,
         #console-output::-webkit-scrollbar-track {
-            background: #2d3748; /* gray-800 */
+            background: #262626; /* gray-800 */
         }
         .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
         .CodeMirror-hscrollbar::-webkit-scrollbar-thumb,
         #console-output::-webkit-scrollbar-thumb {
-            background: #4a5568; /* gray-600 */
-            border-radius: 4px;
+            background: #525252; /* gray-600 */
+            border-radius: 0;
         }
         .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
         .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover,
         #console-output::-webkit-scrollbar-thumb:hover {
-            background: #718096; /* gray-500 */
+            background: #737373; /* gray-500 */
         }
-        /* Ensure panes don't shrink below their content if min-width is not 0 for flex items */
         #editor-pane, #right-pane {
             min-width: 0;
         }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        button:disabled.hover\\:bg-black:hover { /* More specific selector to override tailwind hover when disabled */
+            background-color: initial !important; /* Or specific non-hover color */
+        }
+         button:disabled.hover\\:bg-opacity-20:hover {
+            --tw-bg-opacity: 1 !important; /* Prevent opacity change on hover when disabled */
+        }
+        button:disabled.hover\\:text-primary:hover {
+            color: initial !important; /* Or specific non-hover text color */
+        }
+
     </style>
 </head>
 <body class="bg-darker text-white">
     <main class="flex flex-col h-screen">
-        <section id="panelEditor" class="flex flex-grow p-2 h-[calc(100%-3rem)]">
+        <section id="panelEditor" class="flex flex-grow h-[calc(100%-3rem)]">
             <!-- Editor Pane -->
-            <div id="editor-pane" class="h-full flex flex-col rounded-md overflow-hidden bg-neutral-800 border border-white/10 code-editor-ui" style="flex-shrink: 0;">
-                <div class="flex-grow h-[calc(100%-4rem)]">
+            <div id="editor-pane" class="h-full flex flex-col overflow-hidden bg-neutral-800 code-editor-ui relative" style="flex-shrink: 0;">
+                <div class="flex-grow h-[calc(100%-3rem)]">
                     <textarea id="code-editor"></textarea>
                 </div>
+                <button id="code-prettier-btn" class="top-2 right-4 absolute bg-black opacity-70 hover:opacity-100 text-xs font-mono font-bold rounded-full px-2 py-1">PRETTIER</button>
             </div>
     
             <!-- Resize Handle -->
@@ -97,7 +112,7 @@
             <div id="right-pane" class="h-full flex flex-col flex-grow relative">
                 <!-- Preview Pane -->
                 <div id="preview-pane-container" class="flex flex-col flex-grow justify-center bg-darker">
-                    <div id="preview-devices-container" class="bg-white mx-auto rounded-md overflow-hidden" style="width: 100%; height: 100%;">
+                    <div id="preview-devices-container" class="bg-white mx-auto overflow-hidden" style="width: 100%; height: 100%;">
                         <iframe id="preview-frame" class="w-full h-full border-0" sandbox="allow-scripts allow-popups allow-forms"></iframe>
                     </div>
                 </div>
@@ -106,7 +121,7 @@
                 <div id="resize-handle-console" class="h-2 w-full bg-transparent cursor-row-resize flex-shrink-0 console-ui"></div>
     
                 <!-- Console Pane -->
-                <div id="console-container" class="bg-dark border border-white/10 flex flex-col rounded-md overflow-hidden console-ui">
+                <div id="console-container" class="bg-dark flex flex-col overflow-hidden console-ui">
                     <div class="bg-white/10 pl-3 p-2 text-sm font-semibold h-10 flex justify-between items-center">
                         <span class="font-mono">Console</span>
                         <button id="clear-console-btn" class="text-xs bg-neutral-700 hover:bg-neutral-600 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Clear</button>
@@ -132,9 +147,6 @@
                 </button>
             </div>
             <div class="flex flex-grow justify-center">
-                <button class="w-12 h-12 aspect-square flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="alert('open sharing modal')">
-                    <i class="fas fa-share-alt"></i>
-                </button>
                 <input id="url-address-bar" readonly class="w-full max-w-xl border border-white/10 bg-darker text-neutral-400 h-8 rounded-md my-auto flex item-center px-2">
                 <button class="w-12 h-12 aspect-square flex items-center justify-center hover:bg-black hover:bg-opacity-20 hover:text-primary" onclick="updatePreview()">
                     <i class="fas fa-sync-alt"></i>
@@ -172,11 +184,15 @@
 
             const toggleConsoleBtn = document.getElementById('toggle-console-btn');
             const toggleCodeEditorBtn = document.getElementById('toggle-code-editor-btn');
-
+            const codePrettierBtn = document.getElementById('code-prettier-btn'); 
             const previewDevicesContainer = document.getElementById('preview-devices-container'); 
-            const urlAddressBar = document.getElementById('url-address-bar'); // Get the URL address bar element
+
+            const undoBtn = document.getElementById('undo-btn');
+            const redoBtn = document.getElementById('redo-btn');
+            const EDITOR_CONTENT_STORAGE_KEY = 'senangwebs-one-editor-content-v1';
 
             const activeClasses = ['bg-black', 'bg-opacity-20', 'text-primary'];
+            const urlAddressBar = document.getElementById('url-address-bar');
 
             function updateButtonActiveState(button, isActive) {
                 if (isActive) {
@@ -186,23 +202,18 @@
                 }
             }
 
-            // Initial state setup
-            editorPane.style.width = '50%';
+            editorPane.style.width = 'calc(50% - 4px)';
 
-            // Hide console elements by default and update button state
             const consoleElements = document.getElementsByClassName('console-ui');
             Array.from(consoleElements).forEach(element => {
                 element.style.display = 'none';
             });
-            updateButtonActiveState(toggleConsoleBtn, false); // Console is initially hidden
+            updateButtonActiveState(toggleConsoleBtn, false); 
 
-            // Preview pane takes full height of the right pane initially
             previewPaneContainer.style.height = `${rightPane.offsetHeight}px`;
-
-            // Ensure editor is visible and its button state is correct
             updateButtonActiveState(toggleCodeEditorBtn, editorPane.style.display !== 'none');
 
-            const initialCode = `<!DOCTYPE html>
+            const defaultInitialCode = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -248,7 +259,10 @@
 </body>
 </html>`;
 
-            editorTextArea.value = initialCode;
+            // Load code from localStorage or use default
+            let loadedCode = localStorage.getItem(EDITOR_CONTENT_STORAGE_KEY);
+            const currentInitialCode = loadedCode !== null ? loadedCode : defaultInitialCode;
+            editorTextArea.value = currentInitialCode;
 
             const cmEditor = CodeMirror.fromTextArea(editorTextArea, {
                 mode: 'htmlmixed',
@@ -260,6 +274,70 @@
                 tabSize: 2,
                 indentUnit: 2,
             });
+
+            function updateUndoRedoButtonStates() {
+                if (!cmEditor) return;
+                const history = cmEditor.historySize();
+
+                const applyButtonDisabledStyle = (button, isDisabled) => {
+                    if (!button) return;
+                    button.disabled = isDisabled;
+                    // Tailwind handles disabled styling via the :disabled pseudo-class if configured
+                    // For direct manipulation:
+                    if (isDisabled) {
+                        button.classList.add('opacity-50', 'cursor-not-allowed');
+                        // To prevent hover styles on disabled, you might need more specific CSS or remove/add hover classes
+                        button.classList.remove('hover:bg-black', 'hover:bg-opacity-20', 'hover:text-primary');
+                    } else {
+                        button.classList.remove('opacity-50', 'cursor-not-allowed');
+                        button.classList.add('hover:bg-black', 'hover:bg-opacity-20', 'hover:text-primary');
+                    }
+                };
+
+                applyButtonDisabledStyle(undoBtn, history.undo === 0);
+                applyButtonDisabledStyle(redoBtn, history.redo === 0);
+            }
+            
+            // Initial setup for undo/redo buttons
+            updateUndoRedoButtonStates();
+            if (loadedCode !== null) {
+                // If loaded from storage, make this the baseline, clear CM's prior history
+                cmEditor.clearHistory();
+                updateUndoRedoButtonStates(); // Re-check after clearing history
+            }
+
+
+            // Add click listener for the code prettier button
+            if (codePrettierBtn) {
+                if (typeof html_beautify === 'function') {
+                    codePrettierBtn.addEventListener('click', () => {
+                        const currentCode = cmEditor.getValue();
+                        const options = {
+                            wrap_line_length: 0, 
+                        };
+                        if (cmEditor.getOption("indentWithTabs")) {
+                            options.indent_with_tabs = true;
+                        } else {
+                            options.indent_with_tabs = false;
+                            options.indent_size = cmEditor.getOption("indentUnit") || 2;
+                            options.indent_char = ' ';
+                        }
+                        try {
+                            const formattedCode = html_beautify(currentCode, options);
+                            cmEditor.setValue(formattedCode);
+                        } catch (e) {
+                            console.error("Error during code formatting with js-beautify:", e);
+                            alert("Could not format the code. Check console for errors.");
+                        }
+                    });
+                } else {
+                    codePrettierBtn.disabled = true;
+                    codePrettierBtn.title = "Formatting library (js-beautify) not loaded";
+                    codePrettierBtn.style.opacity = '0.5';
+                    console.warn('html_beautify function not found. The "Prettier" button will be disabled. Make sure js-beautify library is loaded.');
+                }
+            }
+
 
             const iframeConsoleBridgeScript = `
 <script id="iframe-console-bridge">
@@ -295,7 +373,6 @@
             return String(arg);
         });
     }
-    // Only attempt to postMessage if running in an iframe that is not the top window
     const isNotInTopWindow = window.self !== window.top;
 
     methods.forEach(methodName => {
@@ -334,7 +411,6 @@
             catch(e) { if(originalConsole.error) originalConsole.error('Console bridge error (unhandledrejection):', e); }
         }
     });
-    // Only send iframe-ready if it's not the top window (i.e., it's in the editor's iframe)
     if (isNotInTopWindow) {
         setTimeout(() => {
             try { 
@@ -355,33 +431,26 @@
                 if (previewFrame) {
                     previewFrame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(fullCode);
                     if (urlAddressBar) {
-                        // Update the URL address bar with a user-friendly representation
-                        urlAddressBar.value = "data:text/html (Live Preview)";
+                        urlAddressBar.value = location.href;
                     }
                 }
             }
             window.updatePreview = updatePreview;
 
-            // NEW FUNCTION to open preview in a new tab
             function openPreviewInNewTab() {
                 const userCode = cmEditor.getValue();
                 const fullCode = iframeConsoleBridgeScript + userCode;
-                
                 const blob = new Blob([fullCode], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
-                
                 const newTab = window.open(url, '_blank');
-                
                 if (newTab) {
-                    setTimeout(() => {
-                        URL.revokeObjectURL(url);
-                    }, 5000); 
+                    setTimeout(() => { URL.revokeObjectURL(url); }, 5000); 
                 } else {
                     URL.revokeObjectURL(url); 
                     alert('Popup blocked! Please allow popups for this site to open the preview in a new tab.');
                 }
             }
-            window.openPreviewInNewTab = openPreviewInNewTab;
+            window.openPreviewInNewTab = openPreviewInNewTab; 
 
             function resizePreviewDevice(width, height) {
                 if (previewDevicesContainer) {
@@ -399,14 +468,11 @@
             function toggleConsole() {
                 const consoleElements = document.getElementsByClassName('console-ui');
                 const consoleIsCurrentlyVisible = consoleContainer.style.display !== 'none';
-
                 Array.from(consoleElements).forEach(element => {
                     element.style.display = consoleIsCurrentlyVisible ? 'none' : 'flex';
                 });
-
                 const isConsoleVisibleAfterToggle = !consoleIsCurrentlyVisible;
                 updateButtonActiveState(toggleConsoleBtn, isConsoleVisibleAfterToggle);
-
                 const rightPaneHeight = rightPane.offsetHeight;
                 if (isConsoleVisibleAfterToggle) {
                     const resizeHandleConsoleHeight = resizeHandleConsole.offsetHeight;
@@ -432,13 +498,33 @@
             }
             window.toggleCodeEditor = toggleCodeEditor;
 
-            let debounceTimeout;
-            function debouncedUpdatePreview() {
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(updatePreview, 300);
+            window.undo = function() {
+                if (cmEditor) {
+                    cmEditor.undo();
+                    // State update will be handled by the 'change' event listener
+                }
             }
 
-            cmEditor.on('change', debouncedUpdatePreview);
+            window.redo = function() {
+                if (cmEditor) {
+                    cmEditor.redo();
+                    // State update will be handled by the 'change' event listener
+                }
+            }
+
+            let debounceTimeout;
+            cmEditor.on('change', (instance, changeObj) => {
+                // Save current code to localStorage
+                localStorage.setItem(EDITOR_CONTENT_STORAGE_KEY, cmEditor.getValue());
+
+                // Update preview (debounced)
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(updatePreview, 300);
+
+                // Update undo/redo button states
+                updateUndoRedoButtonStates();
+            });
+
 
             window.addEventListener('message', (event) => {
                 if (event.source !== previewFrame.contentWindow || !event.data) return;
@@ -585,7 +671,7 @@
                 document.addEventListener('mouseup', handleConsoleResizeMouseUp); 
             });
 
-            debouncedUpdatePreview();
+            updatePreview(); // Initial update of preview with loaded/default code
         });
     </script>
 </body>
