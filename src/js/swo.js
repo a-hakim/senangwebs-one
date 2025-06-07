@@ -203,15 +203,15 @@ class SWO {
         const savedCode = localStorage.getItem(this.options.storageKey);
         const codeToLoad = this.options.code !== null ? this.options.code : savedCode;
         if (this.cmEditor) {
-            this.cmEditor.setValue(JSON.parse(codeToLoad));
-            this.cmEditor.clearHistory(); // Start fresh history for loaded code
+            this.cmEditor.setValue(codeToLoad);
+            this.cmEditor.clearHistory();
         } else {
-            this.elements.codeEditorTextarea.value = JSON.parse(codeToLoad); // Fallback if CM not loaded
+            this.elements.codeEditorTextarea.value = codeToLoad;
         }
     }
 
     _saveCode(code) {
-        localStorage.setItem(this.options.storageKey, JSON.stringify(code));
+        localStorage.setItem(this.options.storageKey, code);
     }
 
     _getIframeConsoleBridgeScript() {
