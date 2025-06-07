@@ -300,7 +300,7 @@ class SWO {
     updatePreview() {
         if (!this.elements.previewFrame) return;
         const userCode = this.cmEditor ? this.cmEditor.getValue() : this.elements.codeEditorTextarea.value;
-        const fullCode = this._getIframeConsoleBridgeScript() + userCode;
+        const fullCode = this._getIframeConsoleBridgeScript() + this.addCrossOriginToAssets(userCode);
         // Use srcdoc for better security and handling relative paths within the iframe (though base tag might be needed for that)
         // However, srcdoc can have issues with complex scripts or iframes being re-used.
         // data: URL is more robust for frequent updates.
@@ -320,6 +320,37 @@ class SWO {
         if (!newTab) {
             URL.revokeObjectURL(url); // Clean up immediately if blocked
             alert('Popup blocked! Please allow popups for this site to open the preview in a new tab.');
+        }
+    }
+
+    addCrossOriginToAssets(htmlString) {
+        if (typeof htmlString !== 'string') {
+            console.error("Input must be an HTML string.");
+            return htmlString;
+        }
+
+        try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+
+            const assetSelectors = [
+                'img',                         // Standard images
+                'audio',                       // Standard audio
+                'video',                       // Standard video
+                'a-asset-item',                // A-Frame generic asset item
+            ];
+
+            doc.querySelectorAll(assetSelectors.join(', ')).forEach(element => {
+                if (element.hasAttribute('src')) {
+                    element.setAttribute('crossorigin', 'anonymous');
+                }
+            });
+
+            return new XMLSerializer().serializeToString(doc);
+
+        } catch (error) {
+            console.error("Error processing HTML string to add crossorigin:", error);
+            return htmlString; // Return original string in case of error
         }
     }
 
