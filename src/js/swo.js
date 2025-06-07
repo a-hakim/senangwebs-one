@@ -300,7 +300,7 @@ class SWO {
     updatePreview() {
         if (!this.elements.previewFrame) return;
         const userCode = this.cmEditor ? this.cmEditor.getValue() : this.elements.codeEditorTextarea.value;
-        const fullCode = this._getIframeConsoleBridgeScript() + this.addCrossOriginToAssets(userCode);
+        const fullCode = this._getIframeConsoleBridgeScript() + userCode;
         // Use srcdoc for better security and handling relative paths within the iframe (though base tag might be needed for that)
         // However, srcdoc can have issues with complex scripts or iframes being re-used.
         // data: URL is more robust for frequent updates.
