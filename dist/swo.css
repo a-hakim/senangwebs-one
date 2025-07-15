@@ -38,16 +38,6 @@
     background: var(--swo-neutral-500);
 }
 
-/* CodeMirror specific styles (user should include CodeMirror's base and theme CSS) */
-.swo-container .CodeMirror {
-    height: 100%;
-    font-size: 14px;
-    line-height: 1.5;
-}
-.swo-container .CodeMirror-scrollbar-filler {
-    opacity: 0 !important;
-}
-
 /* Main Layout */
 .swo-main-wrapper {
     background-color: var(--swo-darker-color);
@@ -76,13 +66,12 @@
     flex-shrink: 0; /* Prevent shrinking beyond content initially */
     /* width will be set by JS */
 }
-.swo-editor-codemirror-container {
+.swo-editor-monaco-container {
     flex-grow: 1;
     height: calc(100% - 0rem); /* Adjust if other elements are in editor-pane */
-    overflow: hidden; /* Ensure CM fits */
+    overflow: hidden; /* Ensure Monaco fits */
 }
-.swo-code-editor-textarea {
-    /* Textarea is hidden by CodeMirror, but good to have */
+.swo-code-editor-container {
     width: 100%;
     height: 100%;
 }
@@ -109,7 +98,6 @@
     opacity: 0.4 !important;
     cursor: not-allowed;
 }
-
 
 /* Resize Handle */
 .swo-resize-handle { /* For editor/preview */

@@ -27,13 +27,13 @@ class SWO {
         };
 
         this.elements = {}; // To store references to important DOM elements
-        this.cmEditor = null;
+        this.monacoEditor = null;
         this.isResizingPanes = false;
         this.isResizingConsole = false;
 
         this._createUI();
         this._cacheElements();
-        this._initCodeMirror();
+        this._initMonaco();
         this._initEventListeners();
         this._initialLayout();
         this._loadCode(); // Load from storage or use initial code
@@ -45,8 +45,8 @@ class SWO {
             <div class="swo-main-wrapper">
                 <section class="swo-panel-editor-preview">
                     <div class="swo-editor-pane">
-                        <div class="swo-editor-codemirror-container">
-                            <textarea class="swo-code-editor-textarea"></textarea>
+                        <div class="swo-editor-monaco-container">
+                            <div class="swo-code-editor-container"></div>
                         </div>
                         <button class="swo-code-prettier-btn">PRETTIER</button>
                     </div>
@@ -96,7 +96,7 @@ class SWO {
         const el = this.elements;
         const T = this.targetElement; // Scope queries to the instance's target element
         el.editorPane = T.querySelector('.swo-editor-pane');
-        el.codeEditorTextarea = T.querySelector('.swo-code-editor-textarea');
+        el.codeEditorContainer = T.querySelector('.swo-code-editor-container');
         el.codePrettierBtn = T.querySelector('.swo-code-prettier-btn');
         el.resizeHandle = T.querySelector('.swo-resize-handle');
         
@@ -126,26 +126,30 @@ class SWO {
         el.consoleUIElements = T.querySelectorAll('.swo-console-container, .swo-resize-handle-console'); // Classes for console UI parts
     }
 
-    _initCodeMirror() {
-        if (typeof CodeMirror === 'undefined') {
-            console.error('SWO: CodeMirror library not found. Please include CodeMirror.');
-            this.elements.codeEditorTextarea.value = "CodeMirror not loaded. Please include it.";
+    _initMonaco() {
+        if (typeof monaco === 'undefined') {
+            console.error('SWO: Monaco Editor not found. Please include Monaco Editor.');
+            this.elements.codeEditorContainer.innerHTML = '<div style="padding: 20px; color: #fff; background: #1e1e1e;">Monaco Editor not loaded. Please include it.</div>';
             return;
         }
-        this.cmEditor = CodeMirror.fromTextArea(this.elements.codeEditorTextarea, {
-            mode: 'htmlmixed',
-            theme: 'hopscotch', // User needs to include this theme's CSS
-            lineNumbers: true,
-            autoCloseTags: true,
-            autoCloseBrackets: true,
-            matchBrackets: true,
+
+        this.monacoEditor = monaco.editor.create(this.elements.codeEditorContainer, {
+            value: this.options.code || this._getDefaultInitialCode(),
+            language: 'html',
+            theme: 'vs-dark',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
             tabSize: 2,
-            indentUnit: 2,
+            insertSpaces: true,
+            wordWrap: 'on',
+            fontSize: 14,
+            lineHeight: 1.5,
         });
 
         let debounceTimeout;
-        this.cmEditor.on('change', () => {
-            this._saveCode(this.cmEditor.getValue());
+        this.monacoEditor.onDidChangeModelContent(() => {
+            this._saveCode(this.monacoEditor.getValue());
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => this.updatePreview(), 300);
         });
@@ -202,11 +206,8 @@ class SWO {
     _loadCode() {
         const savedCode = localStorage.getItem(this.options.storageKey);
         const codeToLoad = this.options.code !== null ? this.options.code : savedCode;
-        if (this.cmEditor) {
-            this.cmEditor.setValue(codeToLoad);
-            this.cmEditor.clearHistory();
-        } else {
-            this.elements.codeEditorTextarea.value = codeToLoad;
+        if (this.monacoEditor) {
+            this.monacoEditor.setValue(codeToLoad || this._getDefaultInitialCode());
         }
     }
 
@@ -299,7 +300,7 @@ class SWO {
 
     updatePreview() {
         if (!this.elements.previewFrame) return;
-        const userCode = this.cmEditor ? this.cmEditor.getValue() : this.elements.codeEditorTextarea.value;
+        const userCode = this.monacoEditor ? this.monacoEditor.getValue() : '';
         const fullCode = this._getIframeConsoleBridgeScript() + userCode;
         // Use srcdoc for better security and handling relative paths within the iframe (though base tag might be needed for that)
         // However, srcdoc can have issues with complex scripts or iframes being re-used.
@@ -308,7 +309,7 @@ class SWO {
     }
 
     openPreviewInNewTab() {
-        const userCode = this.cmEditor ? this.cmEditor.getValue() : this.elements.codeEditorTextarea.value;
+        const userCode = this.monacoEditor ? this.monacoEditor.getValue() : '';
         const fullCode = this._getIframeConsoleBridgeScript() + userCode;
         const blob = new Blob([fullCode], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
@@ -403,17 +404,16 @@ class SWO {
     }
 
     formatCode() {
-        if (typeof html_beautify === 'function' && this.cmEditor) {
-            const currentCode = this.cmEditor.getValue();
+        if (typeof html_beautify === 'function' && this.monacoEditor) {
+            const currentCode = this.monacoEditor.getValue();
             const options = {
-                wrap_line_length: 120, // Sensible default
-                indent_with_tabs: this.cmEditor.getOption("indentWithTabs"),
-                indent_size: this.cmEditor.getOption("indentUnit") || 2,
-                indent_char: this.cmEditor.getOption("indentWithTabs") ? '\t' : ' ',
+                wrap_line_length: 120,
+                indent_size: 2,
+                indent_char: ' ',
             };
             try {
                 const formattedCode = html_beautify(currentCode, options);
-                this.cmEditor.setValue(formattedCode);
+                this.monacoEditor.setValue(formattedCode);
             } catch (e) {
                 console.error("SWO: Error during code formatting with js-beautify:", e);
                 alert("Could not format the code. Check console for errors.");
@@ -631,16 +631,16 @@ class SWO {
     destroy() {
         // Remove event listeners
         window.removeEventListener('message', this._handleIframeMessage.bind(this));
-        // CodeMirror instance cleanup
-        if (this.cmEditor) {
-            this.cmEditor.toTextArea(); // Reverts CodeMirror instance to a textarea
+        // Monaco Editor instance cleanup
+        if (this.monacoEditor) {
+            this.monacoEditor.dispose();
         }
         // Clear HTML
         this.targetElement.innerHTML = '';
         this.targetElement.classList.remove('swo-container');
         // Nullify references
         this.elements = {};
-        this.cmEditor = null;
+        this.monacoEditor = null;
         // Potentially remove from global/auto-init list if tracked
         delete this.targetElement.swoInstance; 
     }
