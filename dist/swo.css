@@ -274,13 +274,23 @@
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
+.swo-control-button svg {
+    height: .8rem;
+    fill: var(--swo-neutral-400);
+}
 .swo-control-button:not(:disabled):hover {
     background-color: rgba(0, 0, 0, 0.2); /* hover:bg-black hover:bg-opacity-20 */
     color: var(--swo-primary-color); /* hover:text-primary */
 }
+.swo-control-button:not(:disabled):hover svg {
+    fill: var(--swo-primary-color);
+}
 .swo-control-button.swo-active {
     background-color: rgba(0, 0, 0, 0.2);
     color: var(--swo-primary-color);
+}
+.swo-control-button.swo-active svg {
+    fill: var(--swo-primary-color);
 }
 .swo-control-button:disabled {
     opacity: 0.5;
