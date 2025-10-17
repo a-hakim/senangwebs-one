@@ -185,6 +185,7 @@ class SWO {
         
         // Pane Resizing
         el.resizeHandle.addEventListener('mousedown', this._onPaneResizeMouseDown.bind(this));
+        el.resizeHandle.addEventListener('dblclick', this._onPaneResizeDoubleClick.bind(this));
         el.resizeHandleConsole.addEventListener('mousedown', this._onConsoleResizeMouseDown.bind(this));
         
         // Console
@@ -546,6 +547,11 @@ class SWO {
         document.body.style.userSelect = '';
         document.removeEventListener('mousemove', this._boundHandlePaneMouseMove);
         document.removeEventListener('mouseup', this._boundHandlePaneMouseUp);
+    }
+
+    _onPaneResizeDoubleClick() {
+        // Reset editor pane to default width (50%)
+        this.elements.editorPane.style.width = 'calc(50% - 0.25rem)'; // 0.25rem is half of resize handle width
     }
 
     // Console Resizing Logic
