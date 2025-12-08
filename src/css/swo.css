@@ -1,302 +1,320 @@
 /* General Styles & Custom Properties */
 :root {
-    --swo-primary-color: #00FF99;
-    --swo-secondary-color: #007370;
-    --swo-dark-color: #18181B;
-    --swo-darker-color: #09090B;
-    --swo-neutral-300: #d4d4d4;
-    --swo-neutral-400: #a3a3a3;
-    --swo-neutral-500: #737373;
-    --swo-neutral-600: #525252;
-    --swo-neutral-700: #404040;
-    --swo-neutral-800: #262626;
-    --swo-text-white: #ffffff;
-    --swo-text-red-400: #f87171;
-    --swo-text-yellow-400: #facc15;
-    --swo-text-blue-400: #60a5fa;
-    --swo-text-purple-400: #c084fc;
-    --swo-text-green-400: #4ade80;
+  --swo-primary-color: #00ff99;
+  --swo-secondary-color: #007370;
+  --swo-dark-color: #18181b;
+  --swo-darker-color: #09090b;
+  --swo-neutral-300: #d4d4d4;
+  --swo-neutral-400: #a3a3a3;
+  --swo-neutral-500: #737373;
+  --swo-neutral-600: #525252;
+  --swo-neutral-700: #404040;
+  --swo-neutral-800: #262626;
+  --swo-text-white: #ffffff;
+  --swo-text-red-400: #f87171;
+  --swo-text-yellow-400: #facc15;
+  --swo-text-blue-400: #60a5fa;
+  --swo-text-purple-400: #c084fc;
+  --swo-text-green-400: #4ade80;
 }
 
-.swo-container, .swo-container body { /* Apply font to body inside swo-container if needed */
-    font-family: 'Outfit', sans-serif;
-    box-sizing: border-box; /* Apply box-sizing to all elements within */
+.swo-container,
+.swo-container body {
+  /* Apply font to body inside swo-container if needed */
+  font-family: "Outfit", sans-serif;
+  box-sizing: border-box; /* Apply box-sizing to all elements within */
 }
 
 .swo-container ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 .swo-container ::-webkit-scrollbar-track {
-    background: var(--swo-neutral-800);
+  background: var(--swo-neutral-800);
 }
 .swo-container ::-webkit-scrollbar-thumb {
-    background: var(--swo-neutral-600);
-    border-radius: 0;
+  background: var(--swo-neutral-600);
+  border-radius: 0;
 }
 .swo-container ::-webkit-scrollbar-thumb:hover {
-    background: var(--swo-neutral-500);
+  background: var(--swo-neutral-500);
 }
 
 /* Main Layout */
 .swo-main-wrapper {
-    background-color: var(--swo-darker-color);
-    color: var(--swo-text-white);
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Assume parent has height or use vh */
-    overflow: hidden; /* Prevent body scroll if wrapper is 100vh */
+  background-color: var(--swo-darker-color);
+  color: var(--swo-text-white);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Assume parent has height or use vh */
+  overflow: hidden; /* Prevent body scroll if wrapper is 100vh */
 }
 
 .swo-panel-editor-preview {
-    display: flex;
-    flex-grow: 1;
-    height: calc(100% - 3rem); /* Space for control panel */
-    overflow: hidden; /* Important for resize logic */
+  display: flex;
+  flex-grow: 1;
+  height: calc(100% - 3rem); /* Space for control panel */
+  overflow: hidden; /* Important for resize logic */
 }
 
 /* Editor Pane */
 .swo-editor-pane {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: var(--swo-neutral-800);
-    position: relative;
-    flex-shrink: 0; /* Prevent shrinking beyond content initially */
-    /* width will be set by JS */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--swo-neutral-800);
+  position: relative;
+  flex-shrink: 0; /* Prevent shrinking beyond content initially */
+  /* width will be set by JS */
 }
 .swo-editor-monaco-container {
-    flex-grow: 1;
-    height: calc(100% - 0rem); /* Adjust if other elements are in editor-pane */
-    overflow: hidden; /* Ensure Monaco fits */
+  flex-grow: 1;
+  height: calc(100% - 0rem); /* Adjust if other elements are in editor-pane */
+  overflow: hidden; /* Ensure Monaco fits */
 }
 .swo-code-editor-container {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 .swo-code-prettier-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    background-color: #000000;
-    opacity: 0.7;
-    font-size: 0.75rem; /* text-xs */
-    font-family: monospace;
-    font-weight: 700; /* font-bold */
-    border-radius: 9999px; /* rounded-full */
-    padding: 0.25rem 0.5rem; /* py-1 px-2 */
-    color: var(--swo-text-white);
-    border: none;
-    cursor: pointer;
-    z-index: 10;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  background-color: #000000;
+  opacity: 0.7;
+  font-size: 0.75rem; /* text-xs */
+  font-family: monospace;
+  font-weight: 700; /* font-bold */
+  border-radius: 9999px; /* rounded-full */
+  padding: 0.25rem 0.5rem; /* py-1 px-2 */
+  color: var(--swo-text-white);
+  border: none;
+  cursor: pointer;
+  z-index: 10;
 }
 .swo-code-prettier-btn:hover {
-    opacity: 1;
+  opacity: 1;
 }
 .swo-code-prettier-btn:disabled {
-    opacity: 0.4 !important;
-    cursor: not-allowed;
+  opacity: 0.4 !important;
+  cursor: not-allowed;
 }
 
 /* Resize Handle */
-.swo-resize-handle { /* For editor/preview */
-    width: 0.5rem; /* w-2 */
-    height: 100%;
-    background-color: transparent; /* Or a subtle color like var(--swo-dark-color) */
-    cursor: col-resize;
-    flex-shrink: 0;
-    /* border-left: 1px solid var(--swo-dark-color); 
+.swo-resize-handle {
+  /* For editor/preview */
+  width: 0.5rem; /* w-2 */
+  height: 100%;
+  background-color: transparent; /* Or a subtle color like var(--swo-dark-color) */
+  cursor: col-resize;
+  flex-shrink: 0;
+  /* border-left: 1px solid var(--swo-dark-color); 
     border-right: 1px solid var(--swo-dark-color); */
 }
 
 /* Right Pane (Preview + Console) */
 .swo-right-pane {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    position: relative;
-    min-width: 0; /* Important for flex containers */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  min-width: 0; /* Important for flex containers */
 }
 
 /* Preview Pane */
 .swo-preview-pane-container {
-    display: flex;
-    flex-direction: column; /* if content needs to be centered vertically */
-    flex-grow: 1;
-    justify-content: center; /* centers preview-devices-container if it's smaller */
-    background-color: var(--swo-darker-color);
-    overflow: hidden; /* Crucial for resize logic and if preview is larger than pane */
+  display: flex;
+  flex-direction: column; /* if content needs to be centered vertically */
+  flex-grow: 1;
+  justify-content: center; /* centers preview-devices-container if it's smaller */
+  background-color: var(--swo-darker-color);
+  overflow: hidden; /* Crucial for resize logic and if preview is larger than pane */
 }
 .swo-preview-devices-container {
-    background-color: var(--swo-text-white); /* Default BG for iframe area */
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden; /* Clips iframe content to device size */
-    width: 100%; /* Default, can be changed by JS */
-    height: 100%; /* Default, can be changed by JS */
-    transition: width 0.3s ease, height 0.3s ease; /* Smooth resize */
-    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Optional: add shadow to device view */
+  background-color: var(--swo-text-white); /* Default BG for iframe area */
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden; /* Clips iframe content to device size */
+  width: 100%; /* Default, can be changed by JS */
+  height: 100%; /* Default, can be changed by JS */
+  transition: width 0.3s ease, height 0.3s ease; /* Smooth resize */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: add shadow to device view */
 }
 .swo-preview-frame {
-    width: 100%;
-    height: 100%;
-    border-width: 0;
+  width: 100%;
+  height: 100%;
+  border-width: 0;
 }
 
 /* Resize Handle Console */
 .swo-resize-handle-console {
-    height: 0.5rem; /* h-2 */
-    width: 100%;
-    background-color: transparent; /* Or a subtle color */
-    cursor: row-resize;
-    flex-shrink: 0;
-    /* border-top: 1px solid var(--swo-dark-color);
+  height: 0.5rem; /* h-2 */
+  width: 100%;
+  background-color: transparent; /* Or a subtle color */
+  cursor: row-resize;
+  flex-shrink: 0;
+  /* border-top: 1px solid var(--swo-dark-color);
     border-bottom: 1px solid var(--swo-dark-color); */
 }
 
 /* Console Pane */
 .swo-console-container {
-    background-color: var(--swo-dark-color);
-    display: flex; /* Initial state managed by JS, but 'flex' when visible */
-    flex-direction: column;
-    overflow: hidden;
-    flex-shrink: 0; /* Prevent shrinking beyond content initially */
-    /* height will be set by JS */
+  background-color: var(--swo-dark-color);
+  display: flex; /* Initial state managed by JS, but 'flex' when visible */
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0; /* Prevent shrinking beyond content initially */
+  /* height will be set by JS */
 }
 .swo-console-header {
-    background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
-    padding: 0.5rem 0.75rem; /* p-2 pl-3 (approx) */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 600; /* font-semibold */
-    height: 2.5rem; /* h-10 */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  padding: 0.5rem 0.75rem; /* p-2 pl-3 (approx) */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600; /* font-semibold */
+  height: 2.5rem; /* h-10 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
 }
 .swo-console-title {
-    font-family: monospace;
+  font-family: monospace;
 }
 .swo-clear-console-btn {
-    font-size: 0.75rem; /* text-xs */
-    background-color: var(--swo-neutral-700);
-    color: var(--swo-text-white);
-    padding: 0.25rem 0.5rem; /* py-1 px-2 */
-    border-radius: 0.25rem; /* rounded */
-    border: none;
-    cursor: pointer;
+  font-size: 0.75rem; /* text-xs */
+  background-color: var(--swo-neutral-700);
+  color: var(--swo-text-white);
+  padding: 0.25rem 0.5rem; /* py-1 px-2 */
+  border-radius: 0.25rem; /* rounded */
+  border: none;
+  cursor: pointer;
 }
 .swo-clear-console-btn:hover {
-    background-color: var(--swo-neutral-600);
+  background-color: var(--swo-neutral-600);
 }
 .swo-clear-console-btn:focus {
-    outline: 2px solid var(--swo-primary-color); /* Example focus */
-    outline-offset: 1px;
+  outline: 2px solid var(--swo-primary-color); /* Example focus */
+  outline-offset: 1px;
 }
 .swo-console-output {
-    flex-grow: 1;
-    padding: 0.5rem; /* p-2 */
-    overflow-y: auto;
-    font-size: 0.75rem; /* text-xs */
-    font-family: monospace;
-    line-height: 1.4;
+  flex-grow: 1;
+  padding: 0.5rem; /* p-2 */
+  overflow-y: auto;
+  font-size: 0.75rem; /* text-xs */
+  font-family: monospace;
+  line-height: 1.4;
 }
 .swo-console-output .swo-console-message-line {
-    padding: 0.25rem; /* p-1 */
-    border-bottom: 1px solid var(--swo-neutral-700);
-    display: flex;
-    align-items: flex-start; /* Align icon with first line of text */
+  padding: 0.25rem; /* p-1 */
+  border-bottom: 1px solid var(--swo-neutral-700);
+  display: flex;
+  align-items: flex-start; /* Align icon with first line of text */
 }
 .swo-console-output .swo-console-message-icon {
-    margin-right: 0.5rem; /* mr-2 */
-    user-select: none; /* select-none */
+  margin-right: 0.5rem; /* mr-2 */
+  user-select: none; /* select-none */
 }
 .swo-console-output .swo-console-message-content-wrapper {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 .swo-console-output .swo-console-message-content {
-    white-space: pre-wrap;
-    word-break: break-all; /* break-words */
+  white-space: pre-wrap;
+  word-break: break-all; /* break-words */
 }
-.swo-console-output .swo-console-log { color: var(--swo-neutral-300); }
-.swo-console-output .swo-console-error { color: var(--swo-text-red-400); }
-.swo-console-output .swo-console-warn { color: var(--swo-text-yellow-400); }
-.swo-console-output .swo-console-info { color: var(--swo-text-blue-400); }
-.swo-console-output .swo-console-debug { color: var(--swo-text-purple-400); }
-.swo-console-output .swo-console-special-message { /* For "cleared", "connected" */
-    padding: 0.25rem;
-    font-style: italic;
+.swo-console-output .swo-console-log {
+  color: var(--swo-neutral-300);
 }
-.swo-console-output .swo-console-cleared { color: var(--swo-neutral-500); }
-.swo-console-output .swo-console-connected { color: var(--swo-text-green-400); }
-
+.swo-console-output .swo-console-error {
+  color: var(--swo-text-red-400);
+}
+.swo-console-output .swo-console-warn {
+  color: var(--swo-text-yellow-400);
+}
+.swo-console-output .swo-console-info {
+  color: var(--swo-text-blue-400);
+}
+.swo-console-output .swo-console-debug {
+  color: var(--swo-text-purple-400);
+}
+.swo-console-output .swo-console-special-message {
+  /* For "cleared", "connected" */
+  padding: 0.25rem;
+  font-style: italic;
+}
+.swo-console-output .swo-console-cleared {
+  color: var(--swo-neutral-500);
+}
+.swo-console-output .swo-console-connected {
+  color: var(--swo-text-green-400);
+}
 
 /* Preview Frame Cover (for resizing) */
 .swo-preview-frame-cover-resizeable {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    opacity: 0; /* Will be shown by JS if needed during resize, but typically not needed if user-select: none is on body */
-    z-index: 50; /* Must be above iframe */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0; /* Will be shown by JS if needed during resize, but typically not needed if user-select: none is on body */
+  z-index: 50; /* Must be above iframe */
 }
 
 /* Control Panel */
 .swo-panel-control {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 3rem; /* h-12 */
-    background-color: var(--swo-dark-color);
-    color: var(--swo-neutral-400);
-    font-size: 0.875rem; /* text-sm */
-    flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem; /* h-12 */
+  background-color: var(--swo-dark-color);
+  color: var(--swo-neutral-400);
+  font-size: 0.875rem; /* text-sm */
+  flex-shrink: 0;
 }
 .swo-panel-control > div {
-    display: flex;
+  display: flex;
 }
 .swo-panel-control-group-center {
-    flex-grow: 1;
-    justify-content: center;
+  flex-grow: 1;
+  justify-content: center;
 }
 .swo-control-button {
-    width: 3rem; /* w-12 */
-    height: 3rem; /* h-12 */
-    aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    color: var(--swo-neutral-400);
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+  width: 3rem; /* w-12 */
+  height: 3rem; /* h-12 */
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--swo-neutral-400);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: 1rem;
 }
 .swo-control-button svg {
-    height: .8rem;
-    fill: var(--swo-neutral-400);
+  height: 0.8rem;
+  fill: var(--swo-neutral-400);
 }
 .swo-control-button:not(:disabled):hover {
-    background-color: rgba(0, 0, 0, 0.2); /* hover:bg-black hover:bg-opacity-20 */
-    color: var(--swo-primary-color); /* hover:text-primary */
+  background-color: rgba(0, 0, 0, 0.2); /* hover:bg-black hover:bg-opacity-20 */
+  color: var(--swo-primary-color); /* hover:text-primary */
 }
 .swo-control-button:not(:disabled):hover svg {
-    fill: var(--swo-primary-color);
+  fill: var(--swo-primary-color);
 }
 .swo-control-button.swo-active {
-    background-color: rgba(0, 0, 0, 0.2);
-    color: var(--swo-primary-color);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--swo-primary-color);
 }
 .swo-control-button.swo-active svg {
-    fill: var(--swo-primary-color);
+  fill: var(--swo-primary-color);
 }
 .swo-control-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 /* Utility for JS to hide elements */
 .swo-hidden {
-    display: none !important;
+  display: none !important;
 }

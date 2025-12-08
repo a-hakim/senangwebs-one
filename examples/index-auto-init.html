@@ -1,67 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SenangWebs One - Auto Initialization Example</title>
 
     <!-- SWO Library CSS -->
-    <link rel="stylesheet" href="../dist/swo.css">
+    <link rel="stylesheet" href="../dist/swo.css" />
 
     <!-- Monaco Editor ESM Loader -->
     <script type="module">
-        import * as monaco from 'https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/+esm';
-        window.monaco = monaco;
+      import * as monaco from "https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/+esm";
+      window.monaco = monaco;
     </script>
-    
-    <!-- js-beautify (for Prettier button) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
 
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        #swo-editor-auto {
-            height: 70vh; /* Give the container a specific height */
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1, p {
-            margin-bottom: 15px;
-        }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      #swo-editor-auto {
+        height: 70vh; /* Give the container a specific height */
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      p {
+        margin-bottom: 15px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>SenangWebs One - Auto Initialization</h1>
-        <p>
-            This instance of SWO is initialized automatically because the
-            <code>div</code> below has the <code>data-swo</code> attribute.
-            It will use the default code or load previously saved code from localStorage
-            (if <code>data-swo-storage-key</code> is set or a default one is used).
-        </p>
+      <h1>SenangWebs One - Auto Initialization</h1>
+      <p>
+        This instance of SWO is initialized automatically because the
+        <code>div</code> below has the <code>data-swo</code> attribute. It will
+        use the default code or load previously saved code from localStorage (if
+        <code>data-swo-storage-key</code> is set or a default one is used).
+      </p>
 
-        <div id="swo-editor-auto" 
-             data-swo 
-             data-swo-storage-key="swo-example-auto-init">
-            <!-- SWO will populate this -->
-        </div>
+      <div
+        id="swo-editor-auto"
+        data-swo
+        data-swo-storage-key="swo-example-auto-init"
+      >
+        <!-- SWO will populate this -->
+      </div>
 
-        <p style="margin-top: 20px;">
-            The SWO library's JavaScript (<code>dist/swo.js</code>) includes logic to find all elements
-            with <code>data-swo</code> on <code>DOMContentLoaded</code> and initialize them.
-        </p>
+      <p style="margin-top: 20px">
+        The SWO library's JavaScript (<code>dist/swo.js</code>) includes logic
+        to find all elements with <code>data-swo</code> on
+        <code>DOMContentLoaded</code> and initialize them.
+      </p>
     </div>
 
     <!-- SWO Library JS (load after dependency scripts and target div) -->
     <script src="../dist/swo.js"></script>
-</body>
+  </body>
 </html>
