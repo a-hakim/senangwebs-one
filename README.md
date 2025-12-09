@@ -27,9 +27,8 @@ SenangWebs One (SWO) is a versatile, embeddable web development environment that
 
 ## Examples
 
-[https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html)
-
-[https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html)
+1. [https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html)
+2. [https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html)
 
 ## Dependencies
 
@@ -39,9 +38,7 @@ SWO relies on a few external libraries that you need to include separately (typi
   - Monaco Editor provides its own CSS and JavaScript bundle
   - Includes built-in syntax highlighting, auto-completion, and modern editor features
 - **JS-Beautify:** For the "Prettier" code formatting button.
-  - `beautify-html.min.js`
-- **Font Awesome:** For icons used in the control panel.
-  - `all.min.css`
+- **SenangStart Icons:** For icons used in the control panel.
 - **Google Fonts (Outfit):** For the default font (optional, used for styling).
 
 ## Installation
@@ -110,15 +107,6 @@ Place the SWO CSS and JS files (either from the CDN links above or your local `d
     <!-- External Dependencies -->
     <!-- Monaco Editor (VS Code editor engine) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0/min/vs/loader.min.js"></script>
-
-    <!-- JS-Beautify (for Prettier button) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
-
-    <!-- Font Awesome (for icons) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
 
     <!-- Google Fonts (Outfit) - Optional for styling -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -346,15 +334,6 @@ If you see "Monaco Editor not loaded" in the code editor:
 
 2. **CDN Issues:** Try using a different CDN or host Monaco Editor locally.
 
-### Prettier Button Disabled
-
-If the Prettier button is disabled:
-
-1. **Include js-beautify:** Make sure js-beautify is loaded before SWO:
-   ```html
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
-   ```
-
 ### Console Not Working
 
 If console messages aren't appearing:
@@ -380,7 +359,7 @@ Contributions, issues, and feature requests are welcome! Please feel free to:
 
 ## License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details (assuming you will add one).
+MIT License
 
 ## Acknowledgments
 
@@ -388,5 +367,5 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 - Built with amazing open-source libraries:
   - **Monaco Editor** - Microsoft's VS Code editor engine
   - **JS-Beautify** - Code formatting functionality
-  - **Font Awesome** - Icons and UI elements
+  - **SenangStart Icons** - Icons and UI elements
 - Special thanks to the VS Code team for making Monaco Editor available as a standalone library.
