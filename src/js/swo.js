@@ -33,11 +33,12 @@ class SWO {
     const instanceId = `swo-instance-${Math.random()
       .toString(36)
       .substring(2, 9)}`;
+    // Validate and set options with proper type checking
+    const codeOption = typeof mergedOptions.code === 'string' ? mergedOptions.code :
+      (this.targetElement.dataset.swoCode || null);
+    
     this.options = {
-      code:
-        mergedOptions.code ||
-        this.targetElement.dataset.swoCode ||
-        this._getDefaultInitialCode(),
+      code: codeOption,
       storageKey:
         mergedOptions.storageKey ||
         this.targetElement.dataset.swoStorageKey ||
@@ -171,8 +172,11 @@ class SWO {
       console.error(
         "SWO: Monaco Editor not found. Please include Monaco Editor."
       );
-      this.elements.codeEditorContainer.innerHTML =
-        '<div style="padding: 20px; color: #fff; background: #1e1e1e;">Monaco Editor not loaded. Please include it.</div>';
+      // Use DOM APIs instead of innerHTML to avoid XSS patterns
+      const errorDiv = document.createElement('div');
+      errorDiv.style.cssText = "padding: 20px; color: #fff; background: #1e1e1e;";
+      errorDiv.textContent = "Monaco Editor not loaded. Please include it.";
+      this.elements.codeEditorContainer.appendChild(errorDiv);
       return;
     }
 
@@ -250,7 +254,9 @@ class SWO {
     el.toggleConsoleBtn.addEventListener("click", () => this.toggleConsole());
 
     // Listen for messages from iframe (console bridge)
-    window.addEventListener("message", this._handleIframeMessage.bind(this));
+    // Store bound reference to properly remove in destroy()
+    this._boundHandleIframeMessage = this._handleIframeMessage.bind(this);
+    window.addEventListener("message", this._boundHandleIframeMessage);
   }
 
   _initialLayout() {
@@ -268,7 +274,12 @@ class SWO {
   }
 
   _loadCode() {
-    const savedCode = localStorage.getItem(this.options.storageKey);
+    let savedCode = null;
+    try {
+      savedCode = localStorage.getItem(this.options.storageKey);
+    } catch (e) {
+      console.warn("SWO: Unable to read from localStorage:", e.message);
+    }
     const codeToLoad =
       this.options.code !== null ? this.options.code : savedCode;
     if (this.monacoEditor) {
@@ -277,7 +288,11 @@ class SWO {
   }
 
   _saveCode(code) {
-    localStorage.setItem(this.options.storageKey, code);
+    try {
+      localStorage.setItem(this.options.storageKey, code);
+    } catch (e) {
+      console.warn("SWO: Unable to save to localStorage:", e.message);
+    }
   }
 
   _getIframeConsoleBridgeScript() {
@@ -766,8 +781,11 @@ class SWO {
 
   // Public method to destroy the instance and clean up
   destroy() {
-    // Remove event listeners
-    window.removeEventListener("message", this._handleIframeMessage.bind(this));
+    // Remove event listeners using the stored bound reference
+    if (this._boundHandleIframeMessage) {
+      window.removeEventListener("message", this._boundHandleIframeMessage);
+      this._boundHandleIframeMessage = null;
+    }
     // Monaco Editor instance cleanup
     if (this.monacoEditor) {
       this.monacoEditor.dispose();
@@ -786,6 +804,13 @@ class SWO {
 // Auto-initialize for data-swo attribute
 // Ensures SWO is available globally for script tag usage after bundle loads
 function initializeSWO() {
+  // Wait for Monaco to be available before initializing
+  if (typeof monaco === "undefined") {
+    // Retry after short delay - Monaco may be loading asynchronously
+    setTimeout(initializeSWO, 100);
+    return;
+  }
+  
   document.querySelectorAll("[data-swo]").forEach((el) => {
     if (!el.swoInstance) {
       // Prevent double initialization
