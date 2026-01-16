@@ -1,6 +1,7 @@
 import "../css/swo.css"; // Import CSS to be processed by Webpack
 import "@bookklik/senangstart-icons/dist/senangstart-icon.min.js";
 import { html_beautify } from "js-beautify";
+import * as monaco from "monaco-editor";
 
 class SWO {
   constructor(targetOrOptions, optionsIfTarget) {
@@ -168,18 +169,6 @@ class SWO {
   }
 
   _initMonaco() {
-    if (typeof monaco === "undefined") {
-      console.error(
-        "SWO: Monaco Editor not found. Please include Monaco Editor."
-      );
-      // Use DOM APIs instead of innerHTML to avoid XSS patterns
-      const errorDiv = document.createElement('div');
-      errorDiv.style.cssText = "padding: 20px; color: #fff; background: #1e1e1e;";
-      errorDiv.textContent = "Monaco Editor not loaded. Please include it.";
-      this.elements.codeEditorContainer.appendChild(errorDiv);
-      return;
-    }
-
     this.monacoEditor = monaco.editor.create(
       this.elements.codeEditorContainer,
       {
@@ -204,6 +193,7 @@ class SWO {
       debounceTimeout = setTimeout(() => this.updatePreview(), 300);
     });
   }
+
 
   _initEventListeners() {
     const el = this.elements;

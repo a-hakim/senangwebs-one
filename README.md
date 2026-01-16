@@ -22,71 +22,19 @@ SenangWebs One (SWO) is a versatile, embeddable web development environment that
 - **Open in New Tab:** Preview your creation in a full browser tab with popup handling.
 - **Easy Integration:** Initialize via simple data attributes or JavaScript constructor.
 - **Multiple Instances:** Support for multiple SWO instances on the same page with unique identifiers.
-- **Crossorigin Asset Support:** Automatic crossorigin attribute addition for media assets (images, audio, video).
 - **Modern Look & Feel:** Styled with a clean, dark theme optimized for coding.
+- **Zero Configuration:** All dependencies (Monaco Editor, js-beautify, icons) are bundled - just include two files and go.
 
 ## Examples
 
 1. [https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-auto-init.html)
 2. [https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html](https://unpkg.com/senangwebs-one@latest/examples/index-js-init.html)
 
-## Dependencies
-
-SWO relies on a few external libraries that you need to include separately (typically via CDN) for full functionality:
-
-- **Monaco Editor:** For the code editor (VS Code's editor engine).
-  - Monaco Editor provides its own CSS and JavaScript bundle
-  - Includes built-in syntax highlighting, auto-completion, and modern editor features
-- **JS-Beautify:** For the "Prettier" code formatting button.
-- **SenangStart Icons:** For icons used in the control panel.
-- **Google Fonts (Outfit):** For the default font (optional, used for styling).
-
 ## Installation
 
-There are a couple of ways to integrate SenangWebs One into your project:
+### Using a CDN (Recommended)
 
-### Using a CDN
-
-For the quickest setup, you can include SenangWebs One's core CSS and JavaScript files directly from a CDN like unpkg. This is often the easiest way to get started.
-
-```html
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/senangwebs-one@latest/dist/swo.css"
-/>
-<script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
-```
-
-You will then include these links in your HTML page as shown in the "Include Files in Your HTML Page" section below.
-
-### Setting Up with Local Files
-
-If you prefer to host the files yourself, want to work offline, or need to build from source:
-
-**1. Get SWO Files**
-
-**Option A: Build from Source (Recommended for development)**
-
-Clone the repository and build the `dist` files:
-
-```bash
-# Clone the repository (if you haven't already)
-# git clone <repository-url>
-# cd senangwebs-one
-
-npm install
-npm run build
-```
-
-This will generate `dist/swo.js` and `dist/swo.css`.
-
-**Option B: Using Pre-built Files (If available)**
-
-If pre-built `dist` files are provided with a release, you can download them directly. These are typically `swo.js` and `swo.css` found in a `dist` folder.
-
-### 2. Include Files in Your HTML Page
-
-Place the SWO CSS and JS files (either from the CDN links above or your local `dist` folder), along with its dependencies, in your HTML's `<head>` and `<body>` sections.
+For the quickest setup, include SenangWebs One's CSS and JavaScript files from unpkg:
 
 ```html
 <!DOCTYPE html>
@@ -96,67 +44,38 @@ Place the SWO CSS and JS files (either from the CDN links above or your local `d
     <title>My SWO Project</title>
 
     <!-- SWO Library CSS -->
-    <!-- Using CDN (recommended for quick start): -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/senangwebs-one@latest/dist/swo.css"
-    />
-    <!-- Or, if using local files: -->
-    <!-- <link rel="stylesheet" href="path/to/your/dist/swo.css"> -->
-
-    <!-- External Dependencies -->
-    <!-- Monaco Editor (VS Code editor engine) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0/min/vs/loader.min.js"></script>
-
-    <!-- Google Fonts (Outfit) - Optional for styling -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/senangwebs-one@latest/dist/swo.css" />
 
     <style>
-      /* Ensure your target element has a defined height */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-      }
-      #my-swo-editor {
-        height: 100vh; /* Or any specific height */
-      }
+      html, body { height: 100%; margin: 0; overflow: hidden; }
+      #my-swo-editor { height: 100vh; }
     </style>
   </head>
   <body>
-    <div id="my-swo-editor">
-      <!-- SWO will be initialized here -->
+    <div id="my-swo-editor" data-swo>
+      <!-- SWO will populate this -->
     </div>
 
-    <!-- Monaco Editor Setup -->
-    <script>
-      require.config({
-        paths: {
-          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.54.0/min/vs",
-        },
-      });
-      require(["vs/editor/editor.main"], function () {
-        // Monaco Editor is now loaded and available as global 'monaco'
-      });
-    </script>
-
-    <!-- SWO Library JS (Load after dependencies and target element) -->
-    <!-- Using CDN (recommended for quick start): -->
+    <!-- SWO Library JS (includes Monaco Editor, js-beautify, and icons) -->
     <script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
-    <!-- Or, if using local files: -->
-    <!-- <script src="path/to/your/dist/swo.js"></script> -->
-    <script>
-      // Optional: JavaScript initialization (see Usage section)
-    </script>
   </body>
 </html>
 ```
+
+That's it! No additional dependencies needed.
+
+### Building from Source
+
+If you prefer to host files locally or customize the build:
+
+```bash
+git clone <repository-url>
+cd senangwebs-one
+npm install
+npm run build
+```
+
+This generates `dist/swo.js` and `dist/swo.css`.
 
 ## Usage
 
@@ -186,28 +105,37 @@ Simply add the `data-swo` attribute to a container element. SWO will automatical
 
 ### 2. Using JavaScript Initialization
 
-For more control, you can initialize SWO programmatically. This is useful for dynamically creating instances or passing complex initial code.
+For more control, you can initialize SWO programmatically.
 
 ```html
 <div id="my-custom-editor" style="height: 100vh;"></div>
 
+<script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    if (typeof SWO !== "undefined") {
-      const customCode = `<!DOCTYPE html>
-<html>
-<head><title>My Awesome Page</title></head>
-<body><h1>Hello from SWO!</h1><script>console.log("JS Init!");<\/script></body>
-</html>`;
+    // Simple inline code (for basic content)
+    new SWO("#my-custom-editor", {
+      code: "<h1>Hello World!</h1><p>Edit me!</p>",
+      storageKey: "my-project-code",
+    });
+  });
+</script>
+```
 
-      new SWO("#my-custom-editor", {
-        // Target element selector or DOM element
-        code: customCode,
-        storageKey: "custom-editor-project-xyz",
-      });
-    } else {
-      console.error("SWO library not loaded.");
-    }
+> **Important:** When using inline code strings, avoid including complete HTML documents with closing tags like `</body>`, `</script>`, or `</html>`. Some dev servers (like Live Server) may misinterpret these tags and inject code into your JavaScript, causing syntax errors. For complex HTML with script tags, use the fetch approach below.
+
+For complex initial code (especially with `<script>` tags), fetch from a separate file:
+
+```html
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    const response = await fetch("./my-template.html");
+    const initialCode = await response.text();
+
+    new SWO("#my-custom-editor", {
+      code: initialCode,
+      storageKey: "my-project-code",
+    });
   });
 </script>
 ```
@@ -310,29 +238,6 @@ SenangWebs One is designed to work on all modern browsers that support Monaco Ed
 **Note:** Internet Explorer is not supported due to ES6+ requirements and Monaco Editor compatibility.
 
 ## Troubleshooting
-
-### Monaco Editor Not Loading
-
-If you see "Monaco Editor not loaded" in the code editor:
-
-1. **Check Monaco Editor Setup:** Ensure Monaco Editor is loaded before SWO:
-
-   ```html
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
-   <script>
-     require.config({
-       paths: {
-         vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs",
-       },
-     });
-     require(["vs/editor/editor.main"], function () {
-       // Monaco is ready, now load SWO
-       // Your SWO initialization code here
-     });
-   </script>
-   ```
-
-2. **CDN Issues:** Try using a different CDN or host Monaco Editor locally.
 
 ### Console Not Working
 

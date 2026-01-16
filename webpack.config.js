@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -14,7 +15,12 @@ module.exports = {
       export: 'default'
     },
     globalObject: 'this', 
-    publicPath: '', 
+    publicPath: 'auto', // Let webpack determine the public path at runtime
+  },
+  // Disable code splitting to bundle everything into a single file
+  optimization: {
+    splitChunks: false,
+    runtimeChunk: false,
   },
   module: {
     rules: [
@@ -31,12 +37,43 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader']
+      },
+      {
+        test: /\.ttf$/,
+        type: 'asset/inline' // Inline fonts as base64 to avoid separate file requests
       }
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'swo.css' 
+    }),
+    new MonacoWebpackPlugin({
+      // Only include HTML language since that's what this editor uses
+      languages: ['html'],
+      // Disable features we don't need to reduce bundle size
+      features: [
+        'bracketMatching',
+        'clipboard',
+        'colorPicker',
+        'comment',
+        'contextmenu',
+        'find',
+        'folding',
+        'fontZoom',
+        'format',
+        'hover',
+        'indentation',
+        'lineSelection',
+        'links',
+        'multicursor',
+        'smartSelect',
+        'snippets',
+        'suggest',
+        'wordHighlighter',
+        'wordOperations',
+        'wordPartOperations'
+      ]
     })
   ]
 };

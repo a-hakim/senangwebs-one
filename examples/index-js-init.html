@@ -8,12 +8,6 @@
     <!-- SWO Library CSS -->
     <link rel="stylesheet" href="../dist/swo.css" />
 
-    <!-- Monaco Editor ESM Loader -->
-    <script type="module">
-      import * as monaco from "https://cdn.jsdelivr.net/npm/monaco-editor@0.54.0/+esm";
-      window.monaco = monaco;
-    </script>
-
     <style>
       html,
       body {
@@ -60,19 +54,15 @@
     <script src="../dist/swo.js"></script>
 
     <script>
-      // Wait for Monaco to load, then initialize SWO
+      // Initialize SWO - Monaco is now bundled with the library
       async function initSWO() {
-        if (typeof monaco !== "undefined" && typeof SWO !== "undefined") {
-          const response = await fetch("./sample_html.txt");
-          const initialCode = await response.text();
+        const response = await fetch("./sample_html.txt");
+        const initialCode = await response.text();
 
-          new SWO("#swo-editor-manual", {
-            storageKey: "swo-example-js-init",
-            code: initialCode,
-          });
-        } else {
-          setTimeout(initSWO, 100);
-        }
+        new SWO("#swo-editor-manual", {
+          storageKey: "swo-example-js-init",
+          code: initialCode,
+        });
       }
 
       document.addEventListener("DOMContentLoaded", initSWO);
