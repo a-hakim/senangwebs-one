@@ -68,20 +68,20 @@
             code: `<!DOCTYPE html>
 <html>
 <head>
-    <title>Custom Initial Code</title>
+    <title>Custom Initial Code\x3c/title>
     <style>
         body { font-family: Arial; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); margin: 0; padding: 40px; color: white; }
         .card { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px); }
-    </style>
-</head>
+    \x3c/style>
+\x3c/head>
 <body>
     <div class="card">
-        <h1>🚀 Manually Initialized SWO</h1>
-        <p>This code was set via JavaScript options!</p>
-        <button onclick="console.log('Hello from custom code!')">Click me</button>
-    </div>
-</body>
-</html>`,
+        <h1>🚀 Manually Initialized SWO\x3c/h1>
+        <p>This code was set via JavaScript options!\x3c/p>
+        <button onclick="console.log('Hello from custom code!')">Click me\x3c/button>
+    \x3c/div>
+\x3c/body>
+\x3c/html>`,
           });
         } else {
           setTimeout(initSWO, 100);
