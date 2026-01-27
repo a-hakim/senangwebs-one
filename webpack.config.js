@@ -8,8 +8,8 @@ module.exports = (env, argv) => {
 
   return {
     entry: {
-      swo: './src/js/swo.js',
-      'swo.min': './src/js/swo.js', // Separate entry for minified version
+      swo: './src/ts/swo.ts',
+      'swo.min': './src/ts/swo.ts', // Separate entry for minified version
     },
     output: {
       filename: '[name].js',
@@ -22,6 +22,9 @@ module.exports = (env, argv) => {
       globalObject: 'this', 
       publicPath: 'auto', 
       clean: true, // Clean the output directory before emit
+    },
+    resolve: {
+      extensions: ['.ts', '.js'],
     },
     devtool: isProduction ? 'source-map' : 'inline-source-map', // Enable source maps
     optimization: {
@@ -39,6 +42,11 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          use: 'ts-loader'
+        },
         {
           test: /\.js$/,
           exclude: /node_modules/,

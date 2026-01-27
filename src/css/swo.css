@@ -139,7 +139,7 @@
   overflow: hidden; /* Clips iframe content to device size */
   width: 100%; /* Default, can be changed by JS */
   height: 100%; /* Default, can be changed by JS */
-  transition: width 0.3s ease, height 0.3s ease; /* Smooth resize */
+  transition: width 0.3s ease, max-width 0.3s ease, height 0.3s ease; /* Smooth resize */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: add shadow to device view */
 }
 .swo-preview-frame {

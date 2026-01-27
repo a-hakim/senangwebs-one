@@ -1,10 +1,10 @@
 import "../css/swo.css"; // Import CSS to be processed by Webpack
 import "@bookklik/senangstart-icons/dist/senangstart-icon.min.js";
-import { html_beautify } from "js-beautify";
+import { html_beautify, HTMLBeautifyOptions } from "js-beautify";
 
 // CodeMirror Imports
 import { EditorState } from "@codemirror/state";
-import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from "@codemirror/view";
+import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine, ViewUpdate } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { bracketMatching, indentOnInput, syntaxHighlighting, defaultHighlightStyle, foldGutter, foldKeymap } from "@codemirror/language";
 import { closeBrackets, closeBracketsKeymap, autocompletion, completionKeymap } from "@codemirror/autocomplete";
@@ -50,10 +50,72 @@ const basicSetup = [
   ])
 ];
 
+interface SWOOptions {
+  code?: string | null;
+  storageKey?: string;
+}
+
+interface SWOElements {
+  editorPane?: HTMLElement;
+  codeEditorContainer?: HTMLElement;
+  codePrettierBtn?: HTMLElement;
+  resizeHandle?: HTMLElement;
+  rightPane?: HTMLElement;
+  previewPaneContainer?: HTMLElement;
+  previewDevicesContainer?: HTMLElement;
+  previewFrame?: HTMLIFrameElement;
+  resizeHandleConsole?: HTMLElement;
+  consoleContainer?: HTMLElement;
+  consoleOutput?: HTMLElement;
+  clearConsoleBtn?: HTMLElement;
+  previewFrameCover?: HTMLElement;
+  toggleCodeEditorBtn?: HTMLElement;
+  toggleConsoleBtn?: HTMLElement;
+  resizeDesktopBtn?: HTMLElement;
+  resizeTabletBtn?: HTMLElement;
+  resizeMobileBtn?: HTMLElement;
+  refreshPreviewBtn?: HTMLElement;
+  openNewTabBtn?: HTMLElement;
+  codeEditorUIElements?: NodeListOf<Element>;
+  consoleUIElements?: NodeListOf<Element>;
+}
+
+interface IframeMessageData {
+    type: string;
+    method?: string;
+    args?: any[];
+}
+
+// Augment HTMLElement to include swoInstance
+declare global {
+  interface HTMLElement {
+    swoInstance?: SWO;
+  }
+}
+
 class SWO {
-  constructor(targetOrOptions, optionsIfTarget) {
-    let targetElement;
-    let mergedOptions;
+  targetElement: HTMLElement;
+  options: SWOOptions;
+  elements: SWOElements;
+  editorView: EditorView | null;
+  isResizingPanes: boolean;
+  isResizingConsole: boolean;
+  
+  private _initialMouseX: number = 0;
+  private _initialEditorWidth: number = 0;
+  private _boundHandlePaneMouseMove: ((e: MouseEvent) => void) | null = null;
+  private _boundHandlePaneMouseUp: (() => void) | null = null;
+  
+  private _initialMouseYConsole: number = 0;
+  private _initialPreviewHeight: number = 0;
+  private _boundHandleConsoleResizeMouseMove: ((e: MouseEvent) => void) | null = null;
+  private _boundHandleConsoleResizeMouseUp: (() => void) | null = null;
+  
+  private _boundHandleIframeMessage: ((event: MessageEvent) => void) | null = null;
+
+  constructor(targetOrOptions?: string | HTMLElement | SWOOptions, optionsIfTarget?: SWOOptions) {
+    let targetElement: HTMLElement | null = null;
+    let mergedOptions: SWOOptions;
 
     if (
       typeof targetOrOptions === "string" ||
@@ -73,7 +135,7 @@ class SWO {
       console.error(
         "SWO: Target element not found. Please provide a valid selector, DOM element, or ensure a [data-swo] element exists."
       );
-      return;
+      throw new Error("Target element not found");
     }
     this.targetElement = targetElement;
     this.targetElement.classList.add("swo-container"); // Add base class for scoping
@@ -81,6 +143,7 @@ class SWO {
     const instanceId = `swo-instance-${Math.random()
       .toString(36)
       .substring(2, 9)}`;
+    
     // Validate and set options with proper type checking
     const codeOption = typeof mergedOptions.code === 'string' ? mergedOptions.code :
       (this.targetElement.dataset.swoCode || null);
@@ -175,35 +238,35 @@ class SWO {
   _cacheElements() {
     const el = this.elements;
     const T = this.targetElement; // Scope queries to the instance's target element
-    el.editorPane = T.querySelector(".swo-editor-pane");
-    el.codeEditorContainer = T.querySelector(".swo-code-editor-container");
-    el.codePrettierBtn = T.querySelector(".swo-code-prettier-btn");
-    el.resizeHandle = T.querySelector(".swo-resize-handle");
+    el.editorPane = T.querySelector(".swo-editor-pane") as HTMLElement;
+    el.codeEditorContainer = T.querySelector(".swo-code-editor-container") as HTMLElement;
+    el.codePrettierBtn = T.querySelector(".swo-code-prettier-btn") as HTMLElement;
+    el.resizeHandle = T.querySelector(".swo-resize-handle") as HTMLElement;
 
-    el.rightPane = T.querySelector(".swo-right-pane");
-    el.previewPaneContainer = T.querySelector(".swo-preview-pane-container");
+    el.rightPane = T.querySelector(".swo-right-pane") as HTMLElement;
+    el.previewPaneContainer = T.querySelector(".swo-preview-pane-container") as HTMLElement;
     el.previewDevicesContainer = T.querySelector(
       ".swo-preview-devices-container"
-    );
-    el.previewFrame = T.querySelector(".swo-preview-frame");
+    ) as HTMLElement;
+    el.previewFrame = T.querySelector(".swo-preview-frame") as HTMLIFrameElement;
 
-    el.resizeHandleConsole = T.querySelector(".swo-resize-handle-console");
-    el.consoleContainer = T.querySelector(".swo-console-container");
-    el.consoleOutput = T.querySelector(".swo-console-output");
-    el.clearConsoleBtn = T.querySelector(".swo-clear-console-btn");
+    el.resizeHandleConsole = T.querySelector(".swo-resize-handle-console") as HTMLElement;
+    el.consoleContainer = T.querySelector(".swo-console-container") as HTMLElement;
+    el.consoleOutput = T.querySelector(".swo-console-output") as HTMLElement;
+    el.clearConsoleBtn = T.querySelector(".swo-clear-console-btn") as HTMLElement;
     el.previewFrameCover = T.querySelector(
       ".swo-preview-frame-cover-resizeable"
-    );
+    ) as HTMLElement;
 
-    el.toggleCodeEditorBtn = T.querySelector(".swo-toggle-code-editor-btn");
-    el.toggleConsoleBtn = T.querySelector(".swo-toggle-console-btn");
+    el.toggleCodeEditorBtn = T.querySelector(".swo-toggle-code-editor-btn") as HTMLElement;
+    el.toggleConsoleBtn = T.querySelector(".swo-toggle-console-btn") as HTMLElement;
 
     // Control Buttons
-    el.resizeDesktopBtn = T.querySelector(".swo-resize-desktop");
-    el.resizeTabletBtn = T.querySelector(".swo-resize-tablet");
-    el.resizeMobileBtn = T.querySelector(".swo-resize-mobile");
-    el.refreshPreviewBtn = T.querySelector(".swo-refresh-preview");
-    el.openNewTabBtn = T.querySelector(".swo-open-new-tab");
+    el.resizeDesktopBtn = T.querySelector(".swo-resize-desktop") as HTMLElement;
+    el.resizeTabletBtn = T.querySelector(".swo-resize-tablet") as HTMLElement;
+    el.resizeMobileBtn = T.querySelector(".swo-resize-mobile") as HTMLElement;
+    el.refreshPreviewBtn = T.querySelector(".swo-refresh-preview") as HTMLElement;
+    el.openNewTabBtn = T.querySelector(".swo-open-new-tab") as HTMLElement;
 
     // Collections for toggling
     el.codeEditorUIElements = T.querySelectorAll(
@@ -215,8 +278,8 @@ class SWO {
   }
 
   _initCodeMirror() {
-    let debounceTimeout;
-    const updateListener = EditorView.updateListener.of((update) => {
+    let debounceTimeout: ReturnType<typeof setTimeout>;
+    const updateListener = EditorView.updateListener.of((update: ViewUpdate) => {
       if (update.docChanged) {
         const code = update.state.doc.toString();
         this._saveCode(code);
@@ -255,44 +318,57 @@ class SWO {
     }
 
     // Pane Resizing
-    el.resizeHandle.addEventListener(
-      "mousedown",
-      this._onPaneResizeMouseDown.bind(this)
-    );
-    el.resizeHandle.addEventListener(
-      "dblclick",
-      this._onPaneResizeDoubleClick.bind(this)
-    );
-    el.resizeHandleConsole.addEventListener(
-      "mousedown",
-      this._onConsoleResizeMouseDown.bind(this)
-    );
+    if (el.resizeHandle) {
+        el.resizeHandle.addEventListener(
+        "mousedown",
+        this._onPaneResizeMouseDown.bind(this)
+        );
+        el.resizeHandle.addEventListener(
+        "dblclick",
+        this._onPaneResizeDoubleClick.bind(this)
+        );
+    }
+    
+    if (el.resizeHandleConsole) {
+        el.resizeHandleConsole.addEventListener(
+        "mousedown",
+        this._onConsoleResizeMouseDown.bind(this)
+        );
+    }
 
     // Console
-    el.clearConsoleBtn.addEventListener("click", () =>
-      this._clearConsoleOutput(true)
-    );
+    if (el.clearConsoleBtn) {
+        el.clearConsoleBtn.addEventListener("click", () =>
+        this._clearConsoleOutput(true)
+        );
+    }
 
     // Control Panel Buttons
-    el.resizeDesktopBtn.addEventListener("click", () =>
-      this.resizePreviewDevice("100%", "100%")
-    );
-    el.resizeTabletBtn.addEventListener("click", () =>
-      this.resizePreviewDevice("1070px", "100%")
-    ); // Max width 1070px, height dynamic
-    el.resizeMobileBtn.addEventListener("click", () =>
-      this.resizePreviewDevice("390px", "844px")
-    );
+    if (el.resizeDesktopBtn) {
+        el.resizeDesktopBtn.addEventListener("click", () =>
+        this.resizePreviewDevice("100%", "100%")
+        );
+    }
+    if (el.resizeTabletBtn) {
+        el.resizeTabletBtn.addEventListener("click", () =>
+        this.resizePreviewDevice("1070px", "100%")
+        ); // Max width 1070px, height dynamic
+    }
+    if (el.resizeMobileBtn) {
+        el.resizeMobileBtn.addEventListener("click", () =>
+        this.resizePreviewDevice("390px", "844px")
+        );
+    }
 
-    el.refreshPreviewBtn.addEventListener("click", () => this.updatePreview());
-    el.openNewTabBtn.addEventListener("click", () =>
+    if (el.refreshPreviewBtn) el.refreshPreviewBtn.addEventListener("click", () => this.updatePreview());
+    if (el.openNewTabBtn) el.openNewTabBtn.addEventListener("click", () =>
       this.openPreviewInNewTab()
     );
 
-    el.toggleCodeEditorBtn.addEventListener("click", () =>
+    if (el.toggleCodeEditorBtn) el.toggleCodeEditorBtn.addEventListener("click", () =>
       this.toggleCodeEditor()
     );
-    el.toggleConsoleBtn.addEventListener("click", () => this.toggleConsole());
+    if (el.toggleConsoleBtn) el.toggleConsoleBtn.addEventListener("click", () => this.toggleConsole());
 
     // Listen for messages from iframe (console bridge)
     // Store bound reference to properly remove in destroy()
@@ -301,6 +377,8 @@ class SWO {
   }
 
   _initialLayout() {
+    if (!this.elements.editorPane || !this.elements.consoleUIElements || !this.elements.previewPaneContainer || !this.elements.rightPane) return;
+    
     // Default: editor takes 50% width, console hidden
     this.elements.editorPane.style.width = "calc(50% - 0.25rem)"; // 0.25rem is half of resize handle width
 
@@ -315,14 +393,16 @@ class SWO {
   }
 
   _loadCode() {
-    let savedCode = null;
+    let savedCode: string | null = null;
     try {
-        savedCode = localStorage.getItem(this.options.storageKey);
-    } catch (e) {
+        if (this.options.storageKey) {
+            savedCode = localStorage.getItem(this.options.storageKey);
+        }
+    } catch (e: any) {
         console.warn("SWO: Unable to read from localStorage:", e.message);
     }
     const codeToLoad =
-        this.options.code !== null ? this.options.code : savedCode;
+        this.options.code !== null && this.options.code !== undefined ? this.options.code : savedCode;
 
     const initialCode = codeToLoad || this._getDefaultInitialCode();
 
@@ -336,10 +416,12 @@ class SWO {
     }
   }
 
-  _saveCode(code) {
+  _saveCode(code: string) {
     try {
-      localStorage.setItem(this.options.storageKey, code);
-    } catch (e) {
+        if (this.options.storageKey) {
+            localStorage.setItem(this.options.storageKey, code);
+        }
+    } catch (e: any) {
       console.warn("SWO: Unable to save to localStorage:", e.message);
     }
   }
@@ -458,7 +540,7 @@ class SWO {
     }
   }
 
-  addCrossOriginToAssets(htmlString) {
+  addCrossOriginToAssets(htmlString: string) {
     if (typeof htmlString !== "string") {
       console.error("Input must be an HTML string.");
       return htmlString;
@@ -488,7 +570,7 @@ class SWO {
     }
   }
 
-  resizePreviewDevice(width, height) {
+  resizePreviewDevice(width: string, height: string) {
     if (this.elements.previewDevicesContainer) {
       this.elements.previewDevicesContainer.style.maxWidth = width;
       this.elements.previewDevicesContainer.style.height = height;
@@ -500,6 +582,8 @@ class SWO {
 
   toggleConsole() {
     const el = this.elements;
+    if (!el.consoleContainer || !el.consoleUIElements || !el.rightPane || !el.previewPaneContainer || !el.resizeHandleConsole || !el.consoleContainer) return;
+
     const consoleIsCurrentlyVisible =
       !el.consoleContainer.classList.contains("swo-hidden");
 
@@ -532,6 +616,8 @@ class SWO {
 
   toggleCodeEditor() {
     const el = this.elements;
+    if (!el.codeEditorUIElements) return;
+
     let isEditorVisibleAfterToggle = false;
     el.codeEditorUIElements.forEach((element) => {
       const isCurrentlyHidden = element.classList.contains("swo-hidden");
@@ -554,7 +640,7 @@ class SWO {
     if (!this.editorView) return;
 
     const currentCode = this.editorView.state.doc.toString();
-    const options = {
+    const options: HTMLBeautifyOptions = {
       wrap_line_length: 120,
       indent_size: 2,
       indent_char: " ",
@@ -571,7 +657,9 @@ class SWO {
     }
   }
 
-  _handleIframeMessage(event) {
+  _handleIframeMessage(event: MessageEvent) {
+    if (!this.elements.previewFrame || !this.elements.previewFrame.contentWindow) return;
+
     // Basic security: check origin if possible, and ensure it's from our iframe.
     // For data: URI, event.source is the window object of the iframe.
     if (
@@ -580,37 +668,40 @@ class SWO {
     )
       return;
 
-    const data = event.data;
+    const data = event.data as IframeMessageData;
     if (data.type === "iframe-console") {
       const messageLine = document.createElement("div");
       messageLine.classList.add("swo-console-message-line");
 
       let methodClass = "swo-console-log",
         methodIcon = "➡️"; // Default for log
-      switch (data.method) {
-        case "error":
-          methodClass = "swo-console-error";
-          methodIcon = "❌";
-          break;
-        case "warn":
-          methodClass = "swo-console-warn";
-          methodIcon = "⚠️";
-          break;
-        case "info":
-          methodClass = "swo-console-info";
-          methodIcon = "ℹ️";
-          break;
-        case "debug":
-          methodClass = "swo-console-debug";
-          methodIcon = "🐞";
-          break;
-        case "clear":
-          this._clearConsoleOutput(false); // false = cleared by iframe
-          this._logSpecialMessageToConsole(
-            "Console cleared by iframe.",
-            "swo-console-cleared"
-          );
-          return;
+      
+      if (data.method) {
+        switch (data.method) {
+            case "error":
+            methodClass = "swo-console-error";
+            methodIcon = "❌";
+            break;
+            case "warn":
+            methodClass = "swo-console-warn";
+            methodIcon = "⚠️";
+            break;
+            case "info":
+            methodClass = "swo-console-info";
+            methodIcon = "ℹ️";
+            break;
+            case "debug":
+            methodClass = "swo-console-debug";
+            methodIcon = "🐞";
+            break;
+            case "clear":
+            this._clearConsoleOutput(false); // false = cleared by iframe
+            this._logSpecialMessageToConsole(
+                "Console cleared by iframe.",
+                "swo-console-cleared"
+            );
+            return;
+        }
       }
       messageLine.classList.add(methodClass);
 
@@ -638,9 +729,11 @@ class SWO {
         contentWrapper.appendChild(emptyMsg);
       }
       messageLine.appendChild(contentWrapper);
-      this.elements.consoleOutput.appendChild(messageLine);
-      this.elements.consoleOutput.scrollTop =
-        this.elements.consoleOutput.scrollHeight;
+      if (this.elements.consoleOutput) {
+          this.elements.consoleOutput.appendChild(messageLine);
+          this.elements.consoleOutput.scrollTop =
+            this.elements.consoleOutput.scrollHeight;
+      }
     } else if (data.type === "iframe-ready") {
       this._logSpecialMessageToConsole(
         "Console connected.",
@@ -649,7 +742,9 @@ class SWO {
     }
   }
 
-  _clearConsoleOutput(byEditor) {
+  _clearConsoleOutput(byEditor: boolean) {
+    if (!this.elements.consoleOutput) return;
+
     this.elements.consoleOutput.innerHTML = "";
     if (byEditor) {
       this._logSpecialMessageToConsole(
@@ -659,7 +754,8 @@ class SWO {
     }
   }
 
-  _logSpecialMessageToConsole(text, className) {
+  _logSpecialMessageToConsole(text: string, className: string) {
+    if (!this.elements.consoleOutput) return;
     const msgDiv = document.createElement("div");
     msgDiv.className = `swo-console-special-message ${className}`;
     msgDiv.textContent = text;
@@ -668,7 +764,7 @@ class SWO {
       this.elements.consoleOutput.scrollHeight;
   }
 
-  _updateButtonActiveState(button, isActive) {
+  _updateButtonActiveState(button: HTMLElement | undefined, isActive: boolean) {
     if (!button) return;
     if (isActive) {
       button.classList.add("swo-active");
@@ -678,7 +774,9 @@ class SWO {
   }
 
   // Pane Resizing Logic
-  _onPaneResizeMouseDown(e) {
+  _onPaneResizeMouseDown(e: MouseEvent) {
+    if (!this.elements.editorPane || !this.elements.previewFrameCover) return; 
+
     e.preventDefault();
     this.isResizingPanes = true;
     this._initialMouseX = e.clientX;
@@ -693,8 +791,8 @@ class SWO {
     document.addEventListener("mousemove", this._boundHandlePaneMouseMove);
     document.addEventListener("mouseup", this._boundHandlePaneMouseUp);
   }
-  _handlePaneMouseMove(e) {
-    if (!this.isResizingPanes) return;
+  _handlePaneMouseMove(e: MouseEvent) {
+    if (!this.isResizingPanes || !this.elements.editorPane || !this.elements.resizeHandle || !this.elements.editorPane.parentElement) return;
     const deltaX = e.clientX - this._initialMouseX;
     let newEditorWidth = this._initialEditorWidth + deltaX;
 
@@ -709,22 +807,25 @@ class SWO {
     this.elements.editorPane.style.width = `${newEditorWidth}px`;
   }
   _handlePaneMouseUp() {
-    if (!this.isResizingPanes) return;
+    if (!this.isResizingPanes || !this.elements.previewFrameCover) return;
     this.isResizingPanes = false;
     this.elements.previewFrameCover.classList.add("swo-hidden"); // Hide cover
     document.body.style.cursor = "default";
     document.body.style.userSelect = "";
-    document.removeEventListener("mousemove", this._boundHandlePaneMouseMove);
-    document.removeEventListener("mouseup", this._boundHandlePaneMouseUp);
+    if (this._boundHandlePaneMouseMove) document.removeEventListener("mousemove", this._boundHandlePaneMouseMove);
+    if (this._boundHandlePaneMouseUp) document.removeEventListener("mouseup", this._boundHandlePaneMouseUp);
   }
 
   _onPaneResizeDoubleClick() {
+      if (!this.elements.editorPane) return;
     // Reset editor pane to default width (50%)
     this.elements.editorPane.style.width = "calc(50% - 0.25rem)"; // 0.25rem is half of resize handle width
   }
 
   // Console Resizing Logic
-  _onConsoleResizeMouseDown(e) {
+  _onConsoleResizeMouseDown(e: MouseEvent) {
+    if (!this.elements.previewPaneContainer || !this.elements.previewFrameCover) return;
+
     e.preventDefault();
     this.isResizingConsole = true;
     this._initialMouseYConsole = e.clientY;
@@ -745,8 +846,8 @@ class SWO {
     );
     document.addEventListener("mouseup", this._boundHandleConsoleResizeMouseUp);
   }
-  _handleConsoleResizeMouseMove(e) {
-    if (!this.isResizingConsole) return;
+  _handleConsoleResizeMouseMove(e: MouseEvent) {
+    if (!this.isResizingConsole || !this.elements.rightPane || !this.elements.resizeHandleConsole || !this.elements.previewPaneContainer || !this.elements.consoleContainer) return;
     const deltaY = e.clientY - this._initialMouseYConsole;
     let newPreviewHeight = this._initialPreviewHeight + deltaY;
 
@@ -764,16 +865,16 @@ class SWO {
     this.elements.consoleContainer.style.height = `${newConsoleHeight}px`;
   }
   _handleConsoleResizeMouseUp() {
-    if (!this.isResizingConsole) return;
+    if (!this.isResizingConsole || !this.elements.previewFrameCover) return;
     this.isResizingConsole = false;
     this.elements.previewFrameCover.classList.add("swo-hidden");
     document.body.style.cursor = "default";
     document.body.style.userSelect = "";
-    document.removeEventListener(
+    if (this._boundHandleConsoleResizeMouseMove) document.removeEventListener(
       "mousemove",
       this._boundHandleConsoleResizeMouseMove
     );
-    document.removeEventListener(
+    if (this._boundHandleConsoleResizeMouseUp) document.removeEventListener(
       "mouseup",
       this._boundHandleConsoleResizeMouseUp
     );
@@ -843,23 +944,25 @@ class SWO {
       this.editorView.destroy();
     }
     // Clear HTML
-    this.targetElement.innerHTML = "";
-    this.targetElement.classList.remove("swo-container");
+    if (this.targetElement) {
+        this.targetElement.innerHTML = "";
+        this.targetElement.classList.remove("swo-container");
+        delete this.targetElement.swoInstance;
+    }
     // Nullify references
     this.elements = {};
     this.editorView = null;
-    // Potentially remove from global/auto-init list if tracked
-    delete this.targetElement.swoInstance;
   }
 }
 
 // Auto-initialize for data-swo attribute
-// Ensures SWO is available globally for script tag usage after bundle loads
+// Ensures SWO available globally for script tag usage after bundle loads
 function initializeSWO() {
   document.querySelectorAll("[data-swo]").forEach((el) => {
-    if (!el.swoInstance) {
+    const htmlEl = el as HTMLElement;
+    if (!htmlEl.swoInstance) {
       // Prevent double initialization
-      el.swoInstance = new SWO(el, {}); // Pass element directly and empty options (will read from data-attributes)
+      htmlEl.swoInstance = new SWO(htmlEl, {}); // Pass element directly and empty options (will read from data-attributes)
     }
   });
 }
@@ -868,7 +971,7 @@ if (typeof window !== "undefined") {
   // Auto-init if DOM is already loaded, or defer
   if (
     document.readyState === "complete" ||
-    (document.readyState !== "loading" && !document.documentElement.doScroll)
+    (document.readyState !== "loading")
   ) {
     initializeSWO();
   } else {
