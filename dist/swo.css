@@ -68,10 +68,10 @@
   flex-shrink: 0; /* Prevent shrinking beyond content initially */
   /* width will be set by JS */
 }
-.swo-editor-monaco-container {
+.swo-editor-wrapper {
   flex-grow: 1;
   height: calc(100% - 0rem); /* Adjust if other elements are in editor-pane */
-  overflow: hidden; /* Ensure Monaco fits */
+  overflow: hidden; /* Ensure editor fits */
 }
 .swo-code-editor-container {
   width: 100%;

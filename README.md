@@ -3,14 +3,13 @@
 SenangWebs One (SWO) is a versatile, embeddable web development environment that provides a live HTML/CSS/JS code editor, a real-time preview pane, and an integrated console. It's designed for quick prototyping, live demonstrations, and educational purposes, allowing users to see their code changes reflected instantly.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
-[![Built with Monaco Editor](https://img.shields.io/badge/Built%20with-Monaco%20Editor-0d6efd.svg)](https://microsoft.github.io/monaco-editor/)
 [![Built with SenangStart Icons](https://img.shields.io/badge/Built%20with-SenangStart%20Icons-2563EB.svg)](https://github.com/bookklik-technologies/senangstart-icons)
 
 ![SenangWebs One Preview](https://raw.githubusercontent.com/a-hakim/senangwebs-one/master/swo_preview.png)
 
 ## Features
 
-- **Live Code Editor:** Powered by Monaco Editor (VS Code's editor) for a rich editing experience with syntax highlighting, auto-completion, and modern editor features.
+- **Live Code Editor:** A rich editing experience with syntax highlighting, auto-completion, and modern editor features.
 - **Real-time Preview:** Instantly see changes to HTML, CSS, and JavaScript in a sandboxed iframe with automatic refresh on code changes.
 - **Integrated Console:** Captures `console.log`, `console.error`, `console.warn`, `console.info`, and `console.debug` from the preview iframe and displays them within the SWO interface.
 - **Error Handling:** Automatically captures unhandled JavaScript errors and promise rejections from the preview.
@@ -23,7 +22,6 @@ SenangWebs One (SWO) is a versatile, embeddable web development environment that
 - **Easy Integration:** Initialize via simple data attributes or JavaScript constructor.
 - **Multiple Instances:** Support for multiple SWO instances on the same page with unique identifiers.
 - **Modern Look & Feel:** Styled with a clean, dark theme optimized for coding.
-- **Zero Configuration:** All dependencies (Monaco Editor, js-beautify, icons) are bundled - just include two files and go.
 
 ## Examples
 
@@ -44,7 +42,7 @@ For the quickest setup, include SenangWebs One's CSS and JavaScript files from u
     <title>My SWO Project</title>
 
     <!-- SWO Library CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/senangwebs-one@latest/dist/swo.css" />
+    <link rel="stylesheet" href="https://unpkg.com/senangwebs-one@latest/dist/swo.min.css" />
 
     <style>
       html, body { height: 100%; margin: 0; overflow: hidden; }
@@ -56,8 +54,8 @@ For the quickest setup, include SenangWebs One's CSS and JavaScript files from u
       <!-- SWO will populate this -->
     </div>
 
-    <!-- SWO Library JS (includes Monaco Editor, js-beautify, and icons) -->
-    <script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
+    <!-- SWO Library JS (includes js-beautify and icons) -->
+    <script src="https://unpkg.com/senangwebs-one@latest/dist/swo.min.js"></script>
   </body>
 </html>
 ```
@@ -75,7 +73,7 @@ npm install
 npm run build
 ```
 
-This generates `dist/swo.js` and `dist/swo.css`.
+This generates `dist/swo.min.js` and `dist/swo.min.css`.
 
 ## Usage
 
@@ -110,7 +108,7 @@ For more control, you can initialize SWO programmatically.
 ```html
 <div id="my-custom-editor" style="height: 100vh;"></div>
 
-<script src="https://unpkg.com/senangwebs-one@latest/dist/swo.js"></script>
+<script src="https://unpkg.com/senangwebs-one@latest/dist/swo.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Simple inline code (for basic content)
@@ -191,7 +189,7 @@ editor.destroy();
 
 ## Interface Overview
 
-- **Code Editor (Left Pane):** Monaco Editor for writing HTML, CSS (inline `<style>` tags), and JavaScript (inline `<script>` tags).
+- **Code Editor (Left Pane):** A powerful editor for writing HTML, CSS (inline `<style>` tags), and JavaScript (inline `<script>` tags).
   - **Prettier Button:** Formats the HTML code in the editor using js-beautify.
   - **Features:** Syntax highlighting, auto-completion, error detection, and VS Code-like editing experience.
 - **Vertical Resize Handle:** Drag to adjust the width ratio between editor and preview/console panes.
@@ -228,14 +226,14 @@ SWO includes an intelligent console bridge that automatically captures all conso
 
 ## Browser Support
 
-SenangWebs One is designed to work on all modern browsers that support Monaco Editor and ES6+ features:
+SenangWebs One is designed to work on all modern browsers that support ES6+ features:
 
 - **Chrome** 60+ (recommended)
 - **Firefox** 55+
 - **Safari** 11+
 - **Edge** 79+ (Chromium-based)
 
-**Note:** Internet Explorer is not supported due to ES6+ requirements and Monaco Editor compatibility.
+**Note:** Internet Explorer is not supported due to ES6+ requirements.
 
 ## Troubleshooting
 
@@ -270,7 +268,5 @@ MIT License
 
 - Inspired by various online code playgrounds like CodePen, JSFiddle, and Glitch.
 - Built with amazing open-source libraries:
-  - **Monaco Editor** - Microsoft's VS Code editor engine
-  - **JS-Beautify** - Code formatting functionality
+- **JS-Beautify** - Code formatting functionality
   - **SenangStart Icons** - Icons and UI elements
-- Special thanks to the VS Code team for making Monaco Editor available as a standalone library.

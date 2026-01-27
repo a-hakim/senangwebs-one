@@ -174,7 +174,7 @@ class SWO {
             <div class="swo-main-wrapper">
                 <section class="swo-panel-editor-preview">
                     <div class="swo-editor-pane">
-                        <div class="swo-editor-monaco-container">
+                        <div class="swo-editor-wrapper">
                             <div class="swo-code-editor-container"></div>
                         </div>
                         <button class="swo-code-prettier-btn"><ss-icon icon="sparkles" thickness="2.2"></ss-icon> PRETTIER</button>
