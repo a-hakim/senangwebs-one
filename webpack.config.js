@@ -1,6 +1,5 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -47,33 +46,6 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'swo.css' 
-    }),
-    new MonacoWebpackPlugin({
-      // Only include HTML language since that's what this editor uses
-      languages: ['html'],
-      // Disable features we don't need to reduce bundle size
-      features: [
-        'bracketMatching',
-        'clipboard',
-        'colorPicker',
-        'comment',
-        'contextmenu',
-        'find',
-        'folding',
-        'fontZoom',
-        'format',
-        'hover',
-        'indentation',
-        'lineSelection',
-        'links',
-        'multicursor',
-        'smartSelect',
-        'snippets',
-        'suggest',
-        'wordHighlighter',
-        'wordOperations',
-        'wordPartOperations'
-      ]
     })
   ]
 };

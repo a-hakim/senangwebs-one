@@ -318,3 +318,12 @@
 .swo-hidden {
   display: none !important;
 }
+
+/* CodeMirror Specific Overrides */
+.cm-editor {
+  height: 100%;
+}
+
+.cm-scroller {
+  overflow: auto;
+}

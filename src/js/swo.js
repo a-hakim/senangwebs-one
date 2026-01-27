@@ -1,7 +1,54 @@
 import "../css/swo.css"; // Import CSS to be processed by Webpack
 import "@bookklik/senangstart-icons/dist/senangstart-icon.min.js";
 import { html_beautify } from "js-beautify";
-import * as monaco from "monaco-editor";
+
+// CodeMirror Imports
+import { EditorState } from "@codemirror/state";
+import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from "@codemirror/view";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { bracketMatching, indentOnInput, syntaxHighlighting, defaultHighlightStyle, foldGutter, foldKeymap } from "@codemirror/language";
+import { closeBrackets, closeBracketsKeymap, autocompletion, completionKeymap } from "@codemirror/autocomplete";
+import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
+import { lintKeymap } from "@codemirror/lint";
+
+// Language Support
+import { html } from "@codemirror/lang-html";
+import { css } from "@codemirror/lang-css";
+import { javascript } from "@codemirror/lang-javascript";
+import { xml } from "@codemirror/lang-xml";
+
+// Theme
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+
+const basicSetup = [
+  lineNumbers(),
+  highlightActiveLineGutter(),
+  highlightSpecialChars(),
+  history(),
+  foldGutter(),
+  drawSelection(),
+  dropCursor(),
+  EditorState.allowMultipleSelections.of(true),
+  indentOnInput(),
+  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+  bracketMatching(),
+  closeBrackets(),
+  autocompletion(),
+  rectangularSelection(),
+  crosshairCursor(),
+  highlightActiveLine(),
+  highlightSelectionMatches(),
+  EditorView.lineWrapping,
+  keymap.of([
+    ...closeBracketsKeymap,
+    ...defaultKeymap,
+    ...searchKeymap,
+    ...historyKeymap,
+    ...foldKeymap,
+    ...completionKeymap,
+    ...lintKeymap
+  ])
+];
 
 class SWO {
   constructor(targetOrOptions, optionsIfTarget) {
@@ -47,17 +94,16 @@ class SWO {
     };
 
     this.elements = {}; // To store references to important DOM elements
-    this.monacoEditor = null;
+    this.editorView = null; // CodeMirror EditorView instance
     this.isResizingPanes = false;
     this.isResizingConsole = false;
 
     this._createUI();
     this._cacheElements();
-    this._initMonaco();
+    this._initCodeMirror();
     this._initEventListeners();
     this._initialLayout();
-    this._loadCode(); // Load from storage or use initial code
-    this.updatePreview();
+    this._loadCode(); // Load from storage or use initial code, updates preview
   }
 
   _createUI() {
@@ -168,29 +214,34 @@ class SWO {
     ); // Classes for console UI parts
   }
 
-  _initMonaco() {
-    this.monacoEditor = monaco.editor.create(
-      this.elements.codeEditorContainer,
-      {
-        value: this.options.code || this._getDefaultInitialCode(),
-        language: "html",
-        theme: "vs-dark",
-        automaticLayout: true,
-        minimap: { enabled: false },
-        scrollBeyondLastLine: false,
-        tabSize: 2,
-        insertSpaces: true,
-        wordWrap: "on",
-        fontSize: 14,
-        lineHeight: 1.5,
-      }
-    );
-
+  _initCodeMirror() {
     let debounceTimeout;
-    this.monacoEditor.onDidChangeModelContent(() => {
-      this._saveCode(this.monacoEditor.getValue());
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(() => this.updatePreview(), 300);
+    const updateListener = EditorView.updateListener.of((update) => {
+      if (update.docChanged) {
+        const code = update.state.doc.toString();
+        this._saveCode(code);
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => this.updatePreview(), 300);
+      }
+    });
+
+    const startState = EditorState.create({
+      doc: this.options.code || this._getDefaultInitialCode(),
+      extensions: [
+        basicSetup,
+        // Support for multiple languages
+        html({ autoCloseTags: true, matchClosingTags: true }), 
+        css(),
+        javascript(),
+        xml(), 
+        vscodeDark,
+        updateListener
+      ]
+    });
+
+    this.editorView = new EditorView({
+      state: startState,
+      parent: this.elements.codeEditorContainer
     });
   }
 
@@ -266,14 +317,22 @@ class SWO {
   _loadCode() {
     let savedCode = null;
     try {
-      savedCode = localStorage.getItem(this.options.storageKey);
+        savedCode = localStorage.getItem(this.options.storageKey);
     } catch (e) {
-      console.warn("SWO: Unable to read from localStorage:", e.message);
+        console.warn("SWO: Unable to read from localStorage:", e.message);
     }
     const codeToLoad =
-      this.options.code !== null ? this.options.code : savedCode;
-    if (this.monacoEditor) {
-      this.monacoEditor.setValue(codeToLoad || this._getDefaultInitialCode());
+        this.options.code !== null ? this.options.code : savedCode;
+
+    const initialCode = codeToLoad || this._getDefaultInitialCode();
+
+    if (this.editorView) {
+        const transaction = this.editorView.state.update({
+            changes: { from: 0, to: this.editorView.state.doc.length, insert: initialCode }
+        });
+        this.editorView.dispatch(transaction);
+        // Force preview update since initial load might not trigger docChanged in same way if content is same
+        this.updatePreview();
     }
   }
 
@@ -370,7 +429,7 @@ class SWO {
 
   updatePreview() {
     if (!this.elements.previewFrame) return;
-    const userCode = this.monacoEditor ? this.monacoEditor.getValue() : "";
+    const userCode = this.editorView ? this.editorView.state.doc.toString() : "";
     const fullCode = this._getIframeConsoleBridgeScript() + userCode;
     // Use srcdoc for better security and handling relative paths within the iframe (though base tag might be needed for that)
     // However, srcdoc can have issues with complex scripts or iframes being re-used.
@@ -380,7 +439,7 @@ class SWO {
   }
 
   openPreviewInNewTab() {
-    const userCode = this.monacoEditor ? this.monacoEditor.getValue() : "";
+    const userCode = this.editorView ? this.editorView.state.doc.toString() : "";
     const fullCode = this._getIframeConsoleBridgeScript() + userCode;
     const blob = new Blob([fullCode], { type: "text/html" });
     const url = URL.createObjectURL(blob);
@@ -492,9 +551,9 @@ class SWO {
   }
 
   formatCode() {
-    if (!this.monacoEditor) return;
+    if (!this.editorView) return;
 
-    const currentCode = this.monacoEditor.getValue();
+    const currentCode = this.editorView.state.doc.toString();
     const options = {
       wrap_line_length: 120,
       indent_size: 2,
@@ -502,7 +561,10 @@ class SWO {
     };
     try {
       const formattedCode = html_beautify(currentCode, options);
-      this.monacoEditor.setValue(formattedCode);
+      const transaction = this.editorView.state.update({
+        changes: { from: 0, to: this.editorView.state.doc.length, insert: formattedCode }
+      });
+      this.editorView.dispatch(transaction);
     } catch (e) {
       console.error("SWO: Error during code formatting with js-beautify:", e);
       alert("Could not format the code. Check console for errors.");
@@ -776,16 +838,16 @@ class SWO {
       window.removeEventListener("message", this._boundHandleIframeMessage);
       this._boundHandleIframeMessage = null;
     }
-    // Monaco Editor instance cleanup
-    if (this.monacoEditor) {
-      this.monacoEditor.dispose();
+    // CodeMirror instance cleanup
+    if (this.editorView) {
+      this.editorView.destroy();
     }
     // Clear HTML
     this.targetElement.innerHTML = "";
     this.targetElement.classList.remove("swo-container");
     // Nullify references
     this.elements = {};
-    this.monacoEditor = null;
+    this.editorView = null;
     // Potentially remove from global/auto-init list if tracked
     delete this.targetElement.swoInstance;
   }
@@ -794,13 +856,6 @@ class SWO {
 // Auto-initialize for data-swo attribute
 // Ensures SWO is available globally for script tag usage after bundle loads
 function initializeSWO() {
-  // Wait for Monaco to be available before initializing
-  if (typeof monaco === "undefined") {
-    // Retry after short delay - Monaco may be loading asynchronously
-    setTimeout(initializeSWO, 100);
-    return;
-  }
-  
   document.querySelectorAll("[data-swo]").forEach((el) => {
     if (!el.swoInstance) {
       // Prevent double initialization
