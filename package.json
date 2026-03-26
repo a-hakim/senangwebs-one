@@ -1,6 +1,6 @@
 {
   "name": "senangwebs-one",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A web-based code editor and live previewer, inspired by Glitch and CodePen.",
   "main": "dist/swo.js",
   "scripts": {
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.6",
-    "@bookklik/senangstart-icons": "^1.0.4",
+    "@bookklik/senangstart-icons": "^1.0.14",
     "@codemirror/autocomplete": "^6.20.0",
     "@codemirror/lang-css": "^6.3.1",
     "@codemirror/lang-html": "^6.4.11",

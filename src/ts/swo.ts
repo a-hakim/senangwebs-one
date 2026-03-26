@@ -1,6 +1,7 @@
 import "../css/swo.css"; // Import CSS to be processed by Webpack
-import "@bookklik/senangstart-icons/dist/senangstart-icon.min.js";
-
+if (!customElements.get("ss-icon")) {
+  import("@bookklik/senangstart-icons");
+}
 import { UIManager, SWOElements } from "./modules/UIManager";
 import { EditorManager } from "./modules/EditorManager";
 import { PreviewManager } from "./modules/PreviewManager";
