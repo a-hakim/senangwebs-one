@@ -20,7 +20,7 @@ SenangWebs One (SWO) is a versatile, embeddable web development environment that
 - **Toggle UI Elements:** Show/hide the code editor and console panes independently for flexible layouts.
 - **Open in New Tab:** Preview your creation in a full browser tab with popup handling.
 - **Easy Integration:** Initialize via simple data attributes or JavaScript constructor.
-- **Multiple Instances:** Support for multiple SWO instances on the same page with unique identifiers.
+- **Multiple Instances:** Run multiple isolated SWO editors on the same page; each console only receives messages from its own preview.
 - **Modern Look & Feel:** Styled with a clean, dark theme optimized for coding.
 
 ## Examples
@@ -185,7 +185,11 @@ editor.destroy();
 - `toggleCodeEditor()`: Show/hide the code editor pane
 - `toggleConsole()`: Show/hide the console pane
 - `resizePreviewDevice(width, height)`: Set custom preview dimensions
-- `destroy()`: Clean up the instance and remove event listeners
+- `destroy()`: Clean up the instance, preview resources, and global event listeners
+
+Each instance filters console messages by its own preview iframe. This prevents
+logs from one editor appearing in another editor's console when multiple SWO
+instances share a page.
 
 ## Interface Overview
 

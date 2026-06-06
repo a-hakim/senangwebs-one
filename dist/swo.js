@@ -11,8 +11,93 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3:
-/***/ ((module, exports) => {
+/***/ 418
+(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*jshint node:true */
+/* globals define */
+/*
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+*/
+
+
+
+/**
+The following batches are equivalent:
+
+var beautify_js = require('js-beautify');
+var beautify_js = require('js-beautify').js;
+var beautify_js = require('js-beautify').js_beautify;
+
+var beautify_css = require('js-beautify').css;
+var beautify_css = require('js-beautify').css_beautify;
+
+var beautify_html = require('js-beautify').html;
+var beautify_html = require('js-beautify').html_beautify;
+
+All methods returned accept two arguments, the source string and an options object.
+**/
+
+function get_beautify(js_beautify, css_beautify, html_beautify) {
+  // the default is js
+  var beautify = function(src, config) {
+    return js_beautify.js_beautify(src, config);
+  };
+
+  // short aliases
+  beautify.js = js_beautify.js_beautify;
+  beautify.css = css_beautify.css_beautify;
+  beautify.html = html_beautify.html_beautify;
+
+  // legacy aliases
+  beautify.js_beautify = js_beautify.js_beautify;
+  beautify.css_beautify = css_beautify.css_beautify;
+  beautify.html_beautify = html_beautify.html_beautify;
+
+  return beautify;
+}
+
+if (true) {
+  // Add support for AMD ( https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property- )
+  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+    __webpack_require__(617),
+    __webpack_require__(3),
+    __webpack_require__(675)
+  ], __WEBPACK_AMD_DEFINE_RESULT__ = (function(js_beautify, css_beautify, html_beautify) {
+    return get_beautify(js_beautify, css_beautify, html_beautify);
+  }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+} else // removed by dead control flow
+{}
+
+/***/ },
+
+/***/ 3
+(module, exports) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* AUTO-GENERATED. DO NOT MODIFY. */
 /*
@@ -1701,15 +1786,14 @@ if (true) {
 }());
 
 
-/***/ }),
+/***/ },
 
-/***/ 418:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ 675
+(module, exports, __webpack_require__) {
 
-"use strict";
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*jshint node:true */
-/* globals define */
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* AUTO-GENERATED. DO NOT MODIFY. */
 /*
+
   The MIT License (MIT)
 
   Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
@@ -1734,62 +1818,3210 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*jshint node:tr
   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
 
+
+ Style HTML
+---------------
+
+  Written by Nochum Sossonko, (nsossonko@hotmail.com)
+
+  Based on code initially developed by: Einar Lielmanis, <einar@beautifier.io>
+    https://beautifier.io/
+
+  Usage:
+    style_html(html_source);
+
+    style_html(html_source, options);
+
+  The options are:
+    indent_inner_html (default false)  — indent <head> and <body> sections,
+    indent_size (default 4)          — indentation size,
+    indent_char (default space)      — character to indent with,
+    wrap_line_length (default 250)            -  maximum amount of characters per line (0 = disable)
+    brace_style (default "collapse") - "collapse" | "expand" | "end-expand" | "none"
+            put braces on the same line as control statements (default), or put braces on own line (Allman / ANSI style), or just put end braces on own line, or attempt to keep them where they are.
+    inline (defaults to inline tags) - list of tags to be considered inline tags
+    unformatted (defaults to inline tags) - list of tags, that shouldn't be reformatted
+    content_unformatted (defaults to ["pre", "textarea"] tags) - list of tags, whose content shouldn't be reformatted
+    indent_scripts (default normal)  - "keep"|"separate"|"normal"
+    preserve_newlines (default true) - whether existing line breaks before elements should be preserved
+                                        Only works before elements, not inside tags or for text.
+    max_preserve_newlines (default unlimited) - maximum number of line breaks to be preserved in one chunk
+    indent_handlebars (default false) - format and indent {{#foo}} and {{/foo}}
+    end_with_newline (false)          - end with a newline
+    extra_liners (default [head,body,/html]) -List of tags that should have an extra newline before them.
+
+    e.g.
+
+    style_html(html_source, {
+      'indent_inner_html': false,
+      'indent_size': 2,
+      'indent_char': ' ',
+      'wrap_line_length': 78,
+      'brace_style': 'expand',
+      'preserve_newlines': true,
+      'max_preserve_newlines': 5,
+      'indent_handlebars': false,
+      'extra_liners': ['/html']
+    });
+*/
+
+(function() {
+
+/* GENERATED_BUILD_OUTPUT */
+var legacy_beautify_html;
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
+/* 0 */,
+/* 1 */,
+/* 2 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
 */
 
 
 
-/**
-The following batches are equivalent:
+function OutputLine(parent) {
+  this.__parent = parent;
+  this.__character_count = 0;
+  // use indent_count as a marker for this.__lines that have preserved indentation
+  this.__indent_count = -1;
+  this.__alignment_count = 0;
+  this.__wrap_point_index = 0;
+  this.__wrap_point_character_count = 0;
+  this.__wrap_point_indent_count = -1;
+  this.__wrap_point_alignment_count = 0;
 
-var beautify_js = require('js-beautify');
-var beautify_js = require('js-beautify').js;
-var beautify_js = require('js-beautify').js_beautify;
-
-var beautify_css = require('js-beautify').css;
-var beautify_css = require('js-beautify').css_beautify;
-
-var beautify_html = require('js-beautify').html;
-var beautify_html = require('js-beautify').html_beautify;
-
-All methods returned accept two arguments, the source string and an options object.
-**/
-
-function get_beautify(js_beautify, css_beautify, html_beautify) {
-  // the default is js
-  var beautify = function(src, config) {
-    return js_beautify.js_beautify(src, config);
-  };
-
-  // short aliases
-  beautify.js = js_beautify.js_beautify;
-  beautify.css = css_beautify.css_beautify;
-  beautify.html = html_beautify.html_beautify;
-
-  // legacy aliases
-  beautify.js_beautify = js_beautify.js_beautify;
-  beautify.css_beautify = css_beautify.css_beautify;
-  beautify.html_beautify = html_beautify.html_beautify;
-
-  return beautify;
+  this.__items = [];
 }
 
-if (true) {
-  // Add support for AMD ( https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property- )
-  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-    __webpack_require__(617),
-    __webpack_require__(3),
-    __webpack_require__(675)
-  ], __WEBPACK_AMD_DEFINE_RESULT__ = (function(js_beautify, css_beautify, html_beautify) {
-    return get_beautify(js_beautify, css_beautify, html_beautify);
-  }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-} else // removed by dead control flow
-{}
+OutputLine.prototype.clone_empty = function() {
+  var line = new OutputLine(this.__parent);
+  line.set_indent(this.__indent_count, this.__alignment_count);
+  return line;
+};
+
+OutputLine.prototype.item = function(index) {
+  if (index < 0) {
+    return this.__items[this.__items.length + index];
+  } else {
+    return this.__items[index];
+  }
+};
+
+OutputLine.prototype.has_match = function(pattern) {
+  for (var lastCheckedOutput = this.__items.length - 1; lastCheckedOutput >= 0; lastCheckedOutput--) {
+    if (this.__items[lastCheckedOutput].match(pattern)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+OutputLine.prototype.set_indent = function(indent, alignment) {
+  if (this.is_empty()) {
+    this.__indent_count = indent || 0;
+    this.__alignment_count = alignment || 0;
+    this.__character_count = this.__parent.get_indent_size(this.__indent_count, this.__alignment_count);
+  }
+};
+
+OutputLine.prototype._set_wrap_point = function() {
+  if (this.__parent.wrap_line_length) {
+    this.__wrap_point_index = this.__items.length;
+    this.__wrap_point_character_count = this.__character_count;
+    this.__wrap_point_indent_count = this.__parent.next_line.__indent_count;
+    this.__wrap_point_alignment_count = this.__parent.next_line.__alignment_count;
+  }
+};
+
+OutputLine.prototype._should_wrap = function() {
+  return this.__wrap_point_index &&
+    this.__character_count > this.__parent.wrap_line_length &&
+    this.__wrap_point_character_count > this.__parent.next_line.__character_count;
+};
+
+OutputLine.prototype._allow_wrap = function() {
+  if (this._should_wrap()) {
+    this.__parent.add_new_line();
+    var next = this.__parent.current_line;
+    next.set_indent(this.__wrap_point_indent_count, this.__wrap_point_alignment_count);
+    next.__items = this.__items.slice(this.__wrap_point_index);
+    this.__items = this.__items.slice(0, this.__wrap_point_index);
+
+    next.__character_count += this.__character_count - this.__wrap_point_character_count;
+    this.__character_count = this.__wrap_point_character_count;
+
+    if (next.__items[0] === " ") {
+      next.__items.splice(0, 1);
+      next.__character_count -= 1;
+    }
+    return true;
+  }
+  return false;
+};
+
+OutputLine.prototype.is_empty = function() {
+  return this.__items.length === 0;
+};
+
+OutputLine.prototype.last = function() {
+  if (!this.is_empty()) {
+    return this.__items[this.__items.length - 1];
+  } else {
+    return null;
+  }
+};
+
+OutputLine.prototype.push = function(item) {
+  this.__items.push(item);
+  var last_newline_index = item.lastIndexOf('\n');
+  if (last_newline_index !== -1) {
+    this.__character_count = item.length - last_newline_index;
+  } else {
+    this.__character_count += item.length;
+  }
+};
+
+OutputLine.prototype.pop = function() {
+  var item = null;
+  if (!this.is_empty()) {
+    item = this.__items.pop();
+    this.__character_count -= item.length;
+  }
+  return item;
+};
+
+
+OutputLine.prototype._remove_indent = function() {
+  if (this.__indent_count > 0) {
+    this.__indent_count -= 1;
+    this.__character_count -= this.__parent.indent_size;
+  }
+};
+
+OutputLine.prototype._remove_wrap_indent = function() {
+  if (this.__wrap_point_indent_count > 0) {
+    this.__wrap_point_indent_count -= 1;
+  }
+};
+OutputLine.prototype.trim = function() {
+  while (this.last() === ' ') {
+    this.__items.pop();
+    this.__character_count -= 1;
+  }
+};
+
+OutputLine.prototype.toString = function() {
+  var result = '';
+  if (this.is_empty()) {
+    if (this.__parent.indent_empty_lines) {
+      result = this.__parent.get_indent_string(this.__indent_count);
+    }
+  } else {
+    result = this.__parent.get_indent_string(this.__indent_count, this.__alignment_count);
+    result += this.__items.join('');
+  }
+  return result;
+};
+
+function IndentStringCache(options, baseIndentString) {
+  this.__cache = [''];
+  this.__indent_size = options.indent_size;
+  this.__indent_string = options.indent_char;
+  if (!options.indent_with_tabs) {
+    this.__indent_string = new Array(options.indent_size + 1).join(options.indent_char);
+  }
+
+  // Set to null to continue support for auto detection of base indent
+  baseIndentString = baseIndentString || '';
+  if (options.indent_level > 0) {
+    baseIndentString = new Array(options.indent_level + 1).join(this.__indent_string);
+  }
+
+  this.__base_string = baseIndentString;
+  this.__base_string_length = baseIndentString.length;
+}
+
+IndentStringCache.prototype.get_indent_size = function(indent, column) {
+  var result = this.__base_string_length;
+  column = column || 0;
+  if (indent < 0) {
+    result = 0;
+  }
+  result += indent * this.__indent_size;
+  result += column;
+  return result;
+};
+
+IndentStringCache.prototype.get_indent_string = function(indent_level, column) {
+  var result = this.__base_string;
+  column = column || 0;
+  if (indent_level < 0) {
+    indent_level = 0;
+    result = '';
+  }
+  column += indent_level * this.__indent_size;
+  this.__ensure_cache(column);
+  result += this.__cache[column];
+  return result;
+};
+
+IndentStringCache.prototype.__ensure_cache = function(column) {
+  while (column >= this.__cache.length) {
+    this.__add_column();
+  }
+};
+
+IndentStringCache.prototype.__add_column = function() {
+  var column = this.__cache.length;
+  var indent = 0;
+  var result = '';
+  if (this.__indent_size && column >= this.__indent_size) {
+    indent = Math.floor(column / this.__indent_size);
+    column -= indent * this.__indent_size;
+    result = new Array(indent + 1).join(this.__indent_string);
+  }
+  if (column) {
+    result += new Array(column + 1).join(' ');
+  }
+
+  this.__cache.push(result);
+};
+
+function Output(options, baseIndentString) {
+  this.__indent_cache = new IndentStringCache(options, baseIndentString);
+  this.raw = false;
+  this._end_with_newline = options.end_with_newline;
+  this.indent_size = options.indent_size;
+  this.wrap_line_length = options.wrap_line_length;
+  this.indent_empty_lines = options.indent_empty_lines;
+  this.__lines = [];
+  this.previous_line = null;
+  this.current_line = null;
+  this.next_line = new OutputLine(this);
+  this.space_before_token = false;
+  this.non_breaking_space = false;
+  this.previous_token_wrapped = false;
+  // initialize
+  this.__add_outputline();
+}
+
+Output.prototype.__add_outputline = function() {
+  this.previous_line = this.current_line;
+  this.current_line = this.next_line.clone_empty();
+  this.__lines.push(this.current_line);
+};
+
+Output.prototype.get_line_number = function() {
+  return this.__lines.length;
+};
+
+Output.prototype.get_indent_string = function(indent, column) {
+  return this.__indent_cache.get_indent_string(indent, column);
+};
+
+Output.prototype.get_indent_size = function(indent, column) {
+  return this.__indent_cache.get_indent_size(indent, column);
+};
+
+Output.prototype.is_empty = function() {
+  return !this.previous_line && this.current_line.is_empty();
+};
+
+Output.prototype.add_new_line = function(force_newline) {
+  // never newline at the start of file
+  // otherwise, newline only if we didn't just add one or we're forced
+  if (this.is_empty() ||
+    (!force_newline && this.just_added_newline())) {
+    return false;
+  }
+
+  // if raw output is enabled, don't print additional newlines,
+  // but still return True as though you had
+  if (!this.raw) {
+    this.__add_outputline();
+  }
+  return true;
+};
+
+Output.prototype.get_code = function(eol) {
+  this.trim(true);
+
+  // handle some edge cases where the last tokens
+  // has text that ends with newline(s)
+  var last_item = this.current_line.pop();
+  if (last_item) {
+    if (last_item[last_item.length - 1] === '\n') {
+      last_item = last_item.replace(/\n+$/g, '');
+    }
+    this.current_line.push(last_item);
+  }
+
+  if (this._end_with_newline) {
+    this.__add_outputline();
+  }
+
+  var sweet_code = this.__lines.join('\n');
+
+  if (eol !== '\n') {
+    sweet_code = sweet_code.replace(/[\n]/g, eol);
+  }
+  return sweet_code;
+};
+
+Output.prototype.set_wrap_point = function() {
+  this.current_line._set_wrap_point();
+};
+
+Output.prototype.set_indent = function(indent, alignment) {
+  indent = indent || 0;
+  alignment = alignment || 0;
+
+  // Next line stores alignment values
+  this.next_line.set_indent(indent, alignment);
+
+  // Never indent your first output indent at the start of the file
+  if (this.__lines.length > 1) {
+    this.current_line.set_indent(indent, alignment);
+    return true;
+  }
+
+  this.current_line.set_indent();
+  return false;
+};
+
+Output.prototype.add_raw_token = function(token) {
+  for (var x = 0; x < token.newlines; x++) {
+    this.__add_outputline();
+  }
+  this.current_line.set_indent(-1);
+  this.current_line.push(token.whitespace_before);
+  this.current_line.push(token.text);
+  this.space_before_token = false;
+  this.non_breaking_space = false;
+  this.previous_token_wrapped = false;
+};
+
+Output.prototype.add_token = function(printable_token) {
+  this.__add_space_before_token();
+  this.current_line.push(printable_token);
+  this.space_before_token = false;
+  this.non_breaking_space = false;
+  this.previous_token_wrapped = this.current_line._allow_wrap();
+};
+
+Output.prototype.__add_space_before_token = function() {
+  if (this.space_before_token && !this.just_added_newline()) {
+    if (!this.non_breaking_space) {
+      this.set_wrap_point();
+    }
+    this.current_line.push(' ');
+  }
+};
+
+Output.prototype.remove_indent = function(index) {
+  var output_length = this.__lines.length;
+  while (index < output_length) {
+    this.__lines[index]._remove_indent();
+    index++;
+  }
+  this.current_line._remove_wrap_indent();
+};
+
+Output.prototype.trim = function(eat_newlines) {
+  eat_newlines = (eat_newlines === undefined) ? false : eat_newlines;
+
+  this.current_line.trim();
+
+  while (eat_newlines && this.__lines.length > 1 &&
+    this.current_line.is_empty()) {
+    this.__lines.pop();
+    this.current_line = this.__lines[this.__lines.length - 1];
+    this.current_line.trim();
+  }
+
+  this.previous_line = this.__lines.length > 1 ?
+    this.__lines[this.__lines.length - 2] : null;
+};
+
+Output.prototype.just_added_newline = function() {
+  return this.current_line.is_empty();
+};
+
+Output.prototype.just_added_blankline = function() {
+  return this.is_empty() ||
+    (this.current_line.is_empty() && this.previous_line.is_empty());
+};
+
+Output.prototype.ensure_empty_line_above = function(starts_with, ends_with) {
+  var index = this.__lines.length - 2;
+  while (index >= 0) {
+    var potentialEmptyLine = this.__lines[index];
+    if (potentialEmptyLine.is_empty()) {
+      break;
+    } else if (potentialEmptyLine.item(0).indexOf(starts_with) !== 0 &&
+      potentialEmptyLine.item(-1) !== ends_with) {
+      this.__lines.splice(index + 1, 0, new OutputLine(this));
+      this.previous_line = this.__lines[this.__lines.length - 2];
+      break;
+    }
+    index--;
+  }
+};
+
+module.exports.Output = Output;
+
 
 /***/ }),
+/* 3 */
+/***/ (function(module) {
 
-/***/ 617:
-/***/ ((module, exports) => {
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+function Token(type, text, newlines, whitespace_before) {
+  this.type = type;
+  this.text = text;
+
+  // comments_before are
+  // comments that have a new line before them
+  // and may or may not have a newline after
+  // this is a set of comments before
+  this.comments_before = null; /* inline comment*/
+
+
+  // this.comments_after =  new TokenStream(); // no new line before and newline after
+  this.newlines = newlines || 0;
+  this.whitespace_before = whitespace_before || '';
+  this.parent = null;
+  this.next = null;
+  this.previous = null;
+  this.opened = null;
+  this.closed = null;
+  this.directives = null;
+}
+
+
+module.exports.Token = Token;
+
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+function Options(options, merge_child_field) {
+  this.raw_options = _mergeOpts(options, merge_child_field);
+
+  // Support passing the source text back with no change
+  this.disabled = this._get_boolean('disabled');
+
+  this.eol = this._get_characters('eol', 'auto');
+  this.end_with_newline = this._get_boolean('end_with_newline');
+  this.indent_size = this._get_number('indent_size', 4);
+  this.indent_char = this._get_characters('indent_char', ' ');
+  this.indent_level = this._get_number('indent_level');
+
+  this.preserve_newlines = this._get_boolean('preserve_newlines', true);
+  this.max_preserve_newlines = this._get_number('max_preserve_newlines', 32786);
+  if (!this.preserve_newlines) {
+    this.max_preserve_newlines = 0;
+  }
+
+  this.indent_with_tabs = this._get_boolean('indent_with_tabs', this.indent_char === '\t');
+  if (this.indent_with_tabs) {
+    this.indent_char = '\t';
+
+    // indent_size behavior changed after 1.8.6
+    // It used to be that indent_size would be
+    // set to 1 for indent_with_tabs. That is no longer needed and
+    // actually doesn't make sense - why not use spaces? Further,
+    // that might produce unexpected behavior - tabs being used
+    // for single-column alignment. So, when indent_with_tabs is true
+    // and indent_size is 1, reset indent_size to 4.
+    if (this.indent_size === 1) {
+      this.indent_size = 4;
+    }
+  }
+
+  // Backwards compat with 1.3.x
+  this.wrap_line_length = this._get_number('wrap_line_length', this._get_number('max_char'));
+
+  this.indent_empty_lines = this._get_boolean('indent_empty_lines');
+
+  // valid templating languages ['django', 'erb', 'handlebars', 'php', 'smarty', 'angular']
+  // For now, 'auto' = all off for javascript, all except angular on for html (and inline javascript/css).
+  // other values ignored
+  this.templating = this._get_selection_list('templating', ['auto', 'none', 'angular', 'django', 'erb', 'handlebars', 'php', 'smarty'], ['auto']);
+}
+
+Options.prototype._get_array = function(name, default_value) {
+  var option_value = this.raw_options[name];
+  var result = default_value || [];
+  if (typeof option_value === 'object') {
+    if (option_value !== null && typeof option_value.concat === 'function') {
+      result = option_value.concat();
+    }
+  } else if (typeof option_value === 'string') {
+    result = option_value.split(/[^a-zA-Z0-9_\/\-]+/);
+  }
+  return result;
+};
+
+Options.prototype._get_boolean = function(name, default_value) {
+  var option_value = this.raw_options[name];
+  var result = option_value === undefined ? !!default_value : !!option_value;
+  return result;
+};
+
+Options.prototype._get_characters = function(name, default_value) {
+  var option_value = this.raw_options[name];
+  var result = default_value || '';
+  if (typeof option_value === 'string') {
+    result = option_value.replace(/\\r/, '\r').replace(/\\n/, '\n').replace(/\\t/, '\t');
+  }
+  return result;
+};
+
+Options.prototype._get_number = function(name, default_value) {
+  var option_value = this.raw_options[name];
+  default_value = parseInt(default_value, 10);
+  if (isNaN(default_value)) {
+    default_value = 0;
+  }
+  var result = parseInt(option_value, 10);
+  if (isNaN(result)) {
+    result = default_value;
+  }
+  return result;
+};
+
+Options.prototype._get_selection = function(name, selection_list, default_value) {
+  var result = this._get_selection_list(name, selection_list, default_value);
+  if (result.length !== 1) {
+    throw new Error(
+      "Invalid Option Value: The option '" + name + "' can only be one of the following values:\n" +
+      selection_list + "\nYou passed in: '" + this.raw_options[name] + "'");
+  }
+
+  return result[0];
+};
+
+
+Options.prototype._get_selection_list = function(name, selection_list, default_value) {
+  if (!selection_list || selection_list.length === 0) {
+    throw new Error("Selection list cannot be empty.");
+  }
+
+  default_value = default_value || [selection_list[0]];
+  if (!this._is_valid_selection(default_value, selection_list)) {
+    throw new Error("Invalid Default Value!");
+  }
+
+  var result = this._get_array(name, default_value);
+  if (!this._is_valid_selection(result, selection_list)) {
+    throw new Error(
+      "Invalid Option Value: The option '" + name + "' can contain only the following values:\n" +
+      selection_list + "\nYou passed in: '" + this.raw_options[name] + "'");
+  }
+
+  return result;
+};
+
+Options.prototype._is_valid_selection = function(result, selection_list) {
+  return result.length && selection_list.length &&
+    !result.some(function(item) { return selection_list.indexOf(item) === -1; });
+};
+
+
+// merges child options up with the parent options object
+// Example: obj = {a: 1, b: {a: 2}}
+//          mergeOpts(obj, 'b')
+//
+//          Returns: {a: 2}
+function _mergeOpts(allOptions, childFieldName) {
+  var finalOpts = {};
+  allOptions = _normalizeOpts(allOptions);
+  var name;
+
+  for (name in allOptions) {
+    if (name !== childFieldName) {
+      finalOpts[name] = allOptions[name];
+    }
+  }
+
+  //merge in the per type settings for the childFieldName
+  if (childFieldName && allOptions[childFieldName]) {
+    for (name in allOptions[childFieldName]) {
+      finalOpts[name] = allOptions[childFieldName][name];
+    }
+  }
+  return finalOpts;
+}
+
+function _normalizeOpts(options) {
+  var convertedOpts = {};
+  var key;
+
+  for (key in options) {
+    var newKey = key.replace(/-/g, "_");
+    convertedOpts[newKey] = options[key];
+  }
+  return convertedOpts;
+}
+
+module.exports.Options = Options;
+module.exports.normalizeOpts = _normalizeOpts;
+module.exports.mergeOpts = _mergeOpts;
+
+
+/***/ }),
+/* 7 */,
+/* 8 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var regexp_has_sticky = RegExp.prototype.hasOwnProperty('sticky');
+
+function InputScanner(input_string) {
+  this.__input = input_string || '';
+  this.__input_length = this.__input.length;
+  this.__position = 0;
+}
+
+InputScanner.prototype.restart = function() {
+  this.__position = 0;
+};
+
+InputScanner.prototype.back = function() {
+  if (this.__position > 0) {
+    this.__position -= 1;
+  }
+};
+
+InputScanner.prototype.hasNext = function() {
+  return this.__position < this.__input_length;
+};
+
+InputScanner.prototype.next = function() {
+  var val = null;
+  if (this.hasNext()) {
+    val = this.__input.charAt(this.__position);
+    this.__position += 1;
+  }
+  return val;
+};
+
+InputScanner.prototype.peek = function(index) {
+  var val = null;
+  index = index || 0;
+  index += this.__position;
+  if (index >= 0 && index < this.__input_length) {
+    val = this.__input.charAt(index);
+  }
+  return val;
+};
+
+// This is a JavaScript only helper function (not in python)
+// Javascript doesn't have a match method
+// and not all implementation support "sticky" flag.
+// If they do not support sticky then both this.match() and this.test() method
+// must get the match and check the index of the match.
+// If sticky is supported and set, this method will use it.
+// Otherwise it will check that global is set, and fall back to the slower method.
+InputScanner.prototype.__match = function(pattern, index) {
+  pattern.lastIndex = index;
+  var pattern_match = pattern.exec(this.__input);
+
+  if (pattern_match && !(regexp_has_sticky && pattern.sticky)) {
+    if (pattern_match.index !== index) {
+      pattern_match = null;
+    }
+  }
+
+  return pattern_match;
+};
+
+InputScanner.prototype.test = function(pattern, index) {
+  index = index || 0;
+  index += this.__position;
+
+  if (index >= 0 && index < this.__input_length) {
+    return !!this.__match(pattern, index);
+  } else {
+    return false;
+  }
+};
+
+InputScanner.prototype.testChar = function(pattern, index) {
+  // test one character regex match
+  var val = this.peek(index);
+  pattern.lastIndex = 0;
+  return val !== null && pattern.test(val);
+};
+
+InputScanner.prototype.match = function(pattern) {
+  var pattern_match = this.__match(pattern, this.__position);
+  if (pattern_match) {
+    this.__position += pattern_match[0].length;
+  } else {
+    pattern_match = null;
+  }
+  return pattern_match;
+};
+
+InputScanner.prototype.read = function(starting_pattern, until_pattern, until_after) {
+  var val = '';
+  var match;
+  if (starting_pattern) {
+    match = this.match(starting_pattern);
+    if (match) {
+      val += match[0];
+    }
+  }
+  if (until_pattern && (match || !starting_pattern)) {
+    val += this.readUntil(until_pattern, until_after);
+  }
+  return val;
+};
+
+InputScanner.prototype.readUntil = function(pattern, until_after) {
+  var val = '';
+  var match_index = this.__position;
+  pattern.lastIndex = this.__position;
+  var pattern_match = pattern.exec(this.__input);
+  if (pattern_match) {
+    match_index = pattern_match.index;
+    if (until_after) {
+      match_index += pattern_match[0].length;
+    }
+  } else {
+    match_index = this.__input_length;
+  }
+
+  val = this.__input.substring(this.__position, match_index);
+  this.__position = match_index;
+  return val;
+};
+
+InputScanner.prototype.readUntilAfter = function(pattern) {
+  return this.readUntil(pattern, true);
+};
+
+InputScanner.prototype.get_regexp = function(pattern, match_from) {
+  var result = null;
+  var flags = 'g';
+  if (match_from && regexp_has_sticky) {
+    flags = 'y';
+  }
+  // strings are converted to regexp
+  if (typeof pattern === "string" && pattern !== '') {
+    // result = new RegExp(pattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), flags);
+    result = new RegExp(pattern, flags);
+  } else if (pattern) {
+    result = new RegExp(pattern.source, flags);
+  }
+  return result;
+};
+
+InputScanner.prototype.get_literal_regexp = function(literal_string) {
+  return RegExp(literal_string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+};
+
+/* css beautifier legacy helpers */
+InputScanner.prototype.peekUntilAfter = function(pattern) {
+  var start = this.__position;
+  var val = this.readUntilAfter(pattern);
+  this.__position = start;
+  return val;
+};
+
+InputScanner.prototype.lookBack = function(testVal) {
+  var start = this.__position - 1;
+  return start >= testVal.length && this.__input.substring(start - testVal.length, start)
+    .toLowerCase() === testVal;
+};
+
+module.exports.InputScanner = InputScanner;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_30328__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var InputScanner = (__nested_webpack_require_30328__(8).InputScanner);
+var Token = (__nested_webpack_require_30328__(3).Token);
+var TokenStream = (__nested_webpack_require_30328__(10).TokenStream);
+var WhitespacePattern = (__nested_webpack_require_30328__(11).WhitespacePattern);
+
+var TOKEN = {
+  START: 'TK_START',
+  RAW: 'TK_RAW',
+  EOF: 'TK_EOF'
+};
+
+var Tokenizer = function(input_string, options) {
+  this._input = new InputScanner(input_string);
+  this._options = options || {};
+  this.__tokens = null;
+
+  this._patterns = {};
+  this._patterns.whitespace = new WhitespacePattern(this._input);
+};
+
+Tokenizer.prototype.tokenize = function() {
+  this._input.restart();
+  this.__tokens = new TokenStream();
+
+  this._reset();
+
+  var current;
+  var previous = new Token(TOKEN.START, '');
+  var open_token = null;
+  var open_stack = [];
+  var comments = new TokenStream();
+
+  while (previous.type !== TOKEN.EOF) {
+    current = this._get_next_token(previous, open_token);
+    while (this._is_comment(current)) {
+      comments.add(current);
+      current = this._get_next_token(previous, open_token);
+    }
+
+    if (!comments.isEmpty()) {
+      current.comments_before = comments;
+      comments = new TokenStream();
+    }
+
+    current.parent = open_token;
+
+    if (this._is_opening(current)) {
+      open_stack.push(open_token);
+      open_token = current;
+    } else if (open_token && this._is_closing(current, open_token)) {
+      current.opened = open_token;
+      open_token.closed = current;
+      open_token = open_stack.pop();
+      current.parent = open_token;
+    }
+
+    current.previous = previous;
+    previous.next = current;
+
+    this.__tokens.add(current);
+    previous = current;
+  }
+
+  return this.__tokens;
+};
+
+
+Tokenizer.prototype._is_first_token = function() {
+  return this.__tokens.isEmpty();
+};
+
+Tokenizer.prototype._reset = function() {};
+
+Tokenizer.prototype._get_next_token = function(previous_token, open_token) { // jshint unused:false
+  this._readWhitespace();
+  var resulting_string = this._input.read(/.+/g);
+  if (resulting_string) {
+    return this._create_token(TOKEN.RAW, resulting_string);
+  } else {
+    return this._create_token(TOKEN.EOF, '');
+  }
+};
+
+Tokenizer.prototype._is_comment = function(current_token) { // jshint unused:false
+  return false;
+};
+
+Tokenizer.prototype._is_opening = function(current_token) { // jshint unused:false
+  return false;
+};
+
+Tokenizer.prototype._is_closing = function(current_token, open_token) { // jshint unused:false
+  return false;
+};
+
+Tokenizer.prototype._create_token = function(type, text) {
+  var token = new Token(type, text,
+    this._patterns.whitespace.newline_count,
+    this._patterns.whitespace.whitespace_before_token);
+  return token;
+};
+
+Tokenizer.prototype._readWhitespace = function() {
+  return this._patterns.whitespace.read();
+};
+
+
+
+module.exports.Tokenizer = Tokenizer;
+module.exports.TOKEN = TOKEN;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+function TokenStream(parent_token) {
+  // private
+  this.__tokens = [];
+  this.__tokens_length = this.__tokens.length;
+  this.__position = 0;
+  this.__parent_token = parent_token;
+}
+
+TokenStream.prototype.restart = function() {
+  this.__position = 0;
+};
+
+TokenStream.prototype.isEmpty = function() {
+  return this.__tokens_length === 0;
+};
+
+TokenStream.prototype.hasNext = function() {
+  return this.__position < this.__tokens_length;
+};
+
+TokenStream.prototype.next = function() {
+  var val = null;
+  if (this.hasNext()) {
+    val = this.__tokens[this.__position];
+    this.__position += 1;
+  }
+  return val;
+};
+
+TokenStream.prototype.peek = function(index) {
+  var val = null;
+  index = index || 0;
+  index += this.__position;
+  if (index >= 0 && index < this.__tokens_length) {
+    val = this.__tokens[index];
+  }
+  return val;
+};
+
+TokenStream.prototype.add = function(token) {
+  if (this.__parent_token) {
+    token.parent = this.__parent_token;
+  }
+  this.__tokens.push(token);
+  this.__tokens_length += 1;
+};
+
+module.exports.TokenStream = TokenStream;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_36748__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var Pattern = (__nested_webpack_require_36748__(12).Pattern);
+
+function WhitespacePattern(input_scanner, parent) {
+  Pattern.call(this, input_scanner, parent);
+  if (parent) {
+    this._line_regexp = this._input.get_regexp(parent._line_regexp);
+  } else {
+    this.__set_whitespace_patterns('', '');
+  }
+
+  this.newline_count = 0;
+  this.whitespace_before_token = '';
+}
+WhitespacePattern.prototype = new Pattern();
+
+WhitespacePattern.prototype.__set_whitespace_patterns = function(whitespace_chars, newline_chars) {
+  whitespace_chars += '\\t ';
+  newline_chars += '\\n\\r';
+
+  this._match_pattern = this._input.get_regexp(
+    '[' + whitespace_chars + newline_chars + ']+', true);
+  this._newline_regexp = this._input.get_regexp(
+    '\\r\\n|[' + newline_chars + ']');
+};
+
+WhitespacePattern.prototype.read = function() {
+  this.newline_count = 0;
+  this.whitespace_before_token = '';
+
+  var resulting_string = this._input.read(this._match_pattern);
+  if (resulting_string === ' ') {
+    this.whitespace_before_token = ' ';
+  } else if (resulting_string) {
+    var matches = this.__split(this._newline_regexp, resulting_string);
+    this.newline_count = matches.length - 1;
+    this.whitespace_before_token = matches[this.newline_count];
+  }
+
+  return resulting_string;
+};
+
+WhitespacePattern.prototype.matching = function(whitespace_chars, newline_chars) {
+  var result = this._create();
+  result.__set_whitespace_patterns(whitespace_chars, newline_chars);
+  result._update();
+  return result;
+};
+
+WhitespacePattern.prototype._create = function() {
+  return new WhitespacePattern(this._input, this);
+};
+
+WhitespacePattern.prototype.__split = function(regexp, input_string) {
+  regexp.lastIndex = 0;
+  var start_index = 0;
+  var result = [];
+  var next_match = regexp.exec(input_string);
+  while (next_match) {
+    result.push(input_string.substring(start_index, next_match.index));
+    start_index = next_match.index + next_match[0].length;
+    next_match = regexp.exec(input_string);
+  }
+
+  if (start_index < input_string.length) {
+    result.push(input_string.substring(start_index, input_string.length));
+  } else {
+    result.push('');
+  }
+
+  return result;
+};
+
+
+
+module.exports.WhitespacePattern = WhitespacePattern;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+function Pattern(input_scanner, parent) {
+  this._input = input_scanner;
+  this._starting_pattern = null;
+  this._match_pattern = null;
+  this._until_pattern = null;
+  this._until_after = false;
+
+  if (parent) {
+    this._starting_pattern = this._input.get_regexp(parent._starting_pattern, true);
+    this._match_pattern = this._input.get_regexp(parent._match_pattern, true);
+    this._until_pattern = this._input.get_regexp(parent._until_pattern);
+    this._until_after = parent._until_after;
+  }
+}
+
+Pattern.prototype.read = function() {
+  var result = this._input.read(this._starting_pattern);
+  if (!this._starting_pattern || result) {
+    result += this._input.read(this._match_pattern, this._until_pattern, this._until_after);
+  }
+  return result;
+};
+
+Pattern.prototype.read_match = function() {
+  return this._input.match(this._match_pattern);
+};
+
+Pattern.prototype.until_after = function(pattern) {
+  var result = this._create();
+  result._until_after = true;
+  result._until_pattern = this._input.get_regexp(pattern);
+  result._update();
+  return result;
+};
+
+Pattern.prototype.until = function(pattern) {
+  var result = this._create();
+  result._until_after = false;
+  result._until_pattern = this._input.get_regexp(pattern);
+  result._update();
+  return result;
+};
+
+Pattern.prototype.starting_with = function(pattern) {
+  var result = this._create();
+  result._starting_pattern = this._input.get_regexp(pattern, true);
+  result._update();
+  return result;
+};
+
+Pattern.prototype.matching = function(pattern) {
+  var result = this._create();
+  result._match_pattern = this._input.get_regexp(pattern, true);
+  result._update();
+  return result;
+};
+
+Pattern.prototype._create = function() {
+  return new Pattern(this._input, this);
+};
+
+Pattern.prototype._update = function() {};
+
+module.exports.Pattern = Pattern;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+function Directives(start_block_pattern, end_block_pattern) {
+  start_block_pattern = typeof start_block_pattern === 'string' ? start_block_pattern : start_block_pattern.source;
+  end_block_pattern = typeof end_block_pattern === 'string' ? end_block_pattern : end_block_pattern.source;
+  this.__directives_block_pattern = new RegExp(start_block_pattern + / beautify( \w+[:]\w+)+ /.source + end_block_pattern, 'g');
+  this.__directive_pattern = / (\w+)[:](\w+)/g;
+
+  this.__directives_end_ignore_pattern = new RegExp(start_block_pattern + /\sbeautify\signore:end\s/.source + end_block_pattern, 'g');
+}
+
+Directives.prototype.get_directives = function(text) {
+  if (!text.match(this.__directives_block_pattern)) {
+    return null;
+  }
+
+  var directives = {};
+  this.__directive_pattern.lastIndex = 0;
+  var directive_match = this.__directive_pattern.exec(text);
+
+  while (directive_match) {
+    directives[directive_match[1]] = directive_match[2];
+    directive_match = this.__directive_pattern.exec(text);
+  }
+
+  return directives;
+};
+
+Directives.prototype.readIgnored = function(input) {
+  return input.readUntilAfter(this.__directives_end_ignore_pattern);
+};
+
+
+module.exports.Directives = Directives;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_45735__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var Pattern = (__nested_webpack_require_45735__(12).Pattern);
+
+
+var template_names = {
+  django: false,
+  erb: false,
+  handlebars: false,
+  php: false,
+  smarty: false,
+  angular: false
+};
+
+// This lets templates appear anywhere we would do a readUntil
+// The cost is higher but it is pay to play.
+function TemplatablePattern(input_scanner, parent) {
+  Pattern.call(this, input_scanner, parent);
+  this.__template_pattern = null;
+  this._disabled = Object.assign({}, template_names);
+  this._excluded = Object.assign({}, template_names);
+
+  if (parent) {
+    this.__template_pattern = this._input.get_regexp(parent.__template_pattern);
+    this._excluded = Object.assign(this._excluded, parent._excluded);
+    this._disabled = Object.assign(this._disabled, parent._disabled);
+  }
+  var pattern = new Pattern(input_scanner);
+  this.__patterns = {
+    handlebars_comment: pattern.starting_with(/{{!--/).until_after(/--}}/),
+    handlebars_unescaped: pattern.starting_with(/{{{/).until_after(/}}}/),
+    handlebars: pattern.starting_with(/{{/).until_after(/}}/),
+    php: pattern.starting_with(/<\?(?:[= ]|php)/).until_after(/\?>/),
+    erb: pattern.starting_with(/<%[^%]/).until_after(/[^%]%>/),
+    // django coflicts with handlebars a bit.
+    django: pattern.starting_with(/{%/).until_after(/%}/),
+    django_value: pattern.starting_with(/{{/).until_after(/}}/),
+    django_comment: pattern.starting_with(/{#/).until_after(/#}/),
+    smarty: pattern.starting_with(/{(?=[^}{\s\n])/).until_after(/[^\s\n]}/),
+    smarty_comment: pattern.starting_with(/{\*/).until_after(/\*}/),
+    smarty_literal: pattern.starting_with(/{literal}/).until_after(/{\/literal}/)
+  };
+}
+TemplatablePattern.prototype = new Pattern();
+
+TemplatablePattern.prototype._create = function() {
+  return new TemplatablePattern(this._input, this);
+};
+
+TemplatablePattern.prototype._update = function() {
+  this.__set_templated_pattern();
+};
+
+TemplatablePattern.prototype.disable = function(language) {
+  var result = this._create();
+  result._disabled[language] = true;
+  result._update();
+  return result;
+};
+
+TemplatablePattern.prototype.read_options = function(options) {
+  var result = this._create();
+  for (var language in template_names) {
+    result._disabled[language] = options.templating.indexOf(language) === -1;
+  }
+  result._update();
+  return result;
+};
+
+TemplatablePattern.prototype.exclude = function(language) {
+  var result = this._create();
+  result._excluded[language] = true;
+  result._update();
+  return result;
+};
+
+TemplatablePattern.prototype.read = function() {
+  var result = '';
+  if (this._match_pattern) {
+    result = this._input.read(this._starting_pattern);
+  } else {
+    result = this._input.read(this._starting_pattern, this.__template_pattern);
+  }
+  var next = this._read_template();
+  while (next) {
+    if (this._match_pattern) {
+      next += this._input.read(this._match_pattern);
+    } else {
+      next += this._input.readUntil(this.__template_pattern);
+    }
+    result += next;
+    next = this._read_template();
+  }
+
+  if (this._until_after) {
+    result += this._input.readUntilAfter(this._until_pattern);
+  }
+  return result;
+};
+
+TemplatablePattern.prototype.__set_templated_pattern = function() {
+  var items = [];
+
+  if (!this._disabled.php) {
+    items.push(this.__patterns.php._starting_pattern.source);
+  }
+  if (!this._disabled.handlebars) {
+    items.push(this.__patterns.handlebars._starting_pattern.source);
+  }
+  if (!this._disabled.angular) {
+    // Handlebars ('{{' and '}}') are also special tokens in Angular)
+    items.push(this.__patterns.handlebars._starting_pattern.source);
+  }
+  if (!this._disabled.erb) {
+    items.push(this.__patterns.erb._starting_pattern.source);
+  }
+  if (!this._disabled.django) {
+    items.push(this.__patterns.django._starting_pattern.source);
+    // The starting pattern for django is more complex because it has different
+    // patterns for value, comment, and other sections
+    items.push(this.__patterns.django_value._starting_pattern.source);
+    items.push(this.__patterns.django_comment._starting_pattern.source);
+  }
+  if (!this._disabled.smarty) {
+    items.push(this.__patterns.smarty._starting_pattern.source);
+  }
+
+  if (this._until_pattern) {
+    items.push(this._until_pattern.source);
+  }
+  this.__template_pattern = this._input.get_regexp('(?:' + items.join('|') + ')');
+};
+
+TemplatablePattern.prototype._read_template = function() {
+  var resulting_string = '';
+  var c = this._input.peek();
+  if (c === '<') {
+    var peek1 = this._input.peek(1);
+    //if we're in a comment, do something special
+    // We treat all comments as literals, even more than preformatted tags
+    // we just look for the appropriate close tag
+    if (!this._disabled.php && !this._excluded.php && peek1 === '?') {
+      resulting_string = resulting_string ||
+        this.__patterns.php.read();
+    }
+    if (!this._disabled.erb && !this._excluded.erb && peek1 === '%') {
+      resulting_string = resulting_string ||
+        this.__patterns.erb.read();
+    }
+  } else if (c === '{') {
+    if (!this._disabled.handlebars && !this._excluded.handlebars) {
+      resulting_string = resulting_string ||
+        this.__patterns.handlebars_comment.read();
+      resulting_string = resulting_string ||
+        this.__patterns.handlebars_unescaped.read();
+      resulting_string = resulting_string ||
+        this.__patterns.handlebars.read();
+    }
+    if (!this._disabled.django) {
+      // django coflicts with handlebars a bit.
+      if (!this._excluded.django && !this._excluded.handlebars) {
+        resulting_string = resulting_string ||
+          this.__patterns.django_value.read();
+      }
+      if (!this._excluded.django) {
+        resulting_string = resulting_string ||
+          this.__patterns.django_comment.read();
+        resulting_string = resulting_string ||
+          this.__patterns.django.read();
+      }
+    }
+    if (!this._disabled.smarty) {
+      // smarty cannot be enabled with django or handlebars enabled
+      if (this._disabled.django && this._disabled.handlebars) {
+        resulting_string = resulting_string ||
+          this.__patterns.smarty_comment.read();
+        resulting_string = resulting_string ||
+          this.__patterns.smarty_literal.read();
+        resulting_string = resulting_string ||
+          this.__patterns.smarty.read();
+      }
+    }
+  }
+  return resulting_string;
+};
+
+
+module.exports.TemplatablePattern = TemplatablePattern;
+
+
+/***/ }),
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_53475__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var Beautifier = (__nested_webpack_require_53475__(19).Beautifier),
+  Options = (__nested_webpack_require_53475__(20).Options);
+
+function style_html(html_source, options, js_beautify, css_beautify) {
+  var beautifier = new Beautifier(html_source, options, js_beautify, css_beautify);
+  return beautifier.beautify();
+}
+
+module.exports = style_html;
+module.exports.defaultOptions = function() {
+  return new Options();
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_55153__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var Options = (__nested_webpack_require_55153__(20).Options);
+var Output = (__nested_webpack_require_55153__(2).Output);
+var Tokenizer = (__nested_webpack_require_55153__(21).Tokenizer);
+var TOKEN = (__nested_webpack_require_55153__(21).TOKEN);
+
+var lineBreak = /\r\n|[\r\n]/;
+var allLineBreaks = /\r\n|[\r\n]/g;
+
+var Printer = function(options, base_indent_string) { //handles input/output and some other printing functions
+
+  this.indent_level = 0;
+  this.alignment_size = 0;
+  this.max_preserve_newlines = options.max_preserve_newlines;
+  this.preserve_newlines = options.preserve_newlines;
+
+  this._output = new Output(options, base_indent_string);
+
+};
+
+Printer.prototype.current_line_has_match = function(pattern) {
+  return this._output.current_line.has_match(pattern);
+};
+
+Printer.prototype.set_space_before_token = function(value, non_breaking) {
+  this._output.space_before_token = value;
+  this._output.non_breaking_space = non_breaking;
+};
+
+Printer.prototype.set_wrap_point = function() {
+  this._output.set_indent(this.indent_level, this.alignment_size);
+  this._output.set_wrap_point();
+};
+
+
+Printer.prototype.add_raw_token = function(token) {
+  this._output.add_raw_token(token);
+};
+
+Printer.prototype.print_preserved_newlines = function(raw_token) {
+  var newlines = 0;
+  if (raw_token.type !== TOKEN.TEXT && raw_token.previous.type !== TOKEN.TEXT) {
+    newlines = raw_token.newlines ? 1 : 0;
+  }
+
+  if (this.preserve_newlines) {
+    newlines = raw_token.newlines < this.max_preserve_newlines + 1 ? raw_token.newlines : this.max_preserve_newlines + 1;
+  }
+  for (var n = 0; n < newlines; n++) {
+    this.print_newline(n > 0);
+  }
+
+  return newlines !== 0;
+};
+
+Printer.prototype.traverse_whitespace = function(raw_token) {
+  if (raw_token.whitespace_before || raw_token.newlines) {
+    if (!this.print_preserved_newlines(raw_token)) {
+      this._output.space_before_token = true;
+    }
+    return true;
+  }
+  return false;
+};
+
+Printer.prototype.previous_token_wrapped = function() {
+  return this._output.previous_token_wrapped;
+};
+
+Printer.prototype.print_newline = function(force) {
+  this._output.add_new_line(force);
+};
+
+Printer.prototype.print_token = function(token) {
+  if (token.text) {
+    this._output.set_indent(this.indent_level, this.alignment_size);
+    this._output.add_token(token.text);
+  }
+};
+
+Printer.prototype.indent = function() {
+  this.indent_level++;
+};
+
+Printer.prototype.deindent = function() {
+  if (this.indent_level > 0) {
+    this.indent_level--;
+    this._output.set_indent(this.indent_level, this.alignment_size);
+  }
+};
+
+Printer.prototype.get_full_indent = function(level) {
+  level = this.indent_level + (level || 0);
+  if (level < 1) {
+    return '';
+  }
+
+  return this._output.get_indent_string(level);
+};
+
+var get_type_attribute = function(start_token) {
+  var result = null;
+  var raw_token = start_token.next;
+
+  // Search attributes for a type attribute
+  while (raw_token.type !== TOKEN.EOF && start_token.closed !== raw_token) {
+    if (raw_token.type === TOKEN.ATTRIBUTE && raw_token.text === 'type') {
+      if (raw_token.next && raw_token.next.type === TOKEN.EQUALS &&
+        raw_token.next.next && raw_token.next.next.type === TOKEN.VALUE) {
+        result = raw_token.next.next.text;
+      }
+      break;
+    }
+    raw_token = raw_token.next;
+  }
+
+  return result;
+};
+
+var get_custom_beautifier_name = function(tag_check, raw_token) {
+  var typeAttribute = null;
+  var result = null;
+
+  if (!raw_token.closed) {
+    return null;
+  }
+
+  if (tag_check === 'script') {
+    typeAttribute = 'text/javascript';
+  } else if (tag_check === 'style') {
+    typeAttribute = 'text/css';
+  }
+
+  typeAttribute = get_type_attribute(raw_token) || typeAttribute;
+
+  // For script and style tags that have a type attribute, only enable custom beautifiers for matching values
+  // For those without a type attribute use default;
+  if (typeAttribute.search('text/css') > -1) {
+    result = 'css';
+  } else if (typeAttribute.search(/module|((text|application|dojo)\/(x-)?(javascript|ecmascript|jscript|livescript|(ld\+)?json|method|aspect))/) > -1) {
+    result = 'javascript';
+  } else if (typeAttribute.search(/(text|application|dojo)\/(x-)?(html)/) > -1) {
+    result = 'html';
+  } else if (typeAttribute.search(/test\/null/) > -1) {
+    // Test only mime-type for testing the beautifier when null is passed as beautifing function
+    result = 'null';
+  }
+
+  return result;
+};
+
+function in_array(what, arr) {
+  return arr.indexOf(what) !== -1;
+}
+
+function TagFrame(parent, parser_token, indent_level) {
+  this.parent = parent || null;
+  this.tag = parser_token ? parser_token.tag_name : '';
+  this.indent_level = indent_level || 0;
+  this.parser_token = parser_token || null;
+}
+
+function TagStack(printer) {
+  this._printer = printer;
+  this._current_frame = null;
+}
+
+TagStack.prototype.get_parser_token = function() {
+  return this._current_frame ? this._current_frame.parser_token : null;
+};
+
+TagStack.prototype.record_tag = function(parser_token) { //function to record a tag and its parent in this.tags Object
+  var new_frame = new TagFrame(this._current_frame, parser_token, this._printer.indent_level);
+  this._current_frame = new_frame;
+};
+
+TagStack.prototype._try_pop_frame = function(frame) { //function to retrieve the opening tag to the corresponding closer
+  var parser_token = null;
+
+  if (frame) {
+    parser_token = frame.parser_token;
+    this._printer.indent_level = frame.indent_level;
+    this._current_frame = frame.parent;
+  }
+
+  return parser_token;
+};
+
+TagStack.prototype._get_frame = function(tag_list, stop_list) { //function to retrieve the opening tag to the corresponding closer
+  var frame = this._current_frame;
+
+  while (frame) { //till we reach '' (the initial value);
+    if (tag_list.indexOf(frame.tag) !== -1) { //if this is it use it
+      break;
+    } else if (stop_list && stop_list.indexOf(frame.tag) !== -1) {
+      frame = null;
+      break;
+    }
+    frame = frame.parent;
+  }
+
+  return frame;
+};
+
+TagStack.prototype.try_pop = function(tag, stop_list) { //function to retrieve the opening tag to the corresponding closer
+  var frame = this._get_frame([tag], stop_list);
+  return this._try_pop_frame(frame);
+};
+
+TagStack.prototype.indent_to_tag = function(tag_list) {
+  var frame = this._get_frame(tag_list);
+  if (frame) {
+    this._printer.indent_level = frame.indent_level;
+  }
+};
+
+function Beautifier(source_text, options, js_beautify, css_beautify) {
+  //Wrapper function to invoke all the necessary constructors and deal with the output.
+  this._source_text = source_text || '';
+  options = options || {};
+  this._js_beautify = js_beautify;
+  this._css_beautify = css_beautify;
+  this._tag_stack = null;
+
+  // Allow the setting of language/file-type specific options
+  // with inheritance of overall settings
+  var optionHtml = new Options(options, 'html');
+
+  this._options = optionHtml;
+
+  this._is_wrap_attributes_force = this._options.wrap_attributes.substr(0, 'force'.length) === 'force';
+  this._is_wrap_attributes_force_expand_multiline = (this._options.wrap_attributes === 'force-expand-multiline');
+  this._is_wrap_attributes_force_aligned = (this._options.wrap_attributes === 'force-aligned');
+  this._is_wrap_attributes_aligned_multiple = (this._options.wrap_attributes === 'aligned-multiple');
+  this._is_wrap_attributes_preserve = this._options.wrap_attributes.substr(0, 'preserve'.length) === 'preserve';
+  this._is_wrap_attributes_preserve_aligned = (this._options.wrap_attributes === 'preserve-aligned');
+}
+
+Beautifier.prototype.beautify = function() {
+
+  // if disabled, return the input unchanged.
+  if (this._options.disabled) {
+    return this._source_text;
+  }
+
+  var source_text = this._source_text;
+  var eol = this._options.eol;
+  if (this._options.eol === 'auto') {
+    eol = '\n';
+    if (source_text && lineBreak.test(source_text)) {
+      eol = source_text.match(lineBreak)[0];
+    }
+  }
+
+  // HACK: newline parsing inconsistent. This brute force normalizes the input.
+  source_text = source_text.replace(allLineBreaks, '\n');
+
+  var baseIndentString = source_text.match(/^[\t ]*/)[0];
+
+  var last_token = {
+    text: '',
+    type: ''
+  };
+
+  var last_tag_token = new TagOpenParserToken(this._options);
+
+  var printer = new Printer(this._options, baseIndentString);
+  var tokens = new Tokenizer(source_text, this._options).tokenize();
+
+  this._tag_stack = new TagStack(printer);
+
+  var parser_token = null;
+  var raw_token = tokens.next();
+  while (raw_token.type !== TOKEN.EOF) {
+
+    if (raw_token.type === TOKEN.TAG_OPEN || raw_token.type === TOKEN.COMMENT) {
+      parser_token = this._handle_tag_open(printer, raw_token, last_tag_token, last_token, tokens);
+      last_tag_token = parser_token;
+    } else if ((raw_token.type === TOKEN.ATTRIBUTE || raw_token.type === TOKEN.EQUALS || raw_token.type === TOKEN.VALUE) ||
+      (raw_token.type === TOKEN.TEXT && !last_tag_token.tag_complete)) {
+      parser_token = this._handle_inside_tag(printer, raw_token, last_tag_token, last_token);
+    } else if (raw_token.type === TOKEN.TAG_CLOSE) {
+      parser_token = this._handle_tag_close(printer, raw_token, last_tag_token);
+    } else if (raw_token.type === TOKEN.TEXT) {
+      parser_token = this._handle_text(printer, raw_token, last_tag_token);
+    } else if (raw_token.type === TOKEN.CONTROL_FLOW_OPEN) {
+      parser_token = this._handle_control_flow_open(printer, raw_token);
+    } else if (raw_token.type === TOKEN.CONTROL_FLOW_CLOSE) {
+      parser_token = this._handle_control_flow_close(printer, raw_token);
+    } else {
+      // This should never happen, but if it does. Print the raw token
+      printer.add_raw_token(raw_token);
+    }
+
+    last_token = parser_token;
+
+    raw_token = tokens.next();
+  }
+  var sweet_code = printer._output.get_code(eol);
+
+  return sweet_code;
+};
+
+Beautifier.prototype._handle_control_flow_open = function(printer, raw_token) {
+  var parser_token = {
+    text: raw_token.text,
+    type: raw_token.type
+  };
+  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
+  if (raw_token.newlines) {
+    printer.print_preserved_newlines(raw_token);
+  } else {
+    printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
+  }
+  printer.print_token(raw_token);
+  printer.indent();
+  return parser_token;
+};
+
+Beautifier.prototype._handle_control_flow_close = function(printer, raw_token) {
+  var parser_token = {
+    text: raw_token.text,
+    type: raw_token.type
+  };
+
+  printer.deindent();
+  if (raw_token.newlines) {
+    printer.print_preserved_newlines(raw_token);
+  } else {
+    printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
+  }
+  printer.print_token(raw_token);
+  return parser_token;
+};
+
+Beautifier.prototype._handle_tag_close = function(printer, raw_token, last_tag_token) {
+  var parser_token = {
+    text: raw_token.text,
+    type: raw_token.type
+  };
+  printer.alignment_size = 0;
+  last_tag_token.tag_complete = true;
+
+  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
+  if (last_tag_token.is_unformatted) {
+    printer.add_raw_token(raw_token);
+  } else {
+    if (last_tag_token.tag_start_char === '<') {
+      printer.set_space_before_token(raw_token.text[0] === '/', true); // space before />, no space before >
+      if (this._is_wrap_attributes_force_expand_multiline && last_tag_token.has_wrapped_attrs) {
+        printer.print_newline(false);
+      }
+    }
+    printer.print_token(raw_token);
+
+  }
+
+  if (last_tag_token.indent_content &&
+    !(last_tag_token.is_unformatted || last_tag_token.is_content_unformatted)) {
+    printer.indent();
+
+    // only indent once per opened tag
+    last_tag_token.indent_content = false;
+  }
+
+  if (!last_tag_token.is_inline_element &&
+    !(last_tag_token.is_unformatted || last_tag_token.is_content_unformatted)) {
+    printer.set_wrap_point();
+  }
+
+  return parser_token;
+};
+
+Beautifier.prototype._handle_inside_tag = function(printer, raw_token, last_tag_token, last_token) {
+  var wrapped = last_tag_token.has_wrapped_attrs;
+  var parser_token = {
+    text: raw_token.text,
+    type: raw_token.type
+  };
+
+  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
+  if (last_tag_token.is_unformatted) {
+    printer.add_raw_token(raw_token);
+  } else if (last_tag_token.tag_start_char === '{' && raw_token.type === TOKEN.TEXT) {
+    // For the insides of handlebars allow newlines or a single space between open and contents
+    if (printer.print_preserved_newlines(raw_token)) {
+      raw_token.newlines = 0;
+      printer.add_raw_token(raw_token);
+    } else {
+      printer.print_token(raw_token);
+    }
+  } else {
+    if (raw_token.type === TOKEN.ATTRIBUTE) {
+      printer.set_space_before_token(true);
+    } else if (raw_token.type === TOKEN.EQUALS) { //no space before =
+      printer.set_space_before_token(false);
+    } else if (raw_token.type === TOKEN.VALUE && raw_token.previous.type === TOKEN.EQUALS) { //no space before value
+      printer.set_space_before_token(false);
+    }
+
+    if (raw_token.type === TOKEN.ATTRIBUTE && last_tag_token.tag_start_char === '<') {
+      if (this._is_wrap_attributes_preserve || this._is_wrap_attributes_preserve_aligned) {
+        printer.traverse_whitespace(raw_token);
+        wrapped = wrapped || raw_token.newlines !== 0;
+      }
+
+      // Wrap for 'force' options, and if the number of attributes is at least that specified in 'wrap_attributes_min_attrs':
+      // 1. always wrap the second and beyond attributes
+      // 2. wrap the first attribute only if 'force-expand-multiline' is specified
+      if (this._is_wrap_attributes_force &&
+        last_tag_token.attr_count >= this._options.wrap_attributes_min_attrs &&
+        (last_token.type !== TOKEN.TAG_OPEN || // ie. second attribute and beyond
+          this._is_wrap_attributes_force_expand_multiline)) {
+        printer.print_newline(false);
+        wrapped = true;
+      }
+    }
+    printer.print_token(raw_token);
+    wrapped = wrapped || printer.previous_token_wrapped();
+    last_tag_token.has_wrapped_attrs = wrapped;
+  }
+  return parser_token;
+};
+
+Beautifier.prototype._handle_text = function(printer, raw_token, last_tag_token) {
+  var parser_token = {
+    text: raw_token.text,
+    type: 'TK_CONTENT'
+  };
+  if (last_tag_token.custom_beautifier_name) { //check if we need to format javascript
+    this._print_custom_beatifier_text(printer, raw_token, last_tag_token);
+  } else if (last_tag_token.is_unformatted || last_tag_token.is_content_unformatted) {
+    printer.add_raw_token(raw_token);
+  } else {
+    printer.traverse_whitespace(raw_token);
+    printer.print_token(raw_token);
+  }
+  return parser_token;
+};
+
+Beautifier.prototype._print_custom_beatifier_text = function(printer, raw_token, last_tag_token) {
+  var local = this;
+  if (raw_token.text !== '') {
+
+    var text = raw_token.text,
+      _beautifier,
+      script_indent_level = 1,
+      pre = '',
+      post = '';
+    if (last_tag_token.custom_beautifier_name === 'javascript' && typeof this._js_beautify === 'function') {
+      _beautifier = this._js_beautify;
+    } else if (last_tag_token.custom_beautifier_name === 'css' && typeof this._css_beautify === 'function') {
+      _beautifier = this._css_beautify;
+    } else if (last_tag_token.custom_beautifier_name === 'html') {
+      _beautifier = function(html_source, options) {
+        var beautifier = new Beautifier(html_source, options, local._js_beautify, local._css_beautify);
+        return beautifier.beautify();
+      };
+    }
+
+    if (this._options.indent_scripts === "keep") {
+      script_indent_level = 0;
+    } else if (this._options.indent_scripts === "separate") {
+      script_indent_level = -printer.indent_level;
+    }
+
+    var indentation = printer.get_full_indent(script_indent_level);
+
+    // if there is at least one empty line at the end of this text, strip it
+    // we'll be adding one back after the text but before the containing tag.
+    text = text.replace(/\n[ \t]*$/, '');
+
+    // Handle the case where content is wrapped in a comment or cdata.
+    if (last_tag_token.custom_beautifier_name !== 'html' &&
+      text[0] === '<' && text.match(/^(<!--|<!\[CDATA\[)/)) {
+      var matched = /^(<!--[^\n]*|<!\[CDATA\[)(\n?)([ \t\n]*)([\s\S]*)(-->|]]>)$/.exec(text);
+
+      // if we start to wrap but don't finish, print raw
+      if (!matched) {
+        printer.add_raw_token(raw_token);
+        return;
+      }
+
+      pre = indentation + matched[1] + '\n';
+      text = matched[4];
+      if (matched[5]) {
+        post = indentation + matched[5];
+      }
+
+      // if there is at least one empty line at the end of this text, strip it
+      // we'll be adding one back after the text but before the containing tag.
+      text = text.replace(/\n[ \t]*$/, '');
+
+      if (matched[2] || matched[3].indexOf('\n') !== -1) {
+        // if the first line of the non-comment text has spaces
+        // use that as the basis for indenting in null case.
+        matched = matched[3].match(/[ \t]+$/);
+        if (matched) {
+          raw_token.whitespace_before = matched[0];
+        }
+      }
+    }
+
+    if (text) {
+      if (_beautifier) {
+
+        // call the Beautifier if avaliable
+        var Child_options = function() {
+          this.eol = '\n';
+        };
+        Child_options.prototype = this._options.raw_options;
+        var child_options = new Child_options();
+        text = _beautifier(indentation + text, child_options);
+      } else {
+        // simply indent the string otherwise
+        var white = raw_token.whitespace_before;
+        if (white) {
+          text = text.replace(new RegExp('\n(' + white + ')?', 'g'), '\n');
+        }
+
+        text = indentation + text.replace(/\n/g, '\n' + indentation);
+      }
+    }
+
+    if (pre) {
+      if (!text) {
+        text = pre + post;
+      } else {
+        text = pre + text + '\n' + post;
+      }
+    }
+
+    printer.print_newline(false);
+    if (text) {
+      raw_token.text = text;
+      raw_token.whitespace_before = '';
+      raw_token.newlines = 0;
+      printer.add_raw_token(raw_token);
+      printer.print_newline(true);
+    }
+  }
+};
+
+Beautifier.prototype._handle_tag_open = function(printer, raw_token, last_tag_token, last_token, tokens) {
+  var parser_token = this._get_tag_open_token(raw_token);
+
+  if ((last_tag_token.is_unformatted || last_tag_token.is_content_unformatted) &&
+    !last_tag_token.is_empty_element &&
+    raw_token.type === TOKEN.TAG_OPEN && !parser_token.is_start_tag) {
+    // End element tags for unformatted or content_unformatted elements
+    // are printed raw to keep any newlines inside them exactly the same.
+    printer.add_raw_token(raw_token);
+    parser_token.start_tag_token = this._tag_stack.try_pop(parser_token.tag_name);
+  } else {
+    printer.traverse_whitespace(raw_token);
+    this._set_tag_position(printer, raw_token, parser_token, last_tag_token, last_token);
+    if (!parser_token.is_inline_element) {
+      printer.set_wrap_point();
+    }
+    printer.print_token(raw_token);
+  }
+
+  // count the number of attributes
+  if (parser_token.is_start_tag && this._is_wrap_attributes_force) {
+    var peek_index = 0;
+    var peek_token;
+    do {
+      peek_token = tokens.peek(peek_index);
+      if (peek_token.type === TOKEN.ATTRIBUTE) {
+        parser_token.attr_count += 1;
+      }
+      peek_index += 1;
+    } while (peek_token.type !== TOKEN.EOF && peek_token.type !== TOKEN.TAG_CLOSE);
+  }
+
+  //indent attributes an auto, forced, aligned or forced-align line-wrap
+  if (this._is_wrap_attributes_force_aligned || this._is_wrap_attributes_aligned_multiple || this._is_wrap_attributes_preserve_aligned) {
+    parser_token.alignment_size = raw_token.text.length + 1;
+  }
+
+  if (!parser_token.tag_complete && !parser_token.is_unformatted) {
+    printer.alignment_size = parser_token.alignment_size;
+  }
+
+  return parser_token;
+};
+
+var TagOpenParserToken = function(options, parent, raw_token) {
+  this.parent = parent || null;
+  this.text = '';
+  this.type = 'TK_TAG_OPEN';
+  this.tag_name = '';
+  this.is_inline_element = false;
+  this.is_unformatted = false;
+  this.is_content_unformatted = false;
+  this.is_empty_element = false;
+  this.is_start_tag = false;
+  this.is_end_tag = false;
+  this.indent_content = false;
+  this.multiline_content = false;
+  this.custom_beautifier_name = null;
+  this.start_tag_token = null;
+  this.attr_count = 0;
+  this.has_wrapped_attrs = false;
+  this.alignment_size = 0;
+  this.tag_complete = false;
+  this.tag_start_char = '';
+  this.tag_check = '';
+
+  if (!raw_token) {
+    this.tag_complete = true;
+  } else {
+    var tag_check_match;
+
+    this.tag_start_char = raw_token.text[0];
+    this.text = raw_token.text;
+
+    if (this.tag_start_char === '<') {
+      tag_check_match = raw_token.text.match(/^<([^\s>]*)/);
+      this.tag_check = tag_check_match ? tag_check_match[1] : '';
+    } else {
+      tag_check_match = raw_token.text.match(/^{{~?(?:[\^]|#\*?)?([^\s}]+)/);
+      this.tag_check = tag_check_match ? tag_check_match[1] : '';
+
+      // handle "{{#> myPartial}}" or "{{~#> myPartial}}"
+      if ((raw_token.text.startsWith('{{#>') || raw_token.text.startsWith('{{~#>')) && this.tag_check[0] === '>') {
+        if (this.tag_check === '>' && raw_token.next !== null) {
+          this.tag_check = raw_token.next.text.split(' ')[0];
+        } else {
+          this.tag_check = raw_token.text.split('>')[1];
+        }
+      }
+    }
+
+    this.tag_check = this.tag_check.toLowerCase();
+
+    if (raw_token.type === TOKEN.COMMENT) {
+      this.tag_complete = true;
+    }
+
+    this.is_start_tag = this.tag_check.charAt(0) !== '/';
+    this.tag_name = !this.is_start_tag ? this.tag_check.substr(1) : this.tag_check;
+    this.is_end_tag = !this.is_start_tag ||
+      (raw_token.closed && raw_token.closed.text === '/>');
+
+    // if whitespace handler ~ included (i.e. {{~#if true}}), handlebars tags start at pos 3 not pos 2
+    var handlebar_starts = 2;
+    if (this.tag_start_char === '{' && this.text.length >= 3) {
+      if (this.text.charAt(2) === '~') {
+        handlebar_starts = 3;
+      }
+    }
+
+    // handlebars tags that don't start with # or ^ are single_tags, and so also start and end.
+    // if they start with # or ^, they are still considered single tags if indenting of handlebars is set to false
+    this.is_end_tag = this.is_end_tag ||
+      (this.tag_start_char === '{' && (!options.indent_handlebars || this.text.length < 3 || (/[^#\^]/.test(this.text.charAt(handlebar_starts)))));
+  }
+};
+
+Beautifier.prototype._get_tag_open_token = function(raw_token) { //function to get a full tag and parse its type
+  var parser_token = new TagOpenParserToken(this._options, this._tag_stack.get_parser_token(), raw_token);
+
+  parser_token.alignment_size = this._options.wrap_attributes_indent_size;
+
+  parser_token.is_end_tag = parser_token.is_end_tag ||
+    in_array(parser_token.tag_check, this._options.void_elements);
+
+  parser_token.is_empty_element = parser_token.tag_complete ||
+    (parser_token.is_start_tag && parser_token.is_end_tag);
+
+  parser_token.is_unformatted = !parser_token.tag_complete && in_array(parser_token.tag_check, this._options.unformatted);
+  parser_token.is_content_unformatted = !parser_token.is_empty_element && in_array(parser_token.tag_check, this._options.content_unformatted);
+  parser_token.is_inline_element = in_array(parser_token.tag_name, this._options.inline) || (this._options.inline_custom_elements && parser_token.tag_name.includes("-")) || parser_token.tag_start_char === '{';
+
+  return parser_token;
+};
+
+Beautifier.prototype._set_tag_position = function(printer, raw_token, parser_token, last_tag_token, last_token) {
+
+  if (!parser_token.is_empty_element) {
+    if (parser_token.is_end_tag) { //this tag is a double tag so check for tag-ending
+      parser_token.start_tag_token = this._tag_stack.try_pop(parser_token.tag_name); //remove it and all ancestors
+    } else { // it's a start-tag
+      // check if this tag is starting an element that has optional end element
+      // and do an ending needed
+      if (this._do_optional_end_element(parser_token)) {
+        if (!parser_token.is_inline_element) {
+          printer.print_newline(false);
+        }
+      }
+
+      this._tag_stack.record_tag(parser_token); //push it on the tag stack
+
+      if ((parser_token.tag_name === 'script' || parser_token.tag_name === 'style') &&
+        !(parser_token.is_unformatted || parser_token.is_content_unformatted)) {
+        parser_token.custom_beautifier_name = get_custom_beautifier_name(parser_token.tag_check, raw_token);
+      }
+    }
+  }
+
+  if (in_array(parser_token.tag_check, this._options.extra_liners)) { //check if this double needs an extra line
+    printer.print_newline(false);
+    if (!printer._output.just_added_blankline()) {
+      printer.print_newline(true);
+    }
+  }
+
+  if (parser_token.is_empty_element) { //if this tag name is a single tag type (either in the list or has a closing /)
+
+    // if you hit an else case, reset the indent level if you are inside an:
+    // 'if', 'unless', or 'each' block.
+    if (parser_token.tag_start_char === '{' && parser_token.tag_check === 'else') {
+      this._tag_stack.indent_to_tag(['if', 'unless', 'each']);
+      parser_token.indent_content = true;
+      // Don't add a newline if opening {{#if}} tag is on the current line
+      var foundIfOnCurrentLine = printer.current_line_has_match(/{{#if/);
+      if (!foundIfOnCurrentLine) {
+        printer.print_newline(false);
+      }
+    }
+
+    // Don't add a newline before elements that should remain where they are.
+    if (parser_token.tag_name === '!--' && last_token.type === TOKEN.TAG_CLOSE &&
+      last_tag_token.is_end_tag && parser_token.text.indexOf('\n') === -1) {
+      //Do nothing. Leave comments on same line.
+    } else {
+      if (!(parser_token.is_inline_element || parser_token.is_unformatted)) {
+        printer.print_newline(false);
+      }
+      this._calcluate_parent_multiline(printer, parser_token);
+    }
+  } else if (parser_token.is_end_tag) { //this tag is a double tag so check for tag-ending
+    var do_end_expand = false;
+
+    // deciding whether a block is multiline should not be this hard
+    do_end_expand = parser_token.start_tag_token && parser_token.start_tag_token.multiline_content;
+    do_end_expand = do_end_expand || (!parser_token.is_inline_element &&
+      !(last_tag_token.is_inline_element || last_tag_token.is_unformatted) &&
+      !(last_token.type === TOKEN.TAG_CLOSE && parser_token.start_tag_token === last_tag_token) &&
+      last_token.type !== 'TK_CONTENT'
+    );
+
+    if (parser_token.is_content_unformatted || parser_token.is_unformatted) {
+      do_end_expand = false;
+    }
+
+    if (do_end_expand) {
+      printer.print_newline(false);
+    }
+  } else { // it's a start-tag
+    parser_token.indent_content = !parser_token.custom_beautifier_name;
+
+    if (parser_token.tag_start_char === '<') {
+      if (parser_token.tag_name === 'html') {
+        parser_token.indent_content = this._options.indent_inner_html;
+      } else if (parser_token.tag_name === 'head') {
+        parser_token.indent_content = this._options.indent_head_inner_html;
+      } else if (parser_token.tag_name === 'body') {
+        parser_token.indent_content = this._options.indent_body_inner_html;
+      }
+    }
+
+    if (!(parser_token.is_inline_element || parser_token.is_unformatted) &&
+      (last_token.type !== 'TK_CONTENT' || parser_token.is_content_unformatted)) {
+      printer.print_newline(false);
+    }
+
+    this._calcluate_parent_multiline(printer, parser_token);
+  }
+};
+
+Beautifier.prototype._calcluate_parent_multiline = function(printer, parser_token) {
+  if (parser_token.parent && printer._output.just_added_newline() &&
+    !((parser_token.is_inline_element || parser_token.is_unformatted) && parser_token.parent.is_inline_element)) {
+    parser_token.parent.multiline_content = true;
+  }
+};
+
+//To be used for <p> tag special case:
+var p_closers = ['address', 'article', 'aside', 'blockquote', 'details', 'div', 'dl', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'main', 'menu', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul'];
+var p_parent_excludes = ['a', 'audio', 'del', 'ins', 'map', 'noscript', 'video'];
+
+Beautifier.prototype._do_optional_end_element = function(parser_token) {
+  var result = null;
+  // NOTE: cases of "if there is no more content in the parent element"
+  // are handled automatically by the beautifier.
+  // It assumes parent or ancestor close tag closes all children.
+  // https://www.w3.org/TR/html5/syntax.html#optional-tags
+  if (parser_token.is_empty_element || !parser_token.is_start_tag || !parser_token.parent) {
+    return;
+
+  }
+
+  if (parser_token.tag_name === 'body') {
+    // A head element’s end tag may be omitted if the head element is not immediately followed by a space character or a comment.
+    result = result || this._tag_stack.try_pop('head');
+
+    //} else if (parser_token.tag_name === 'body') {
+    // DONE: A body element’s end tag may be omitted if the body element is not immediately followed by a comment.
+
+  } else if (parser_token.tag_name === 'li') {
+    // An li element’s end tag may be omitted if the li element is immediately followed by another li element or if there is no more content in the parent element.
+    result = result || this._tag_stack.try_pop('li', ['ol', 'ul', 'menu']);
+
+  } else if (parser_token.tag_name === 'dd' || parser_token.tag_name === 'dt') {
+    // A dd element’s end tag may be omitted if the dd element is immediately followed by another dd element or a dt element, or if there is no more content in the parent element.
+    // A dt element’s end tag may be omitted if the dt element is immediately followed by another dt element or a dd element.
+    result = result || this._tag_stack.try_pop('dt', ['dl']);
+    result = result || this._tag_stack.try_pop('dd', ['dl']);
+
+
+  } else if (parser_token.parent.tag_name === 'p' && p_closers.indexOf(parser_token.tag_name) !== -1) {
+    // IMPORTANT: this else-if works because p_closers has no overlap with any other element we look for in this method
+    // check for the parent element is an HTML element that is not an <a>, <audio>, <del>, <ins>, <map>, <noscript>, or <video> element,  or an autonomous custom element.
+    // To do this right, this needs to be coded as an inclusion of the inverse of the exclusion above.
+    // But to start with (if we ignore "autonomous custom elements") the exclusion would be fine.
+    var p_parent = parser_token.parent.parent;
+    if (!p_parent || p_parent_excludes.indexOf(p_parent.tag_name) === -1) {
+      result = result || this._tag_stack.try_pop('p');
+    }
+  } else if (parser_token.tag_name === 'rp' || parser_token.tag_name === 'rt') {
+    // An rt element’s end tag may be omitted if the rt element is immediately followed by an rt or rp element, or if there is no more content in the parent element.
+    // An rp element’s end tag may be omitted if the rp element is immediately followed by an rt or rp element, or if there is no more content in the parent element.
+    result = result || this._tag_stack.try_pop('rt', ['ruby', 'rtc']);
+    result = result || this._tag_stack.try_pop('rp', ['ruby', 'rtc']);
+
+  } else if (parser_token.tag_name === 'optgroup') {
+    // An optgroup element’s end tag may be omitted if the optgroup element is immediately followed by another optgroup element, or if there is no more content in the parent element.
+    // An option element’s end tag may be omitted if the option element is immediately followed by another option element, or if it is immediately followed by an optgroup element, or if there is no more content in the parent element.
+    result = result || this._tag_stack.try_pop('optgroup', ['select']);
+    //result = result || this._tag_stack.try_pop('option', ['select']);
+
+  } else if (parser_token.tag_name === 'option') {
+    // An option element’s end tag may be omitted if the option element is immediately followed by another option element, or if it is immediately followed by an optgroup element, or if there is no more content in the parent element.
+    result = result || this._tag_stack.try_pop('option', ['select', 'datalist', 'optgroup']);
+
+  } else if (parser_token.tag_name === 'colgroup') {
+    // DONE: A colgroup element’s end tag may be omitted if the colgroup element is not immediately followed by a space character or a comment.
+    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
+    result = result || this._tag_stack.try_pop('caption', ['table']);
+
+  } else if (parser_token.tag_name === 'thead') {
+    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
+    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
+    result = result || this._tag_stack.try_pop('caption', ['table']);
+    result = result || this._tag_stack.try_pop('colgroup', ['table']);
+
+    //} else if (parser_token.tag_name === 'caption') {
+    // DONE: A caption element’s end tag may be omitted if the caption element is not immediately followed by a space character or a comment.
+
+  } else if (parser_token.tag_name === 'tbody' || parser_token.tag_name === 'tfoot') {
+    // A thead element’s end tag may be omitted if the thead element is immediately followed by a tbody or tfoot element.
+    // A tbody element’s end tag may be omitted if the tbody element is immediately followed by a tbody or tfoot element, or if there is no more content in the parent element.
+    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
+    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
+    result = result || this._tag_stack.try_pop('caption', ['table']);
+    result = result || this._tag_stack.try_pop('colgroup', ['table']);
+    result = result || this._tag_stack.try_pop('thead', ['table']);
+    result = result || this._tag_stack.try_pop('tbody', ['table']);
+
+    //} else if (parser_token.tag_name === 'tfoot') {
+    // DONE: A tfoot element’s end tag may be omitted if there is no more content in the parent element.
+
+  } else if (parser_token.tag_name === 'tr') {
+    // A tr element’s end tag may be omitted if the tr element is immediately followed by another tr element, or if there is no more content in the parent element.
+    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
+    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
+    result = result || this._tag_stack.try_pop('caption', ['table']);
+    result = result || this._tag_stack.try_pop('colgroup', ['table']);
+    result = result || this._tag_stack.try_pop('tr', ['table', 'thead', 'tbody', 'tfoot']);
+
+  } else if (parser_token.tag_name === 'th' || parser_token.tag_name === 'td') {
+    // A td element’s end tag may be omitted if the td element is immediately followed by a td or th element, or if there is no more content in the parent element.
+    // A th element’s end tag may be omitted if the th element is immediately followed by a td or th element, or if there is no more content in the parent element.
+    result = result || this._tag_stack.try_pop('td', ['table', 'thead', 'tbody', 'tfoot', 'tr']);
+    result = result || this._tag_stack.try_pop('th', ['table', 'thead', 'tbody', 'tfoot', 'tr']);
+  }
+
+  // Start element omission not handled currently
+  // A head element’s start tag may be omitted if the element is empty, or if the first thing inside the head element is an element.
+  // A tbody element’s start tag may be omitted if the first thing inside the tbody element is a tr element, and if the element is not immediately preceded by a tbody, thead, or tfoot element whose end tag has been omitted. (It can’t be omitted if the element is empty.)
+  // A colgroup element’s start tag may be omitted if the first thing inside the colgroup element is a col element, and if the element is not immediately preceded by another colgroup element whose end tag has been omitted. (It can’t be omitted if the element is empty.)
+
+  // Fix up the parent of the parser token
+  parser_token.parent = this._tag_stack.get_parser_token();
+
+  return result;
+};
+
+module.exports.Beautifier = Beautifier;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_92890__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var BaseOptions = (__nested_webpack_require_92890__(6).Options);
+
+function Options(options) {
+  BaseOptions.call(this, options, 'html');
+  if (this.templating.length === 1 && this.templating[0] === 'auto') {
+    this.templating = ['django', 'erb', 'handlebars', 'php'];
+  }
+
+  this.indent_inner_html = this._get_boolean('indent_inner_html');
+  this.indent_body_inner_html = this._get_boolean('indent_body_inner_html', true);
+  this.indent_head_inner_html = this._get_boolean('indent_head_inner_html', true);
+
+  this.indent_handlebars = this._get_boolean('indent_handlebars', true);
+  this.wrap_attributes = this._get_selection('wrap_attributes',
+    ['auto', 'force', 'force-aligned', 'force-expand-multiline', 'aligned-multiple', 'preserve', 'preserve-aligned']);
+  this.wrap_attributes_min_attrs = this._get_number('wrap_attributes_min_attrs', 2);
+  this.wrap_attributes_indent_size = this._get_number('wrap_attributes_indent_size', this.indent_size);
+  this.extra_liners = this._get_array('extra_liners', ['head', 'body', '/html']);
+
+  // Block vs inline elements
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements
+  // https://www.w3.org/TR/html5/dom.html#phrasing-content
+  this.inline = this._get_array('inline', [
+    'a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'br', 'button', 'canvas', 'cite',
+    'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
+    'input', 'ins', 'kbd', 'keygen', 'label', 'map', 'mark', 'math', 'meter', 'noscript',
+    'object', 'output', 'progress', 'q', 'ruby', 's', 'samp', /* 'script', */ 'select', 'small',
+    'span', 'strong', 'sub', 'sup', 'svg', 'template', 'textarea', 'time', 'u', 'var',
+    'video', 'wbr', 'text',
+    // obsolete inline tags
+    'acronym', 'big', 'strike', 'tt'
+  ]);
+  this.inline_custom_elements = this._get_boolean('inline_custom_elements', true);
+  this.void_elements = this._get_array('void_elements', [
+    // HTLM void elements - aka self-closing tags - aka singletons
+    // https://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen',
+    'link', 'menuitem', 'meta', 'param', 'source', 'track', 'wbr',
+    // NOTE: Optional tags are too complex for a simple list
+    // they are hard coded in _do_optional_end_element
+
+    // Doctype and xml elements
+    '!doctype', '?xml',
+
+    // obsolete tags
+    // basefont: https://www.computerhope.com/jargon/h/html-basefont-tag.htm
+    // isndex: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/isindex
+    'basefont', 'isindex'
+  ]);
+  this.unformatted = this._get_array('unformatted', []);
+  this.content_unformatted = this._get_array('content_unformatted', [
+    'pre', 'textarea'
+  ]);
+  this.unformatted_content_delimiter = this._get_characters('unformatted_content_delimiter');
+  this.indent_scripts = this._get_selection('indent_scripts', ['normal', 'keep', 'separate']);
+
+}
+Options.prototype = new BaseOptions();
+
+
+
+module.exports.Options = Options;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_97257__) {
+
+/*jshint node:true */
+/*
+
+  The MIT License (MIT)
+
+  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+
+
+var BaseTokenizer = (__nested_webpack_require_97257__(9).Tokenizer);
+var BASETOKEN = (__nested_webpack_require_97257__(9).TOKEN);
+var Directives = (__nested_webpack_require_97257__(13).Directives);
+var TemplatablePattern = (__nested_webpack_require_97257__(14).TemplatablePattern);
+var Pattern = (__nested_webpack_require_97257__(12).Pattern);
+
+var TOKEN = {
+  TAG_OPEN: 'TK_TAG_OPEN',
+  TAG_CLOSE: 'TK_TAG_CLOSE',
+  CONTROL_FLOW_OPEN: 'TK_CONTROL_FLOW_OPEN',
+  CONTROL_FLOW_CLOSE: 'TK_CONTROL_FLOW_CLOSE',
+  ATTRIBUTE: 'TK_ATTRIBUTE',
+  EQUALS: 'TK_EQUALS',
+  VALUE: 'TK_VALUE',
+  COMMENT: 'TK_COMMENT',
+  TEXT: 'TK_TEXT',
+  UNKNOWN: 'TK_UNKNOWN',
+  START: BASETOKEN.START,
+  RAW: BASETOKEN.RAW,
+  EOF: BASETOKEN.EOF
+};
+
+var directives_core = new Directives(/<\!--/, /-->/);
+
+var Tokenizer = function(input_string, options) {
+  BaseTokenizer.call(this, input_string, options);
+  this._current_tag_name = '';
+
+  // Words end at whitespace or when a tag starts
+  // if we are indenting handlebars, they are considered tags
+  var templatable_reader = new TemplatablePattern(this._input).read_options(this._options);
+  var pattern_reader = new Pattern(this._input);
+
+  this.__patterns = {
+    word: templatable_reader.until(/[\n\r\t <]/),
+    word_control_flow_close_excluded: templatable_reader.until(/[\n\r\t <}]/),
+    single_quote: templatable_reader.until_after(/'/),
+    double_quote: templatable_reader.until_after(/"/),
+    attribute: templatable_reader.until(/[\n\r\t =>]|\/>/),
+    element_name: templatable_reader.until(/[\n\r\t >\/]/),
+
+    angular_control_flow_start: pattern_reader.matching(/\@[a-zA-Z]+[^({]*[({]/),
+    handlebars_comment: pattern_reader.starting_with(/{{!--/).until_after(/--}}/),
+    handlebars: pattern_reader.starting_with(/{{/).until_after(/}}/),
+    handlebars_open: pattern_reader.until(/[\n\r\t }]/),
+    handlebars_raw_close: pattern_reader.until(/}}/),
+    comment: pattern_reader.starting_with(/<!--/).until_after(/-->/),
+    cdata: pattern_reader.starting_with(/<!\[CDATA\[/).until_after(/]]>/),
+    // https://en.wikipedia.org/wiki/Conditional_comment
+    conditional_comment: pattern_reader.starting_with(/<!\[/).until_after(/]>/),
+    processing: pattern_reader.starting_with(/<\?/).until_after(/\?>/)
+  };
+
+  if (this._options.indent_handlebars) {
+    this.__patterns.word = this.__patterns.word.exclude('handlebars');
+    this.__patterns.word_control_flow_close_excluded = this.__patterns.word_control_flow_close_excluded.exclude('handlebars');
+  }
+
+  this._unformatted_content_delimiter = null;
+
+  if (this._options.unformatted_content_delimiter) {
+    var literal_regexp = this._input.get_literal_regexp(this._options.unformatted_content_delimiter);
+    this.__patterns.unformatted_content_delimiter =
+      pattern_reader.matching(literal_regexp)
+      .until_after(literal_regexp);
+  }
+};
+Tokenizer.prototype = new BaseTokenizer();
+
+Tokenizer.prototype._is_comment = function(current_token) { // jshint unused:false
+  return false; //current_token.type === TOKEN.COMMENT || current_token.type === TOKEN.UNKNOWN;
+};
+
+Tokenizer.prototype._is_opening = function(current_token) {
+  return current_token.type === TOKEN.TAG_OPEN || current_token.type === TOKEN.CONTROL_FLOW_OPEN;
+};
+
+Tokenizer.prototype._is_closing = function(current_token, open_token) {
+  return (current_token.type === TOKEN.TAG_CLOSE &&
+    (open_token && (
+      ((current_token.text === '>' || current_token.text === '/>') && open_token.text[0] === '<') ||
+      (current_token.text === '}}' && open_token.text[0] === '{' && open_token.text[1] === '{')))
+  ) || (current_token.type === TOKEN.CONTROL_FLOW_CLOSE &&
+    (current_token.text === '}' && open_token.text.endsWith('{')));
+};
+
+Tokenizer.prototype._reset = function() {
+  this._current_tag_name = '';
+};
+
+Tokenizer.prototype._get_next_token = function(previous_token, open_token) { // jshint unused:false
+  var token = null;
+  this._readWhitespace();
+  var c = this._input.peek();
+
+  if (c === null) {
+    return this._create_token(TOKEN.EOF, '');
+  }
+
+  token = token || this._read_open_handlebars(c, open_token);
+  token = token || this._read_attribute(c, previous_token, open_token);
+  token = token || this._read_close(c, open_token);
+  token = token || this._read_script_and_style(c, previous_token);
+  token = token || this._read_control_flows(c, open_token);
+  token = token || this._read_raw_content(c, previous_token, open_token);
+  token = token || this._read_content_word(c, open_token);
+  token = token || this._read_comment_or_cdata(c);
+  token = token || this._read_processing(c);
+  token = token || this._read_open(c, open_token);
+  token = token || this._create_token(TOKEN.UNKNOWN, this._input.next());
+
+  return token;
+};
+
+Tokenizer.prototype._read_comment_or_cdata = function(c) { // jshint unused:false
+  var token = null;
+  var resulting_string = null;
+  var directives = null;
+
+  if (c === '<') {
+    var peek1 = this._input.peek(1);
+    // We treat all comments as literals, even more than preformatted tags
+    // we only look for the appropriate closing marker
+    if (peek1 === '!') {
+      resulting_string = this.__patterns.comment.read();
+
+      // only process directive on html comments
+      if (resulting_string) {
+        directives = directives_core.get_directives(resulting_string);
+        if (directives && directives.ignore === 'start') {
+          resulting_string += directives_core.readIgnored(this._input);
+        }
+      } else {
+        resulting_string = this.__patterns.cdata.read();
+      }
+    }
+
+    if (resulting_string) {
+      token = this._create_token(TOKEN.COMMENT, resulting_string);
+      token.directives = directives;
+    }
+  }
+
+  return token;
+};
+
+Tokenizer.prototype._read_processing = function(c) { // jshint unused:false
+  var token = null;
+  var resulting_string = null;
+  var directives = null;
+
+  if (c === '<') {
+    var peek1 = this._input.peek(1);
+    if (peek1 === '!' || peek1 === '?') {
+      resulting_string = this.__patterns.conditional_comment.read();
+      resulting_string = resulting_string || this.__patterns.processing.read();
+    }
+
+    if (resulting_string) {
+      token = this._create_token(TOKEN.COMMENT, resulting_string);
+      token.directives = directives;
+    }
+  }
+
+  return token;
+};
+
+Tokenizer.prototype._read_open = function(c, open_token) {
+  var resulting_string = null;
+  var token = null;
+  if (!open_token || open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
+    if (c === '<') {
+
+      resulting_string = this._input.next();
+      if (this._input.peek() === '/') {
+        resulting_string += this._input.next();
+      }
+      resulting_string += this.__patterns.element_name.read();
+      token = this._create_token(TOKEN.TAG_OPEN, resulting_string);
+    }
+  }
+  return token;
+};
+
+Tokenizer.prototype._read_open_handlebars = function(c, open_token) {
+  var resulting_string = null;
+  var token = null;
+  if (!open_token || open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
+    if ((this._options.templating.includes('angular') || this._options.indent_handlebars) && c === '{' && this._input.peek(1) === '{') {
+      if (this._options.indent_handlebars && this._input.peek(2) === '!') {
+        resulting_string = this.__patterns.handlebars_comment.read();
+        resulting_string = resulting_string || this.__patterns.handlebars.read();
+        token = this._create_token(TOKEN.COMMENT, resulting_string);
+      } else {
+        resulting_string = this.__patterns.handlebars_open.read();
+        token = this._create_token(TOKEN.TAG_OPEN, resulting_string);
+      }
+    }
+  }
+  return token;
+};
+
+Tokenizer.prototype._read_control_flows = function(c, open_token) {
+  var resulting_string = '';
+  var token = null;
+  // Only check for control flows if angular templating is set
+  if (!this._options.templating.includes('angular')) {
+    return token;
+  }
+
+  if (c === '@') {
+    resulting_string = this.__patterns.angular_control_flow_start.read();
+    if (resulting_string === '') {
+      return token;
+    }
+
+    var opening_parentheses_count = resulting_string.endsWith('(') ? 1 : 0;
+    var closing_parentheses_count = 0;
+    // The opening brace of the control flow is where the number of opening and closing parentheses equal
+    // e.g. @if({value: true} !== null) { 
+    while (!(resulting_string.endsWith('{') && opening_parentheses_count === closing_parentheses_count)) {
+      var next_char = this._input.next();
+      if (next_char === null) {
+        break;
+      } else if (next_char === '(') {
+        opening_parentheses_count++;
+      } else if (next_char === ')') {
+        closing_parentheses_count++;
+      }
+      resulting_string += next_char;
+    }
+    token = this._create_token(TOKEN.CONTROL_FLOW_OPEN, resulting_string);
+  } else if (c === '}' && open_token && open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
+    resulting_string = this._input.next();
+    token = this._create_token(TOKEN.CONTROL_FLOW_CLOSE, resulting_string);
+  }
+  return token;
+};
+
+
+Tokenizer.prototype._read_close = function(c, open_token) {
+  var resulting_string = null;
+  var token = null;
+  if (open_token && open_token.type === TOKEN.TAG_OPEN) {
+    if (open_token.text[0] === '<' && (c === '>' || (c === '/' && this._input.peek(1) === '>'))) {
+      resulting_string = this._input.next();
+      if (c === '/') { //  for close tag "/>"
+        resulting_string += this._input.next();
+      }
+      token = this._create_token(TOKEN.TAG_CLOSE, resulting_string);
+    } else if (open_token.text[0] === '{' && c === '}' && this._input.peek(1) === '}') {
+      this._input.next();
+      this._input.next();
+      token = this._create_token(TOKEN.TAG_CLOSE, '}}');
+    }
+  }
+
+  return token;
+};
+
+Tokenizer.prototype._read_attribute = function(c, previous_token, open_token) {
+  var token = null;
+  var resulting_string = '';
+  if (open_token && open_token.text[0] === '<') {
+
+    if (c === '=') {
+      token = this._create_token(TOKEN.EQUALS, this._input.next());
+    } else if (c === '"' || c === "'") {
+      var content = this._input.next();
+      if (c === '"') {
+        content += this.__patterns.double_quote.read();
+      } else {
+        content += this.__patterns.single_quote.read();
+      }
+      token = this._create_token(TOKEN.VALUE, content);
+    } else {
+      resulting_string = this.__patterns.attribute.read();
+
+      if (resulting_string) {
+        if (previous_token.type === TOKEN.EQUALS) {
+          token = this._create_token(TOKEN.VALUE, resulting_string);
+        } else {
+          token = this._create_token(TOKEN.ATTRIBUTE, resulting_string);
+        }
+      }
+    }
+  }
+  return token;
+};
+
+Tokenizer.prototype._is_content_unformatted = function(tag_name) {
+  // void_elements have no content and so cannot have unformatted content
+  // script and style tags should always be read as unformatted content
+  // finally content_unformatted and unformatted element contents are unformatted
+  return this._options.void_elements.indexOf(tag_name) === -1 &&
+    (this._options.content_unformatted.indexOf(tag_name) !== -1 ||
+      this._options.unformatted.indexOf(tag_name) !== -1);
+};
+
+Tokenizer.prototype._read_raw_content = function(c, previous_token, open_token) { // jshint unused:false
+  var resulting_string = '';
+  if (open_token && open_token.text[0] === '{') {
+    resulting_string = this.__patterns.handlebars_raw_close.read();
+  } else if (previous_token.type === TOKEN.TAG_CLOSE &&
+    previous_token.opened.text[0] === '<' && previous_token.text[0] !== '/') {
+    // ^^ empty tag has no content 
+    var tag_name = previous_token.opened.text.substr(1).toLowerCase();
+    if (this._is_content_unformatted(tag_name)) {
+
+      resulting_string = this._input.readUntil(new RegExp('</' + tag_name + '[\\n\\r\\t ]*?>', 'ig'));
+    }
+  }
+
+  if (resulting_string) {
+    return this._create_token(TOKEN.TEXT, resulting_string);
+  }
+
+  return null;
+};
+
+Tokenizer.prototype._read_script_and_style = function(c, previous_token) { // jshint unused:false 
+  if (previous_token.type === TOKEN.TAG_CLOSE && previous_token.opened.text[0] === '<' && previous_token.text[0] !== '/') {
+    var tag_name = previous_token.opened.text.substr(1).toLowerCase();
+    if (tag_name === 'script' || tag_name === 'style') {
+      // Script and style tags are allowed to have comments wrapping their content
+      // or just have regular content.
+      var token = this._read_comment_or_cdata(c);
+      if (token) {
+        token.type = TOKEN.TEXT;
+        return token;
+      }
+      var resulting_string = this._input.readUntil(new RegExp('</' + tag_name + '[\\n\\r\\t ]*?>', 'ig'));
+      if (resulting_string) {
+        return this._create_token(TOKEN.TEXT, resulting_string);
+      }
+    }
+  }
+  return null;
+};
+
+Tokenizer.prototype._read_content_word = function(c, open_token) {
+  var resulting_string = '';
+  if (this._options.unformatted_content_delimiter) {
+    if (c === this._options.unformatted_content_delimiter[0]) {
+      resulting_string = this.__patterns.unformatted_content_delimiter.read();
+    }
+  }
+
+  if (!resulting_string) {
+    resulting_string = (open_token && open_token.type === TOKEN.CONTROL_FLOW_OPEN) ? this.__patterns.word_control_flow_close_excluded.read() : this.__patterns.word.read();
+  }
+  if (resulting_string) {
+    return this._create_token(TOKEN.TEXT, resulting_string);
+  }
+  return null;
+};
+
+module.exports.Tokenizer = Tokenizer;
+module.exports.TOKEN = TOKEN;
+
+
+/***/ })
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nested_webpack_require_112012__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_112012__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __nested_webpack_exports__ = __nested_webpack_require_112012__(18);
+/******/ 	legacy_beautify_html = __nested_webpack_exports__;
+/******/ 	
+/******/ })()
+;
+var style_html = legacy_beautify_html;
+/* Footer */
+if (true) {
+    // Add support for AMD ( https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property- )
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, __webpack_require__(617), __webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(requireamd) {
+        var js_beautify = __webpack_require__(617);
+        var css_beautify = __webpack_require__(3);
+
+        return {
+            html_beautify: function(html_source, options) {
+                return style_html(html_source, options, js_beautify.js_beautify, css_beautify.css_beautify);
+            }
+        };
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+} else // removed by dead control flow
+{ var css_beautify, js_beautify; }
+
+}());
+
+
+/***/ },
+
+/***/ 617
+(module, exports) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* AUTO-GENERATED. DO NOT MODIFY. */
 /*
@@ -5838,3239 +9070,7 @@ if (true) {
 
 
 
-/***/ }),
-
-/***/ 675:
-/***/ ((module, exports, __webpack_require__) => {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* AUTO-GENERATED. DO NOT MODIFY. */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-
-
- Style HTML
----------------
-
-  Written by Nochum Sossonko, (nsossonko@hotmail.com)
-
-  Based on code initially developed by: Einar Lielmanis, <einar@beautifier.io>
-    https://beautifier.io/
-
-  Usage:
-    style_html(html_source);
-
-    style_html(html_source, options);
-
-  The options are:
-    indent_inner_html (default false)  — indent <head> and <body> sections,
-    indent_size (default 4)          — indentation size,
-    indent_char (default space)      — character to indent with,
-    wrap_line_length (default 250)            -  maximum amount of characters per line (0 = disable)
-    brace_style (default "collapse") - "collapse" | "expand" | "end-expand" | "none"
-            put braces on the same line as control statements (default), or put braces on own line (Allman / ANSI style), or just put end braces on own line, or attempt to keep them where they are.
-    inline (defaults to inline tags) - list of tags to be considered inline tags
-    unformatted (defaults to inline tags) - list of tags, that shouldn't be reformatted
-    content_unformatted (defaults to ["pre", "textarea"] tags) - list of tags, whose content shouldn't be reformatted
-    indent_scripts (default normal)  - "keep"|"separate"|"normal"
-    preserve_newlines (default true) - whether existing line breaks before elements should be preserved
-                                        Only works before elements, not inside tags or for text.
-    max_preserve_newlines (default unlimited) - maximum number of line breaks to be preserved in one chunk
-    indent_handlebars (default false) - format and indent {{#foo}} and {{/foo}}
-    end_with_newline (false)          - end with a newline
-    extra_liners (default [head,body,/html]) -List of tags that should have an extra newline before them.
-
-    e.g.
-
-    style_html(html_source, {
-      'indent_inner_html': false,
-      'indent_size': 2,
-      'indent_char': ' ',
-      'wrap_line_length': 78,
-      'brace_style': 'expand',
-      'preserve_newlines': true,
-      'max_preserve_newlines': 5,
-      'indent_handlebars': false,
-      'extra_liners': ['/html']
-    });
-*/
-
-(function() {
-
-/* GENERATED_BUILD_OUTPUT */
-var legacy_beautify_html;
-/******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */,
-/* 2 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function OutputLine(parent) {
-  this.__parent = parent;
-  this.__character_count = 0;
-  // use indent_count as a marker for this.__lines that have preserved indentation
-  this.__indent_count = -1;
-  this.__alignment_count = 0;
-  this.__wrap_point_index = 0;
-  this.__wrap_point_character_count = 0;
-  this.__wrap_point_indent_count = -1;
-  this.__wrap_point_alignment_count = 0;
-
-  this.__items = [];
-}
-
-OutputLine.prototype.clone_empty = function() {
-  var line = new OutputLine(this.__parent);
-  line.set_indent(this.__indent_count, this.__alignment_count);
-  return line;
-};
-
-OutputLine.prototype.item = function(index) {
-  if (index < 0) {
-    return this.__items[this.__items.length + index];
-  } else {
-    return this.__items[index];
-  }
-};
-
-OutputLine.prototype.has_match = function(pattern) {
-  for (var lastCheckedOutput = this.__items.length - 1; lastCheckedOutput >= 0; lastCheckedOutput--) {
-    if (this.__items[lastCheckedOutput].match(pattern)) {
-      return true;
-    }
-  }
-  return false;
-};
-
-OutputLine.prototype.set_indent = function(indent, alignment) {
-  if (this.is_empty()) {
-    this.__indent_count = indent || 0;
-    this.__alignment_count = alignment || 0;
-    this.__character_count = this.__parent.get_indent_size(this.__indent_count, this.__alignment_count);
-  }
-};
-
-OutputLine.prototype._set_wrap_point = function() {
-  if (this.__parent.wrap_line_length) {
-    this.__wrap_point_index = this.__items.length;
-    this.__wrap_point_character_count = this.__character_count;
-    this.__wrap_point_indent_count = this.__parent.next_line.__indent_count;
-    this.__wrap_point_alignment_count = this.__parent.next_line.__alignment_count;
-  }
-};
-
-OutputLine.prototype._should_wrap = function() {
-  return this.__wrap_point_index &&
-    this.__character_count > this.__parent.wrap_line_length &&
-    this.__wrap_point_character_count > this.__parent.next_line.__character_count;
-};
-
-OutputLine.prototype._allow_wrap = function() {
-  if (this._should_wrap()) {
-    this.__parent.add_new_line();
-    var next = this.__parent.current_line;
-    next.set_indent(this.__wrap_point_indent_count, this.__wrap_point_alignment_count);
-    next.__items = this.__items.slice(this.__wrap_point_index);
-    this.__items = this.__items.slice(0, this.__wrap_point_index);
-
-    next.__character_count += this.__character_count - this.__wrap_point_character_count;
-    this.__character_count = this.__wrap_point_character_count;
-
-    if (next.__items[0] === " ") {
-      next.__items.splice(0, 1);
-      next.__character_count -= 1;
-    }
-    return true;
-  }
-  return false;
-};
-
-OutputLine.prototype.is_empty = function() {
-  return this.__items.length === 0;
-};
-
-OutputLine.prototype.last = function() {
-  if (!this.is_empty()) {
-    return this.__items[this.__items.length - 1];
-  } else {
-    return null;
-  }
-};
-
-OutputLine.prototype.push = function(item) {
-  this.__items.push(item);
-  var last_newline_index = item.lastIndexOf('\n');
-  if (last_newline_index !== -1) {
-    this.__character_count = item.length - last_newline_index;
-  } else {
-    this.__character_count += item.length;
-  }
-};
-
-OutputLine.prototype.pop = function() {
-  var item = null;
-  if (!this.is_empty()) {
-    item = this.__items.pop();
-    this.__character_count -= item.length;
-  }
-  return item;
-};
-
-
-OutputLine.prototype._remove_indent = function() {
-  if (this.__indent_count > 0) {
-    this.__indent_count -= 1;
-    this.__character_count -= this.__parent.indent_size;
-  }
-};
-
-OutputLine.prototype._remove_wrap_indent = function() {
-  if (this.__wrap_point_indent_count > 0) {
-    this.__wrap_point_indent_count -= 1;
-  }
-};
-OutputLine.prototype.trim = function() {
-  while (this.last() === ' ') {
-    this.__items.pop();
-    this.__character_count -= 1;
-  }
-};
-
-OutputLine.prototype.toString = function() {
-  var result = '';
-  if (this.is_empty()) {
-    if (this.__parent.indent_empty_lines) {
-      result = this.__parent.get_indent_string(this.__indent_count);
-    }
-  } else {
-    result = this.__parent.get_indent_string(this.__indent_count, this.__alignment_count);
-    result += this.__items.join('');
-  }
-  return result;
-};
-
-function IndentStringCache(options, baseIndentString) {
-  this.__cache = [''];
-  this.__indent_size = options.indent_size;
-  this.__indent_string = options.indent_char;
-  if (!options.indent_with_tabs) {
-    this.__indent_string = new Array(options.indent_size + 1).join(options.indent_char);
-  }
-
-  // Set to null to continue support for auto detection of base indent
-  baseIndentString = baseIndentString || '';
-  if (options.indent_level > 0) {
-    baseIndentString = new Array(options.indent_level + 1).join(this.__indent_string);
-  }
-
-  this.__base_string = baseIndentString;
-  this.__base_string_length = baseIndentString.length;
-}
-
-IndentStringCache.prototype.get_indent_size = function(indent, column) {
-  var result = this.__base_string_length;
-  column = column || 0;
-  if (indent < 0) {
-    result = 0;
-  }
-  result += indent * this.__indent_size;
-  result += column;
-  return result;
-};
-
-IndentStringCache.prototype.get_indent_string = function(indent_level, column) {
-  var result = this.__base_string;
-  column = column || 0;
-  if (indent_level < 0) {
-    indent_level = 0;
-    result = '';
-  }
-  column += indent_level * this.__indent_size;
-  this.__ensure_cache(column);
-  result += this.__cache[column];
-  return result;
-};
-
-IndentStringCache.prototype.__ensure_cache = function(column) {
-  while (column >= this.__cache.length) {
-    this.__add_column();
-  }
-};
-
-IndentStringCache.prototype.__add_column = function() {
-  var column = this.__cache.length;
-  var indent = 0;
-  var result = '';
-  if (this.__indent_size && column >= this.__indent_size) {
-    indent = Math.floor(column / this.__indent_size);
-    column -= indent * this.__indent_size;
-    result = new Array(indent + 1).join(this.__indent_string);
-  }
-  if (column) {
-    result += new Array(column + 1).join(' ');
-  }
-
-  this.__cache.push(result);
-};
-
-function Output(options, baseIndentString) {
-  this.__indent_cache = new IndentStringCache(options, baseIndentString);
-  this.raw = false;
-  this._end_with_newline = options.end_with_newline;
-  this.indent_size = options.indent_size;
-  this.wrap_line_length = options.wrap_line_length;
-  this.indent_empty_lines = options.indent_empty_lines;
-  this.__lines = [];
-  this.previous_line = null;
-  this.current_line = null;
-  this.next_line = new OutputLine(this);
-  this.space_before_token = false;
-  this.non_breaking_space = false;
-  this.previous_token_wrapped = false;
-  // initialize
-  this.__add_outputline();
-}
-
-Output.prototype.__add_outputline = function() {
-  this.previous_line = this.current_line;
-  this.current_line = this.next_line.clone_empty();
-  this.__lines.push(this.current_line);
-};
-
-Output.prototype.get_line_number = function() {
-  return this.__lines.length;
-};
-
-Output.prototype.get_indent_string = function(indent, column) {
-  return this.__indent_cache.get_indent_string(indent, column);
-};
-
-Output.prototype.get_indent_size = function(indent, column) {
-  return this.__indent_cache.get_indent_size(indent, column);
-};
-
-Output.prototype.is_empty = function() {
-  return !this.previous_line && this.current_line.is_empty();
-};
-
-Output.prototype.add_new_line = function(force_newline) {
-  // never newline at the start of file
-  // otherwise, newline only if we didn't just add one or we're forced
-  if (this.is_empty() ||
-    (!force_newline && this.just_added_newline())) {
-    return false;
-  }
-
-  // if raw output is enabled, don't print additional newlines,
-  // but still return True as though you had
-  if (!this.raw) {
-    this.__add_outputline();
-  }
-  return true;
-};
-
-Output.prototype.get_code = function(eol) {
-  this.trim(true);
-
-  // handle some edge cases where the last tokens
-  // has text that ends with newline(s)
-  var last_item = this.current_line.pop();
-  if (last_item) {
-    if (last_item[last_item.length - 1] === '\n') {
-      last_item = last_item.replace(/\n+$/g, '');
-    }
-    this.current_line.push(last_item);
-  }
-
-  if (this._end_with_newline) {
-    this.__add_outputline();
-  }
-
-  var sweet_code = this.__lines.join('\n');
-
-  if (eol !== '\n') {
-    sweet_code = sweet_code.replace(/[\n]/g, eol);
-  }
-  return sweet_code;
-};
-
-Output.prototype.set_wrap_point = function() {
-  this.current_line._set_wrap_point();
-};
-
-Output.prototype.set_indent = function(indent, alignment) {
-  indent = indent || 0;
-  alignment = alignment || 0;
-
-  // Next line stores alignment values
-  this.next_line.set_indent(indent, alignment);
-
-  // Never indent your first output indent at the start of the file
-  if (this.__lines.length > 1) {
-    this.current_line.set_indent(indent, alignment);
-    return true;
-  }
-
-  this.current_line.set_indent();
-  return false;
-};
-
-Output.prototype.add_raw_token = function(token) {
-  for (var x = 0; x < token.newlines; x++) {
-    this.__add_outputline();
-  }
-  this.current_line.set_indent(-1);
-  this.current_line.push(token.whitespace_before);
-  this.current_line.push(token.text);
-  this.space_before_token = false;
-  this.non_breaking_space = false;
-  this.previous_token_wrapped = false;
-};
-
-Output.prototype.add_token = function(printable_token) {
-  this.__add_space_before_token();
-  this.current_line.push(printable_token);
-  this.space_before_token = false;
-  this.non_breaking_space = false;
-  this.previous_token_wrapped = this.current_line._allow_wrap();
-};
-
-Output.prototype.__add_space_before_token = function() {
-  if (this.space_before_token && !this.just_added_newline()) {
-    if (!this.non_breaking_space) {
-      this.set_wrap_point();
-    }
-    this.current_line.push(' ');
-  }
-};
-
-Output.prototype.remove_indent = function(index) {
-  var output_length = this.__lines.length;
-  while (index < output_length) {
-    this.__lines[index]._remove_indent();
-    index++;
-  }
-  this.current_line._remove_wrap_indent();
-};
-
-Output.prototype.trim = function(eat_newlines) {
-  eat_newlines = (eat_newlines === undefined) ? false : eat_newlines;
-
-  this.current_line.trim();
-
-  while (eat_newlines && this.__lines.length > 1 &&
-    this.current_line.is_empty()) {
-    this.__lines.pop();
-    this.current_line = this.__lines[this.__lines.length - 1];
-    this.current_line.trim();
-  }
-
-  this.previous_line = this.__lines.length > 1 ?
-    this.__lines[this.__lines.length - 2] : null;
-};
-
-Output.prototype.just_added_newline = function() {
-  return this.current_line.is_empty();
-};
-
-Output.prototype.just_added_blankline = function() {
-  return this.is_empty() ||
-    (this.current_line.is_empty() && this.previous_line.is_empty());
-};
-
-Output.prototype.ensure_empty_line_above = function(starts_with, ends_with) {
-  var index = this.__lines.length - 2;
-  while (index >= 0) {
-    var potentialEmptyLine = this.__lines[index];
-    if (potentialEmptyLine.is_empty()) {
-      break;
-    } else if (potentialEmptyLine.item(0).indexOf(starts_with) !== 0 &&
-      potentialEmptyLine.item(-1) !== ends_with) {
-      this.__lines.splice(index + 1, 0, new OutputLine(this));
-      this.previous_line = this.__lines[this.__lines.length - 2];
-      break;
-    }
-    index--;
-  }
-};
-
-module.exports.Output = Output;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function Token(type, text, newlines, whitespace_before) {
-  this.type = type;
-  this.text = text;
-
-  // comments_before are
-  // comments that have a new line before them
-  // and may or may not have a newline after
-  // this is a set of comments before
-  this.comments_before = null; /* inline comment*/
-
-
-  // this.comments_after =  new TokenStream(); // no new line before and newline after
-  this.newlines = newlines || 0;
-  this.whitespace_before = whitespace_before || '';
-  this.parent = null;
-  this.next = null;
-  this.previous = null;
-  this.opened = null;
-  this.closed = null;
-  this.directives = null;
-}
-
-
-module.exports.Token = Token;
-
-
-/***/ }),
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function Options(options, merge_child_field) {
-  this.raw_options = _mergeOpts(options, merge_child_field);
-
-  // Support passing the source text back with no change
-  this.disabled = this._get_boolean('disabled');
-
-  this.eol = this._get_characters('eol', 'auto');
-  this.end_with_newline = this._get_boolean('end_with_newline');
-  this.indent_size = this._get_number('indent_size', 4);
-  this.indent_char = this._get_characters('indent_char', ' ');
-  this.indent_level = this._get_number('indent_level');
-
-  this.preserve_newlines = this._get_boolean('preserve_newlines', true);
-  this.max_preserve_newlines = this._get_number('max_preserve_newlines', 32786);
-  if (!this.preserve_newlines) {
-    this.max_preserve_newlines = 0;
-  }
-
-  this.indent_with_tabs = this._get_boolean('indent_with_tabs', this.indent_char === '\t');
-  if (this.indent_with_tabs) {
-    this.indent_char = '\t';
-
-    // indent_size behavior changed after 1.8.6
-    // It used to be that indent_size would be
-    // set to 1 for indent_with_tabs. That is no longer needed and
-    // actually doesn't make sense - why not use spaces? Further,
-    // that might produce unexpected behavior - tabs being used
-    // for single-column alignment. So, when indent_with_tabs is true
-    // and indent_size is 1, reset indent_size to 4.
-    if (this.indent_size === 1) {
-      this.indent_size = 4;
-    }
-  }
-
-  // Backwards compat with 1.3.x
-  this.wrap_line_length = this._get_number('wrap_line_length', this._get_number('max_char'));
-
-  this.indent_empty_lines = this._get_boolean('indent_empty_lines');
-
-  // valid templating languages ['django', 'erb', 'handlebars', 'php', 'smarty', 'angular']
-  // For now, 'auto' = all off for javascript, all except angular on for html (and inline javascript/css).
-  // other values ignored
-  this.templating = this._get_selection_list('templating', ['auto', 'none', 'angular', 'django', 'erb', 'handlebars', 'php', 'smarty'], ['auto']);
-}
-
-Options.prototype._get_array = function(name, default_value) {
-  var option_value = this.raw_options[name];
-  var result = default_value || [];
-  if (typeof option_value === 'object') {
-    if (option_value !== null && typeof option_value.concat === 'function') {
-      result = option_value.concat();
-    }
-  } else if (typeof option_value === 'string') {
-    result = option_value.split(/[^a-zA-Z0-9_\/\-]+/);
-  }
-  return result;
-};
-
-Options.prototype._get_boolean = function(name, default_value) {
-  var option_value = this.raw_options[name];
-  var result = option_value === undefined ? !!default_value : !!option_value;
-  return result;
-};
-
-Options.prototype._get_characters = function(name, default_value) {
-  var option_value = this.raw_options[name];
-  var result = default_value || '';
-  if (typeof option_value === 'string') {
-    result = option_value.replace(/\\r/, '\r').replace(/\\n/, '\n').replace(/\\t/, '\t');
-  }
-  return result;
-};
-
-Options.prototype._get_number = function(name, default_value) {
-  var option_value = this.raw_options[name];
-  default_value = parseInt(default_value, 10);
-  if (isNaN(default_value)) {
-    default_value = 0;
-  }
-  var result = parseInt(option_value, 10);
-  if (isNaN(result)) {
-    result = default_value;
-  }
-  return result;
-};
-
-Options.prototype._get_selection = function(name, selection_list, default_value) {
-  var result = this._get_selection_list(name, selection_list, default_value);
-  if (result.length !== 1) {
-    throw new Error(
-      "Invalid Option Value: The option '" + name + "' can only be one of the following values:\n" +
-      selection_list + "\nYou passed in: '" + this.raw_options[name] + "'");
-  }
-
-  return result[0];
-};
-
-
-Options.prototype._get_selection_list = function(name, selection_list, default_value) {
-  if (!selection_list || selection_list.length === 0) {
-    throw new Error("Selection list cannot be empty.");
-  }
-
-  default_value = default_value || [selection_list[0]];
-  if (!this._is_valid_selection(default_value, selection_list)) {
-    throw new Error("Invalid Default Value!");
-  }
-
-  var result = this._get_array(name, default_value);
-  if (!this._is_valid_selection(result, selection_list)) {
-    throw new Error(
-      "Invalid Option Value: The option '" + name + "' can contain only the following values:\n" +
-      selection_list + "\nYou passed in: '" + this.raw_options[name] + "'");
-  }
-
-  return result;
-};
-
-Options.prototype._is_valid_selection = function(result, selection_list) {
-  return result.length && selection_list.length &&
-    !result.some(function(item) { return selection_list.indexOf(item) === -1; });
-};
-
-
-// merges child options up with the parent options object
-// Example: obj = {a: 1, b: {a: 2}}
-//          mergeOpts(obj, 'b')
-//
-//          Returns: {a: 2}
-function _mergeOpts(allOptions, childFieldName) {
-  var finalOpts = {};
-  allOptions = _normalizeOpts(allOptions);
-  var name;
-
-  for (name in allOptions) {
-    if (name !== childFieldName) {
-      finalOpts[name] = allOptions[name];
-    }
-  }
-
-  //merge in the per type settings for the childFieldName
-  if (childFieldName && allOptions[childFieldName]) {
-    for (name in allOptions[childFieldName]) {
-      finalOpts[name] = allOptions[childFieldName][name];
-    }
-  }
-  return finalOpts;
-}
-
-function _normalizeOpts(options) {
-  var convertedOpts = {};
-  var key;
-
-  for (key in options) {
-    var newKey = key.replace(/-/g, "_");
-    convertedOpts[newKey] = options[key];
-  }
-  return convertedOpts;
-}
-
-module.exports.Options = Options;
-module.exports.normalizeOpts = _normalizeOpts;
-module.exports.mergeOpts = _mergeOpts;
-
-
-/***/ }),
-/* 7 */,
-/* 8 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var regexp_has_sticky = RegExp.prototype.hasOwnProperty('sticky');
-
-function InputScanner(input_string) {
-  this.__input = input_string || '';
-  this.__input_length = this.__input.length;
-  this.__position = 0;
-}
-
-InputScanner.prototype.restart = function() {
-  this.__position = 0;
-};
-
-InputScanner.prototype.back = function() {
-  if (this.__position > 0) {
-    this.__position -= 1;
-  }
-};
-
-InputScanner.prototype.hasNext = function() {
-  return this.__position < this.__input_length;
-};
-
-InputScanner.prototype.next = function() {
-  var val = null;
-  if (this.hasNext()) {
-    val = this.__input.charAt(this.__position);
-    this.__position += 1;
-  }
-  return val;
-};
-
-InputScanner.prototype.peek = function(index) {
-  var val = null;
-  index = index || 0;
-  index += this.__position;
-  if (index >= 0 && index < this.__input_length) {
-    val = this.__input.charAt(index);
-  }
-  return val;
-};
-
-// This is a JavaScript only helper function (not in python)
-// Javascript doesn't have a match method
-// and not all implementation support "sticky" flag.
-// If they do not support sticky then both this.match() and this.test() method
-// must get the match and check the index of the match.
-// If sticky is supported and set, this method will use it.
-// Otherwise it will check that global is set, and fall back to the slower method.
-InputScanner.prototype.__match = function(pattern, index) {
-  pattern.lastIndex = index;
-  var pattern_match = pattern.exec(this.__input);
-
-  if (pattern_match && !(regexp_has_sticky && pattern.sticky)) {
-    if (pattern_match.index !== index) {
-      pattern_match = null;
-    }
-  }
-
-  return pattern_match;
-};
-
-InputScanner.prototype.test = function(pattern, index) {
-  index = index || 0;
-  index += this.__position;
-
-  if (index >= 0 && index < this.__input_length) {
-    return !!this.__match(pattern, index);
-  } else {
-    return false;
-  }
-};
-
-InputScanner.prototype.testChar = function(pattern, index) {
-  // test one character regex match
-  var val = this.peek(index);
-  pattern.lastIndex = 0;
-  return val !== null && pattern.test(val);
-};
-
-InputScanner.prototype.match = function(pattern) {
-  var pattern_match = this.__match(pattern, this.__position);
-  if (pattern_match) {
-    this.__position += pattern_match[0].length;
-  } else {
-    pattern_match = null;
-  }
-  return pattern_match;
-};
-
-InputScanner.prototype.read = function(starting_pattern, until_pattern, until_after) {
-  var val = '';
-  var match;
-  if (starting_pattern) {
-    match = this.match(starting_pattern);
-    if (match) {
-      val += match[0];
-    }
-  }
-  if (until_pattern && (match || !starting_pattern)) {
-    val += this.readUntil(until_pattern, until_after);
-  }
-  return val;
-};
-
-InputScanner.prototype.readUntil = function(pattern, until_after) {
-  var val = '';
-  var match_index = this.__position;
-  pattern.lastIndex = this.__position;
-  var pattern_match = pattern.exec(this.__input);
-  if (pattern_match) {
-    match_index = pattern_match.index;
-    if (until_after) {
-      match_index += pattern_match[0].length;
-    }
-  } else {
-    match_index = this.__input_length;
-  }
-
-  val = this.__input.substring(this.__position, match_index);
-  this.__position = match_index;
-  return val;
-};
-
-InputScanner.prototype.readUntilAfter = function(pattern) {
-  return this.readUntil(pattern, true);
-};
-
-InputScanner.prototype.get_regexp = function(pattern, match_from) {
-  var result = null;
-  var flags = 'g';
-  if (match_from && regexp_has_sticky) {
-    flags = 'y';
-  }
-  // strings are converted to regexp
-  if (typeof pattern === "string" && pattern !== '') {
-    // result = new RegExp(pattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), flags);
-    result = new RegExp(pattern, flags);
-  } else if (pattern) {
-    result = new RegExp(pattern.source, flags);
-  }
-  return result;
-};
-
-InputScanner.prototype.get_literal_regexp = function(literal_string) {
-  return RegExp(literal_string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
-};
-
-/* css beautifier legacy helpers */
-InputScanner.prototype.peekUntilAfter = function(pattern) {
-  var start = this.__position;
-  var val = this.readUntilAfter(pattern);
-  this.__position = start;
-  return val;
-};
-
-InputScanner.prototype.lookBack = function(testVal) {
-  var start = this.__position - 1;
-  return start >= testVal.length && this.__input.substring(start - testVal.length, start)
-    .toLowerCase() === testVal;
-};
-
-module.exports.InputScanner = InputScanner;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_30328__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var InputScanner = (__nested_webpack_require_30328__(8).InputScanner);
-var Token = (__nested_webpack_require_30328__(3).Token);
-var TokenStream = (__nested_webpack_require_30328__(10).TokenStream);
-var WhitespacePattern = (__nested_webpack_require_30328__(11).WhitespacePattern);
-
-var TOKEN = {
-  START: 'TK_START',
-  RAW: 'TK_RAW',
-  EOF: 'TK_EOF'
-};
-
-var Tokenizer = function(input_string, options) {
-  this._input = new InputScanner(input_string);
-  this._options = options || {};
-  this.__tokens = null;
-
-  this._patterns = {};
-  this._patterns.whitespace = new WhitespacePattern(this._input);
-};
-
-Tokenizer.prototype.tokenize = function() {
-  this._input.restart();
-  this.__tokens = new TokenStream();
-
-  this._reset();
-
-  var current;
-  var previous = new Token(TOKEN.START, '');
-  var open_token = null;
-  var open_stack = [];
-  var comments = new TokenStream();
-
-  while (previous.type !== TOKEN.EOF) {
-    current = this._get_next_token(previous, open_token);
-    while (this._is_comment(current)) {
-      comments.add(current);
-      current = this._get_next_token(previous, open_token);
-    }
-
-    if (!comments.isEmpty()) {
-      current.comments_before = comments;
-      comments = new TokenStream();
-    }
-
-    current.parent = open_token;
-
-    if (this._is_opening(current)) {
-      open_stack.push(open_token);
-      open_token = current;
-    } else if (open_token && this._is_closing(current, open_token)) {
-      current.opened = open_token;
-      open_token.closed = current;
-      open_token = open_stack.pop();
-      current.parent = open_token;
-    }
-
-    current.previous = previous;
-    previous.next = current;
-
-    this.__tokens.add(current);
-    previous = current;
-  }
-
-  return this.__tokens;
-};
-
-
-Tokenizer.prototype._is_first_token = function() {
-  return this.__tokens.isEmpty();
-};
-
-Tokenizer.prototype._reset = function() {};
-
-Tokenizer.prototype._get_next_token = function(previous_token, open_token) { // jshint unused:false
-  this._readWhitespace();
-  var resulting_string = this._input.read(/.+/g);
-  if (resulting_string) {
-    return this._create_token(TOKEN.RAW, resulting_string);
-  } else {
-    return this._create_token(TOKEN.EOF, '');
-  }
-};
-
-Tokenizer.prototype._is_comment = function(current_token) { // jshint unused:false
-  return false;
-};
-
-Tokenizer.prototype._is_opening = function(current_token) { // jshint unused:false
-  return false;
-};
-
-Tokenizer.prototype._is_closing = function(current_token, open_token) { // jshint unused:false
-  return false;
-};
-
-Tokenizer.prototype._create_token = function(type, text) {
-  var token = new Token(type, text,
-    this._patterns.whitespace.newline_count,
-    this._patterns.whitespace.whitespace_before_token);
-  return token;
-};
-
-Tokenizer.prototype._readWhitespace = function() {
-  return this._patterns.whitespace.read();
-};
-
-
-
-module.exports.Tokenizer = Tokenizer;
-module.exports.TOKEN = TOKEN;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function TokenStream(parent_token) {
-  // private
-  this.__tokens = [];
-  this.__tokens_length = this.__tokens.length;
-  this.__position = 0;
-  this.__parent_token = parent_token;
-}
-
-TokenStream.prototype.restart = function() {
-  this.__position = 0;
-};
-
-TokenStream.prototype.isEmpty = function() {
-  return this.__tokens_length === 0;
-};
-
-TokenStream.prototype.hasNext = function() {
-  return this.__position < this.__tokens_length;
-};
-
-TokenStream.prototype.next = function() {
-  var val = null;
-  if (this.hasNext()) {
-    val = this.__tokens[this.__position];
-    this.__position += 1;
-  }
-  return val;
-};
-
-TokenStream.prototype.peek = function(index) {
-  var val = null;
-  index = index || 0;
-  index += this.__position;
-  if (index >= 0 && index < this.__tokens_length) {
-    val = this.__tokens[index];
-  }
-  return val;
-};
-
-TokenStream.prototype.add = function(token) {
-  if (this.__parent_token) {
-    token.parent = this.__parent_token;
-  }
-  this.__tokens.push(token);
-  this.__tokens_length += 1;
-};
-
-module.exports.TokenStream = TokenStream;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_36748__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var Pattern = (__nested_webpack_require_36748__(12).Pattern);
-
-function WhitespacePattern(input_scanner, parent) {
-  Pattern.call(this, input_scanner, parent);
-  if (parent) {
-    this._line_regexp = this._input.get_regexp(parent._line_regexp);
-  } else {
-    this.__set_whitespace_patterns('', '');
-  }
-
-  this.newline_count = 0;
-  this.whitespace_before_token = '';
-}
-WhitespacePattern.prototype = new Pattern();
-
-WhitespacePattern.prototype.__set_whitespace_patterns = function(whitespace_chars, newline_chars) {
-  whitespace_chars += '\\t ';
-  newline_chars += '\\n\\r';
-
-  this._match_pattern = this._input.get_regexp(
-    '[' + whitespace_chars + newline_chars + ']+', true);
-  this._newline_regexp = this._input.get_regexp(
-    '\\r\\n|[' + newline_chars + ']');
-};
-
-WhitespacePattern.prototype.read = function() {
-  this.newline_count = 0;
-  this.whitespace_before_token = '';
-
-  var resulting_string = this._input.read(this._match_pattern);
-  if (resulting_string === ' ') {
-    this.whitespace_before_token = ' ';
-  } else if (resulting_string) {
-    var matches = this.__split(this._newline_regexp, resulting_string);
-    this.newline_count = matches.length - 1;
-    this.whitespace_before_token = matches[this.newline_count];
-  }
-
-  return resulting_string;
-};
-
-WhitespacePattern.prototype.matching = function(whitespace_chars, newline_chars) {
-  var result = this._create();
-  result.__set_whitespace_patterns(whitespace_chars, newline_chars);
-  result._update();
-  return result;
-};
-
-WhitespacePattern.prototype._create = function() {
-  return new WhitespacePattern(this._input, this);
-};
-
-WhitespacePattern.prototype.__split = function(regexp, input_string) {
-  regexp.lastIndex = 0;
-  var start_index = 0;
-  var result = [];
-  var next_match = regexp.exec(input_string);
-  while (next_match) {
-    result.push(input_string.substring(start_index, next_match.index));
-    start_index = next_match.index + next_match[0].length;
-    next_match = regexp.exec(input_string);
-  }
-
-  if (start_index < input_string.length) {
-    result.push(input_string.substring(start_index, input_string.length));
-  } else {
-    result.push('');
-  }
-
-  return result;
-};
-
-
-
-module.exports.WhitespacePattern = WhitespacePattern;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function Pattern(input_scanner, parent) {
-  this._input = input_scanner;
-  this._starting_pattern = null;
-  this._match_pattern = null;
-  this._until_pattern = null;
-  this._until_after = false;
-
-  if (parent) {
-    this._starting_pattern = this._input.get_regexp(parent._starting_pattern, true);
-    this._match_pattern = this._input.get_regexp(parent._match_pattern, true);
-    this._until_pattern = this._input.get_regexp(parent._until_pattern);
-    this._until_after = parent._until_after;
-  }
-}
-
-Pattern.prototype.read = function() {
-  var result = this._input.read(this._starting_pattern);
-  if (!this._starting_pattern || result) {
-    result += this._input.read(this._match_pattern, this._until_pattern, this._until_after);
-  }
-  return result;
-};
-
-Pattern.prototype.read_match = function() {
-  return this._input.match(this._match_pattern);
-};
-
-Pattern.prototype.until_after = function(pattern) {
-  var result = this._create();
-  result._until_after = true;
-  result._until_pattern = this._input.get_regexp(pattern);
-  result._update();
-  return result;
-};
-
-Pattern.prototype.until = function(pattern) {
-  var result = this._create();
-  result._until_after = false;
-  result._until_pattern = this._input.get_regexp(pattern);
-  result._update();
-  return result;
-};
-
-Pattern.prototype.starting_with = function(pattern) {
-  var result = this._create();
-  result._starting_pattern = this._input.get_regexp(pattern, true);
-  result._update();
-  return result;
-};
-
-Pattern.prototype.matching = function(pattern) {
-  var result = this._create();
-  result._match_pattern = this._input.get_regexp(pattern, true);
-  result._update();
-  return result;
-};
-
-Pattern.prototype._create = function() {
-  return new Pattern(this._input, this);
-};
-
-Pattern.prototype._update = function() {};
-
-module.exports.Pattern = Pattern;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-function Directives(start_block_pattern, end_block_pattern) {
-  start_block_pattern = typeof start_block_pattern === 'string' ? start_block_pattern : start_block_pattern.source;
-  end_block_pattern = typeof end_block_pattern === 'string' ? end_block_pattern : end_block_pattern.source;
-  this.__directives_block_pattern = new RegExp(start_block_pattern + / beautify( \w+[:]\w+)+ /.source + end_block_pattern, 'g');
-  this.__directive_pattern = / (\w+)[:](\w+)/g;
-
-  this.__directives_end_ignore_pattern = new RegExp(start_block_pattern + /\sbeautify\signore:end\s/.source + end_block_pattern, 'g');
-}
-
-Directives.prototype.get_directives = function(text) {
-  if (!text.match(this.__directives_block_pattern)) {
-    return null;
-  }
-
-  var directives = {};
-  this.__directive_pattern.lastIndex = 0;
-  var directive_match = this.__directive_pattern.exec(text);
-
-  while (directive_match) {
-    directives[directive_match[1]] = directive_match[2];
-    directive_match = this.__directive_pattern.exec(text);
-  }
-
-  return directives;
-};
-
-Directives.prototype.readIgnored = function(input) {
-  return input.readUntilAfter(this.__directives_end_ignore_pattern);
-};
-
-
-module.exports.Directives = Directives;
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_45735__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var Pattern = (__nested_webpack_require_45735__(12).Pattern);
-
-
-var template_names = {
-  django: false,
-  erb: false,
-  handlebars: false,
-  php: false,
-  smarty: false,
-  angular: false
-};
-
-// This lets templates appear anywhere we would do a readUntil
-// The cost is higher but it is pay to play.
-function TemplatablePattern(input_scanner, parent) {
-  Pattern.call(this, input_scanner, parent);
-  this.__template_pattern = null;
-  this._disabled = Object.assign({}, template_names);
-  this._excluded = Object.assign({}, template_names);
-
-  if (parent) {
-    this.__template_pattern = this._input.get_regexp(parent.__template_pattern);
-    this._excluded = Object.assign(this._excluded, parent._excluded);
-    this._disabled = Object.assign(this._disabled, parent._disabled);
-  }
-  var pattern = new Pattern(input_scanner);
-  this.__patterns = {
-    handlebars_comment: pattern.starting_with(/{{!--/).until_after(/--}}/),
-    handlebars_unescaped: pattern.starting_with(/{{{/).until_after(/}}}/),
-    handlebars: pattern.starting_with(/{{/).until_after(/}}/),
-    php: pattern.starting_with(/<\?(?:[= ]|php)/).until_after(/\?>/),
-    erb: pattern.starting_with(/<%[^%]/).until_after(/[^%]%>/),
-    // django coflicts with handlebars a bit.
-    django: pattern.starting_with(/{%/).until_after(/%}/),
-    django_value: pattern.starting_with(/{{/).until_after(/}}/),
-    django_comment: pattern.starting_with(/{#/).until_after(/#}/),
-    smarty: pattern.starting_with(/{(?=[^}{\s\n])/).until_after(/[^\s\n]}/),
-    smarty_comment: pattern.starting_with(/{\*/).until_after(/\*}/),
-    smarty_literal: pattern.starting_with(/{literal}/).until_after(/{\/literal}/)
-  };
-}
-TemplatablePattern.prototype = new Pattern();
-
-TemplatablePattern.prototype._create = function() {
-  return new TemplatablePattern(this._input, this);
-};
-
-TemplatablePattern.prototype._update = function() {
-  this.__set_templated_pattern();
-};
-
-TemplatablePattern.prototype.disable = function(language) {
-  var result = this._create();
-  result._disabled[language] = true;
-  result._update();
-  return result;
-};
-
-TemplatablePattern.prototype.read_options = function(options) {
-  var result = this._create();
-  for (var language in template_names) {
-    result._disabled[language] = options.templating.indexOf(language) === -1;
-  }
-  result._update();
-  return result;
-};
-
-TemplatablePattern.prototype.exclude = function(language) {
-  var result = this._create();
-  result._excluded[language] = true;
-  result._update();
-  return result;
-};
-
-TemplatablePattern.prototype.read = function() {
-  var result = '';
-  if (this._match_pattern) {
-    result = this._input.read(this._starting_pattern);
-  } else {
-    result = this._input.read(this._starting_pattern, this.__template_pattern);
-  }
-  var next = this._read_template();
-  while (next) {
-    if (this._match_pattern) {
-      next += this._input.read(this._match_pattern);
-    } else {
-      next += this._input.readUntil(this.__template_pattern);
-    }
-    result += next;
-    next = this._read_template();
-  }
-
-  if (this._until_after) {
-    result += this._input.readUntilAfter(this._until_pattern);
-  }
-  return result;
-};
-
-TemplatablePattern.prototype.__set_templated_pattern = function() {
-  var items = [];
-
-  if (!this._disabled.php) {
-    items.push(this.__patterns.php._starting_pattern.source);
-  }
-  if (!this._disabled.handlebars) {
-    items.push(this.__patterns.handlebars._starting_pattern.source);
-  }
-  if (!this._disabled.angular) {
-    // Handlebars ('{{' and '}}') are also special tokens in Angular)
-    items.push(this.__patterns.handlebars._starting_pattern.source);
-  }
-  if (!this._disabled.erb) {
-    items.push(this.__patterns.erb._starting_pattern.source);
-  }
-  if (!this._disabled.django) {
-    items.push(this.__patterns.django._starting_pattern.source);
-    // The starting pattern for django is more complex because it has different
-    // patterns for value, comment, and other sections
-    items.push(this.__patterns.django_value._starting_pattern.source);
-    items.push(this.__patterns.django_comment._starting_pattern.source);
-  }
-  if (!this._disabled.smarty) {
-    items.push(this.__patterns.smarty._starting_pattern.source);
-  }
-
-  if (this._until_pattern) {
-    items.push(this._until_pattern.source);
-  }
-  this.__template_pattern = this._input.get_regexp('(?:' + items.join('|') + ')');
-};
-
-TemplatablePattern.prototype._read_template = function() {
-  var resulting_string = '';
-  var c = this._input.peek();
-  if (c === '<') {
-    var peek1 = this._input.peek(1);
-    //if we're in a comment, do something special
-    // We treat all comments as literals, even more than preformatted tags
-    // we just look for the appropriate close tag
-    if (!this._disabled.php && !this._excluded.php && peek1 === '?') {
-      resulting_string = resulting_string ||
-        this.__patterns.php.read();
-    }
-    if (!this._disabled.erb && !this._excluded.erb && peek1 === '%') {
-      resulting_string = resulting_string ||
-        this.__patterns.erb.read();
-    }
-  } else if (c === '{') {
-    if (!this._disabled.handlebars && !this._excluded.handlebars) {
-      resulting_string = resulting_string ||
-        this.__patterns.handlebars_comment.read();
-      resulting_string = resulting_string ||
-        this.__patterns.handlebars_unescaped.read();
-      resulting_string = resulting_string ||
-        this.__patterns.handlebars.read();
-    }
-    if (!this._disabled.django) {
-      // django coflicts with handlebars a bit.
-      if (!this._excluded.django && !this._excluded.handlebars) {
-        resulting_string = resulting_string ||
-          this.__patterns.django_value.read();
-      }
-      if (!this._excluded.django) {
-        resulting_string = resulting_string ||
-          this.__patterns.django_comment.read();
-        resulting_string = resulting_string ||
-          this.__patterns.django.read();
-      }
-    }
-    if (!this._disabled.smarty) {
-      // smarty cannot be enabled with django or handlebars enabled
-      if (this._disabled.django && this._disabled.handlebars) {
-        resulting_string = resulting_string ||
-          this.__patterns.smarty_comment.read();
-        resulting_string = resulting_string ||
-          this.__patterns.smarty_literal.read();
-        resulting_string = resulting_string ||
-          this.__patterns.smarty.read();
-      }
-    }
-  }
-  return resulting_string;
-};
-
-
-module.exports.TemplatablePattern = TemplatablePattern;
-
-
-/***/ }),
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_53475__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var Beautifier = (__nested_webpack_require_53475__(19).Beautifier),
-  Options = (__nested_webpack_require_53475__(20).Options);
-
-function style_html(html_source, options, js_beautify, css_beautify) {
-  var beautifier = new Beautifier(html_source, options, js_beautify, css_beautify);
-  return beautifier.beautify();
-}
-
-module.exports = style_html;
-module.exports.defaultOptions = function() {
-  return new Options();
-};
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_55153__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var Options = (__nested_webpack_require_55153__(20).Options);
-var Output = (__nested_webpack_require_55153__(2).Output);
-var Tokenizer = (__nested_webpack_require_55153__(21).Tokenizer);
-var TOKEN = (__nested_webpack_require_55153__(21).TOKEN);
-
-var lineBreak = /\r\n|[\r\n]/;
-var allLineBreaks = /\r\n|[\r\n]/g;
-
-var Printer = function(options, base_indent_string) { //handles input/output and some other printing functions
-
-  this.indent_level = 0;
-  this.alignment_size = 0;
-  this.max_preserve_newlines = options.max_preserve_newlines;
-  this.preserve_newlines = options.preserve_newlines;
-
-  this._output = new Output(options, base_indent_string);
-
-};
-
-Printer.prototype.current_line_has_match = function(pattern) {
-  return this._output.current_line.has_match(pattern);
-};
-
-Printer.prototype.set_space_before_token = function(value, non_breaking) {
-  this._output.space_before_token = value;
-  this._output.non_breaking_space = non_breaking;
-};
-
-Printer.prototype.set_wrap_point = function() {
-  this._output.set_indent(this.indent_level, this.alignment_size);
-  this._output.set_wrap_point();
-};
-
-
-Printer.prototype.add_raw_token = function(token) {
-  this._output.add_raw_token(token);
-};
-
-Printer.prototype.print_preserved_newlines = function(raw_token) {
-  var newlines = 0;
-  if (raw_token.type !== TOKEN.TEXT && raw_token.previous.type !== TOKEN.TEXT) {
-    newlines = raw_token.newlines ? 1 : 0;
-  }
-
-  if (this.preserve_newlines) {
-    newlines = raw_token.newlines < this.max_preserve_newlines + 1 ? raw_token.newlines : this.max_preserve_newlines + 1;
-  }
-  for (var n = 0; n < newlines; n++) {
-    this.print_newline(n > 0);
-  }
-
-  return newlines !== 0;
-};
-
-Printer.prototype.traverse_whitespace = function(raw_token) {
-  if (raw_token.whitespace_before || raw_token.newlines) {
-    if (!this.print_preserved_newlines(raw_token)) {
-      this._output.space_before_token = true;
-    }
-    return true;
-  }
-  return false;
-};
-
-Printer.prototype.previous_token_wrapped = function() {
-  return this._output.previous_token_wrapped;
-};
-
-Printer.prototype.print_newline = function(force) {
-  this._output.add_new_line(force);
-};
-
-Printer.prototype.print_token = function(token) {
-  if (token.text) {
-    this._output.set_indent(this.indent_level, this.alignment_size);
-    this._output.add_token(token.text);
-  }
-};
-
-Printer.prototype.indent = function() {
-  this.indent_level++;
-};
-
-Printer.prototype.deindent = function() {
-  if (this.indent_level > 0) {
-    this.indent_level--;
-    this._output.set_indent(this.indent_level, this.alignment_size);
-  }
-};
-
-Printer.prototype.get_full_indent = function(level) {
-  level = this.indent_level + (level || 0);
-  if (level < 1) {
-    return '';
-  }
-
-  return this._output.get_indent_string(level);
-};
-
-var get_type_attribute = function(start_token) {
-  var result = null;
-  var raw_token = start_token.next;
-
-  // Search attributes for a type attribute
-  while (raw_token.type !== TOKEN.EOF && start_token.closed !== raw_token) {
-    if (raw_token.type === TOKEN.ATTRIBUTE && raw_token.text === 'type') {
-      if (raw_token.next && raw_token.next.type === TOKEN.EQUALS &&
-        raw_token.next.next && raw_token.next.next.type === TOKEN.VALUE) {
-        result = raw_token.next.next.text;
-      }
-      break;
-    }
-    raw_token = raw_token.next;
-  }
-
-  return result;
-};
-
-var get_custom_beautifier_name = function(tag_check, raw_token) {
-  var typeAttribute = null;
-  var result = null;
-
-  if (!raw_token.closed) {
-    return null;
-  }
-
-  if (tag_check === 'script') {
-    typeAttribute = 'text/javascript';
-  } else if (tag_check === 'style') {
-    typeAttribute = 'text/css';
-  }
-
-  typeAttribute = get_type_attribute(raw_token) || typeAttribute;
-
-  // For script and style tags that have a type attribute, only enable custom beautifiers for matching values
-  // For those without a type attribute use default;
-  if (typeAttribute.search('text/css') > -1) {
-    result = 'css';
-  } else if (typeAttribute.search(/module|((text|application|dojo)\/(x-)?(javascript|ecmascript|jscript|livescript|(ld\+)?json|method|aspect))/) > -1) {
-    result = 'javascript';
-  } else if (typeAttribute.search(/(text|application|dojo)\/(x-)?(html)/) > -1) {
-    result = 'html';
-  } else if (typeAttribute.search(/test\/null/) > -1) {
-    // Test only mime-type for testing the beautifier when null is passed as beautifing function
-    result = 'null';
-  }
-
-  return result;
-};
-
-function in_array(what, arr) {
-  return arr.indexOf(what) !== -1;
-}
-
-function TagFrame(parent, parser_token, indent_level) {
-  this.parent = parent || null;
-  this.tag = parser_token ? parser_token.tag_name : '';
-  this.indent_level = indent_level || 0;
-  this.parser_token = parser_token || null;
-}
-
-function TagStack(printer) {
-  this._printer = printer;
-  this._current_frame = null;
-}
-
-TagStack.prototype.get_parser_token = function() {
-  return this._current_frame ? this._current_frame.parser_token : null;
-};
-
-TagStack.prototype.record_tag = function(parser_token) { //function to record a tag and its parent in this.tags Object
-  var new_frame = new TagFrame(this._current_frame, parser_token, this._printer.indent_level);
-  this._current_frame = new_frame;
-};
-
-TagStack.prototype._try_pop_frame = function(frame) { //function to retrieve the opening tag to the corresponding closer
-  var parser_token = null;
-
-  if (frame) {
-    parser_token = frame.parser_token;
-    this._printer.indent_level = frame.indent_level;
-    this._current_frame = frame.parent;
-  }
-
-  return parser_token;
-};
-
-TagStack.prototype._get_frame = function(tag_list, stop_list) { //function to retrieve the opening tag to the corresponding closer
-  var frame = this._current_frame;
-
-  while (frame) { //till we reach '' (the initial value);
-    if (tag_list.indexOf(frame.tag) !== -1) { //if this is it use it
-      break;
-    } else if (stop_list && stop_list.indexOf(frame.tag) !== -1) {
-      frame = null;
-      break;
-    }
-    frame = frame.parent;
-  }
-
-  return frame;
-};
-
-TagStack.prototype.try_pop = function(tag, stop_list) { //function to retrieve the opening tag to the corresponding closer
-  var frame = this._get_frame([tag], stop_list);
-  return this._try_pop_frame(frame);
-};
-
-TagStack.prototype.indent_to_tag = function(tag_list) {
-  var frame = this._get_frame(tag_list);
-  if (frame) {
-    this._printer.indent_level = frame.indent_level;
-  }
-};
-
-function Beautifier(source_text, options, js_beautify, css_beautify) {
-  //Wrapper function to invoke all the necessary constructors and deal with the output.
-  this._source_text = source_text || '';
-  options = options || {};
-  this._js_beautify = js_beautify;
-  this._css_beautify = css_beautify;
-  this._tag_stack = null;
-
-  // Allow the setting of language/file-type specific options
-  // with inheritance of overall settings
-  var optionHtml = new Options(options, 'html');
-
-  this._options = optionHtml;
-
-  this._is_wrap_attributes_force = this._options.wrap_attributes.substr(0, 'force'.length) === 'force';
-  this._is_wrap_attributes_force_expand_multiline = (this._options.wrap_attributes === 'force-expand-multiline');
-  this._is_wrap_attributes_force_aligned = (this._options.wrap_attributes === 'force-aligned');
-  this._is_wrap_attributes_aligned_multiple = (this._options.wrap_attributes === 'aligned-multiple');
-  this._is_wrap_attributes_preserve = this._options.wrap_attributes.substr(0, 'preserve'.length) === 'preserve';
-  this._is_wrap_attributes_preserve_aligned = (this._options.wrap_attributes === 'preserve-aligned');
-}
-
-Beautifier.prototype.beautify = function() {
-
-  // if disabled, return the input unchanged.
-  if (this._options.disabled) {
-    return this._source_text;
-  }
-
-  var source_text = this._source_text;
-  var eol = this._options.eol;
-  if (this._options.eol === 'auto') {
-    eol = '\n';
-    if (source_text && lineBreak.test(source_text)) {
-      eol = source_text.match(lineBreak)[0];
-    }
-  }
-
-  // HACK: newline parsing inconsistent. This brute force normalizes the input.
-  source_text = source_text.replace(allLineBreaks, '\n');
-
-  var baseIndentString = source_text.match(/^[\t ]*/)[0];
-
-  var last_token = {
-    text: '',
-    type: ''
-  };
-
-  var last_tag_token = new TagOpenParserToken(this._options);
-
-  var printer = new Printer(this._options, baseIndentString);
-  var tokens = new Tokenizer(source_text, this._options).tokenize();
-
-  this._tag_stack = new TagStack(printer);
-
-  var parser_token = null;
-  var raw_token = tokens.next();
-  while (raw_token.type !== TOKEN.EOF) {
-
-    if (raw_token.type === TOKEN.TAG_OPEN || raw_token.type === TOKEN.COMMENT) {
-      parser_token = this._handle_tag_open(printer, raw_token, last_tag_token, last_token, tokens);
-      last_tag_token = parser_token;
-    } else if ((raw_token.type === TOKEN.ATTRIBUTE || raw_token.type === TOKEN.EQUALS || raw_token.type === TOKEN.VALUE) ||
-      (raw_token.type === TOKEN.TEXT && !last_tag_token.tag_complete)) {
-      parser_token = this._handle_inside_tag(printer, raw_token, last_tag_token, last_token);
-    } else if (raw_token.type === TOKEN.TAG_CLOSE) {
-      parser_token = this._handle_tag_close(printer, raw_token, last_tag_token);
-    } else if (raw_token.type === TOKEN.TEXT) {
-      parser_token = this._handle_text(printer, raw_token, last_tag_token);
-    } else if (raw_token.type === TOKEN.CONTROL_FLOW_OPEN) {
-      parser_token = this._handle_control_flow_open(printer, raw_token);
-    } else if (raw_token.type === TOKEN.CONTROL_FLOW_CLOSE) {
-      parser_token = this._handle_control_flow_close(printer, raw_token);
-    } else {
-      // This should never happen, but if it does. Print the raw token
-      printer.add_raw_token(raw_token);
-    }
-
-    last_token = parser_token;
-
-    raw_token = tokens.next();
-  }
-  var sweet_code = printer._output.get_code(eol);
-
-  return sweet_code;
-};
-
-Beautifier.prototype._handle_control_flow_open = function(printer, raw_token) {
-  var parser_token = {
-    text: raw_token.text,
-    type: raw_token.type
-  };
-  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
-  if (raw_token.newlines) {
-    printer.print_preserved_newlines(raw_token);
-  } else {
-    printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
-  }
-  printer.print_token(raw_token);
-  printer.indent();
-  return parser_token;
-};
-
-Beautifier.prototype._handle_control_flow_close = function(printer, raw_token) {
-  var parser_token = {
-    text: raw_token.text,
-    type: raw_token.type
-  };
-
-  printer.deindent();
-  if (raw_token.newlines) {
-    printer.print_preserved_newlines(raw_token);
-  } else {
-    printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
-  }
-  printer.print_token(raw_token);
-  return parser_token;
-};
-
-Beautifier.prototype._handle_tag_close = function(printer, raw_token, last_tag_token) {
-  var parser_token = {
-    text: raw_token.text,
-    type: raw_token.type
-  };
-  printer.alignment_size = 0;
-  last_tag_token.tag_complete = true;
-
-  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
-  if (last_tag_token.is_unformatted) {
-    printer.add_raw_token(raw_token);
-  } else {
-    if (last_tag_token.tag_start_char === '<') {
-      printer.set_space_before_token(raw_token.text[0] === '/', true); // space before />, no space before >
-      if (this._is_wrap_attributes_force_expand_multiline && last_tag_token.has_wrapped_attrs) {
-        printer.print_newline(false);
-      }
-    }
-    printer.print_token(raw_token);
-
-  }
-
-  if (last_tag_token.indent_content &&
-    !(last_tag_token.is_unformatted || last_tag_token.is_content_unformatted)) {
-    printer.indent();
-
-    // only indent once per opened tag
-    last_tag_token.indent_content = false;
-  }
-
-  if (!last_tag_token.is_inline_element &&
-    !(last_tag_token.is_unformatted || last_tag_token.is_content_unformatted)) {
-    printer.set_wrap_point();
-  }
-
-  return parser_token;
-};
-
-Beautifier.prototype._handle_inside_tag = function(printer, raw_token, last_tag_token, last_token) {
-  var wrapped = last_tag_token.has_wrapped_attrs;
-  var parser_token = {
-    text: raw_token.text,
-    type: raw_token.type
-  };
-
-  printer.set_space_before_token(raw_token.newlines || raw_token.whitespace_before !== '', true);
-  if (last_tag_token.is_unformatted) {
-    printer.add_raw_token(raw_token);
-  } else if (last_tag_token.tag_start_char === '{' && raw_token.type === TOKEN.TEXT) {
-    // For the insides of handlebars allow newlines or a single space between open and contents
-    if (printer.print_preserved_newlines(raw_token)) {
-      raw_token.newlines = 0;
-      printer.add_raw_token(raw_token);
-    } else {
-      printer.print_token(raw_token);
-    }
-  } else {
-    if (raw_token.type === TOKEN.ATTRIBUTE) {
-      printer.set_space_before_token(true);
-    } else if (raw_token.type === TOKEN.EQUALS) { //no space before =
-      printer.set_space_before_token(false);
-    } else if (raw_token.type === TOKEN.VALUE && raw_token.previous.type === TOKEN.EQUALS) { //no space before value
-      printer.set_space_before_token(false);
-    }
-
-    if (raw_token.type === TOKEN.ATTRIBUTE && last_tag_token.tag_start_char === '<') {
-      if (this._is_wrap_attributes_preserve || this._is_wrap_attributes_preserve_aligned) {
-        printer.traverse_whitespace(raw_token);
-        wrapped = wrapped || raw_token.newlines !== 0;
-      }
-
-      // Wrap for 'force' options, and if the number of attributes is at least that specified in 'wrap_attributes_min_attrs':
-      // 1. always wrap the second and beyond attributes
-      // 2. wrap the first attribute only if 'force-expand-multiline' is specified
-      if (this._is_wrap_attributes_force &&
-        last_tag_token.attr_count >= this._options.wrap_attributes_min_attrs &&
-        (last_token.type !== TOKEN.TAG_OPEN || // ie. second attribute and beyond
-          this._is_wrap_attributes_force_expand_multiline)) {
-        printer.print_newline(false);
-        wrapped = true;
-      }
-    }
-    printer.print_token(raw_token);
-    wrapped = wrapped || printer.previous_token_wrapped();
-    last_tag_token.has_wrapped_attrs = wrapped;
-  }
-  return parser_token;
-};
-
-Beautifier.prototype._handle_text = function(printer, raw_token, last_tag_token) {
-  var parser_token = {
-    text: raw_token.text,
-    type: 'TK_CONTENT'
-  };
-  if (last_tag_token.custom_beautifier_name) { //check if we need to format javascript
-    this._print_custom_beatifier_text(printer, raw_token, last_tag_token);
-  } else if (last_tag_token.is_unformatted || last_tag_token.is_content_unformatted) {
-    printer.add_raw_token(raw_token);
-  } else {
-    printer.traverse_whitespace(raw_token);
-    printer.print_token(raw_token);
-  }
-  return parser_token;
-};
-
-Beautifier.prototype._print_custom_beatifier_text = function(printer, raw_token, last_tag_token) {
-  var local = this;
-  if (raw_token.text !== '') {
-
-    var text = raw_token.text,
-      _beautifier,
-      script_indent_level = 1,
-      pre = '',
-      post = '';
-    if (last_tag_token.custom_beautifier_name === 'javascript' && typeof this._js_beautify === 'function') {
-      _beautifier = this._js_beautify;
-    } else if (last_tag_token.custom_beautifier_name === 'css' && typeof this._css_beautify === 'function') {
-      _beautifier = this._css_beautify;
-    } else if (last_tag_token.custom_beautifier_name === 'html') {
-      _beautifier = function(html_source, options) {
-        var beautifier = new Beautifier(html_source, options, local._js_beautify, local._css_beautify);
-        return beautifier.beautify();
-      };
-    }
-
-    if (this._options.indent_scripts === "keep") {
-      script_indent_level = 0;
-    } else if (this._options.indent_scripts === "separate") {
-      script_indent_level = -printer.indent_level;
-    }
-
-    var indentation = printer.get_full_indent(script_indent_level);
-
-    // if there is at least one empty line at the end of this text, strip it
-    // we'll be adding one back after the text but before the containing tag.
-    text = text.replace(/\n[ \t]*$/, '');
-
-    // Handle the case where content is wrapped in a comment or cdata.
-    if (last_tag_token.custom_beautifier_name !== 'html' &&
-      text[0] === '<' && text.match(/^(<!--|<!\[CDATA\[)/)) {
-      var matched = /^(<!--[^\n]*|<!\[CDATA\[)(\n?)([ \t\n]*)([\s\S]*)(-->|]]>)$/.exec(text);
-
-      // if we start to wrap but don't finish, print raw
-      if (!matched) {
-        printer.add_raw_token(raw_token);
-        return;
-      }
-
-      pre = indentation + matched[1] + '\n';
-      text = matched[4];
-      if (matched[5]) {
-        post = indentation + matched[5];
-      }
-
-      // if there is at least one empty line at the end of this text, strip it
-      // we'll be adding one back after the text but before the containing tag.
-      text = text.replace(/\n[ \t]*$/, '');
-
-      if (matched[2] || matched[3].indexOf('\n') !== -1) {
-        // if the first line of the non-comment text has spaces
-        // use that as the basis for indenting in null case.
-        matched = matched[3].match(/[ \t]+$/);
-        if (matched) {
-          raw_token.whitespace_before = matched[0];
-        }
-      }
-    }
-
-    if (text) {
-      if (_beautifier) {
-
-        // call the Beautifier if avaliable
-        var Child_options = function() {
-          this.eol = '\n';
-        };
-        Child_options.prototype = this._options.raw_options;
-        var child_options = new Child_options();
-        text = _beautifier(indentation + text, child_options);
-      } else {
-        // simply indent the string otherwise
-        var white = raw_token.whitespace_before;
-        if (white) {
-          text = text.replace(new RegExp('\n(' + white + ')?', 'g'), '\n');
-        }
-
-        text = indentation + text.replace(/\n/g, '\n' + indentation);
-      }
-    }
-
-    if (pre) {
-      if (!text) {
-        text = pre + post;
-      } else {
-        text = pre + text + '\n' + post;
-      }
-    }
-
-    printer.print_newline(false);
-    if (text) {
-      raw_token.text = text;
-      raw_token.whitespace_before = '';
-      raw_token.newlines = 0;
-      printer.add_raw_token(raw_token);
-      printer.print_newline(true);
-    }
-  }
-};
-
-Beautifier.prototype._handle_tag_open = function(printer, raw_token, last_tag_token, last_token, tokens) {
-  var parser_token = this._get_tag_open_token(raw_token);
-
-  if ((last_tag_token.is_unformatted || last_tag_token.is_content_unformatted) &&
-    !last_tag_token.is_empty_element &&
-    raw_token.type === TOKEN.TAG_OPEN && !parser_token.is_start_tag) {
-    // End element tags for unformatted or content_unformatted elements
-    // are printed raw to keep any newlines inside them exactly the same.
-    printer.add_raw_token(raw_token);
-    parser_token.start_tag_token = this._tag_stack.try_pop(parser_token.tag_name);
-  } else {
-    printer.traverse_whitespace(raw_token);
-    this._set_tag_position(printer, raw_token, parser_token, last_tag_token, last_token);
-    if (!parser_token.is_inline_element) {
-      printer.set_wrap_point();
-    }
-    printer.print_token(raw_token);
-  }
-
-  // count the number of attributes
-  if (parser_token.is_start_tag && this._is_wrap_attributes_force) {
-    var peek_index = 0;
-    var peek_token;
-    do {
-      peek_token = tokens.peek(peek_index);
-      if (peek_token.type === TOKEN.ATTRIBUTE) {
-        parser_token.attr_count += 1;
-      }
-      peek_index += 1;
-    } while (peek_token.type !== TOKEN.EOF && peek_token.type !== TOKEN.TAG_CLOSE);
-  }
-
-  //indent attributes an auto, forced, aligned or forced-align line-wrap
-  if (this._is_wrap_attributes_force_aligned || this._is_wrap_attributes_aligned_multiple || this._is_wrap_attributes_preserve_aligned) {
-    parser_token.alignment_size = raw_token.text.length + 1;
-  }
-
-  if (!parser_token.tag_complete && !parser_token.is_unformatted) {
-    printer.alignment_size = parser_token.alignment_size;
-  }
-
-  return parser_token;
-};
-
-var TagOpenParserToken = function(options, parent, raw_token) {
-  this.parent = parent || null;
-  this.text = '';
-  this.type = 'TK_TAG_OPEN';
-  this.tag_name = '';
-  this.is_inline_element = false;
-  this.is_unformatted = false;
-  this.is_content_unformatted = false;
-  this.is_empty_element = false;
-  this.is_start_tag = false;
-  this.is_end_tag = false;
-  this.indent_content = false;
-  this.multiline_content = false;
-  this.custom_beautifier_name = null;
-  this.start_tag_token = null;
-  this.attr_count = 0;
-  this.has_wrapped_attrs = false;
-  this.alignment_size = 0;
-  this.tag_complete = false;
-  this.tag_start_char = '';
-  this.tag_check = '';
-
-  if (!raw_token) {
-    this.tag_complete = true;
-  } else {
-    var tag_check_match;
-
-    this.tag_start_char = raw_token.text[0];
-    this.text = raw_token.text;
-
-    if (this.tag_start_char === '<') {
-      tag_check_match = raw_token.text.match(/^<([^\s>]*)/);
-      this.tag_check = tag_check_match ? tag_check_match[1] : '';
-    } else {
-      tag_check_match = raw_token.text.match(/^{{~?(?:[\^]|#\*?)?([^\s}]+)/);
-      this.tag_check = tag_check_match ? tag_check_match[1] : '';
-
-      // handle "{{#> myPartial}}" or "{{~#> myPartial}}"
-      if ((raw_token.text.startsWith('{{#>') || raw_token.text.startsWith('{{~#>')) && this.tag_check[0] === '>') {
-        if (this.tag_check === '>' && raw_token.next !== null) {
-          this.tag_check = raw_token.next.text.split(' ')[0];
-        } else {
-          this.tag_check = raw_token.text.split('>')[1];
-        }
-      }
-    }
-
-    this.tag_check = this.tag_check.toLowerCase();
-
-    if (raw_token.type === TOKEN.COMMENT) {
-      this.tag_complete = true;
-    }
-
-    this.is_start_tag = this.tag_check.charAt(0) !== '/';
-    this.tag_name = !this.is_start_tag ? this.tag_check.substr(1) : this.tag_check;
-    this.is_end_tag = !this.is_start_tag ||
-      (raw_token.closed && raw_token.closed.text === '/>');
-
-    // if whitespace handler ~ included (i.e. {{~#if true}}), handlebars tags start at pos 3 not pos 2
-    var handlebar_starts = 2;
-    if (this.tag_start_char === '{' && this.text.length >= 3) {
-      if (this.text.charAt(2) === '~') {
-        handlebar_starts = 3;
-      }
-    }
-
-    // handlebars tags that don't start with # or ^ are single_tags, and so also start and end.
-    // if they start with # or ^, they are still considered single tags if indenting of handlebars is set to false
-    this.is_end_tag = this.is_end_tag ||
-      (this.tag_start_char === '{' && (!options.indent_handlebars || this.text.length < 3 || (/[^#\^]/.test(this.text.charAt(handlebar_starts)))));
-  }
-};
-
-Beautifier.prototype._get_tag_open_token = function(raw_token) { //function to get a full tag and parse its type
-  var parser_token = new TagOpenParserToken(this._options, this._tag_stack.get_parser_token(), raw_token);
-
-  parser_token.alignment_size = this._options.wrap_attributes_indent_size;
-
-  parser_token.is_end_tag = parser_token.is_end_tag ||
-    in_array(parser_token.tag_check, this._options.void_elements);
-
-  parser_token.is_empty_element = parser_token.tag_complete ||
-    (parser_token.is_start_tag && parser_token.is_end_tag);
-
-  parser_token.is_unformatted = !parser_token.tag_complete && in_array(parser_token.tag_check, this._options.unformatted);
-  parser_token.is_content_unformatted = !parser_token.is_empty_element && in_array(parser_token.tag_check, this._options.content_unformatted);
-  parser_token.is_inline_element = in_array(parser_token.tag_name, this._options.inline) || (this._options.inline_custom_elements && parser_token.tag_name.includes("-")) || parser_token.tag_start_char === '{';
-
-  return parser_token;
-};
-
-Beautifier.prototype._set_tag_position = function(printer, raw_token, parser_token, last_tag_token, last_token) {
-
-  if (!parser_token.is_empty_element) {
-    if (parser_token.is_end_tag) { //this tag is a double tag so check for tag-ending
-      parser_token.start_tag_token = this._tag_stack.try_pop(parser_token.tag_name); //remove it and all ancestors
-    } else { // it's a start-tag
-      // check if this tag is starting an element that has optional end element
-      // and do an ending needed
-      if (this._do_optional_end_element(parser_token)) {
-        if (!parser_token.is_inline_element) {
-          printer.print_newline(false);
-        }
-      }
-
-      this._tag_stack.record_tag(parser_token); //push it on the tag stack
-
-      if ((parser_token.tag_name === 'script' || parser_token.tag_name === 'style') &&
-        !(parser_token.is_unformatted || parser_token.is_content_unformatted)) {
-        parser_token.custom_beautifier_name = get_custom_beautifier_name(parser_token.tag_check, raw_token);
-      }
-    }
-  }
-
-  if (in_array(parser_token.tag_check, this._options.extra_liners)) { //check if this double needs an extra line
-    printer.print_newline(false);
-    if (!printer._output.just_added_blankline()) {
-      printer.print_newline(true);
-    }
-  }
-
-  if (parser_token.is_empty_element) { //if this tag name is a single tag type (either in the list or has a closing /)
-
-    // if you hit an else case, reset the indent level if you are inside an:
-    // 'if', 'unless', or 'each' block.
-    if (parser_token.tag_start_char === '{' && parser_token.tag_check === 'else') {
-      this._tag_stack.indent_to_tag(['if', 'unless', 'each']);
-      parser_token.indent_content = true;
-      // Don't add a newline if opening {{#if}} tag is on the current line
-      var foundIfOnCurrentLine = printer.current_line_has_match(/{{#if/);
-      if (!foundIfOnCurrentLine) {
-        printer.print_newline(false);
-      }
-    }
-
-    // Don't add a newline before elements that should remain where they are.
-    if (parser_token.tag_name === '!--' && last_token.type === TOKEN.TAG_CLOSE &&
-      last_tag_token.is_end_tag && parser_token.text.indexOf('\n') === -1) {
-      //Do nothing. Leave comments on same line.
-    } else {
-      if (!(parser_token.is_inline_element || parser_token.is_unformatted)) {
-        printer.print_newline(false);
-      }
-      this._calcluate_parent_multiline(printer, parser_token);
-    }
-  } else if (parser_token.is_end_tag) { //this tag is a double tag so check for tag-ending
-    var do_end_expand = false;
-
-    // deciding whether a block is multiline should not be this hard
-    do_end_expand = parser_token.start_tag_token && parser_token.start_tag_token.multiline_content;
-    do_end_expand = do_end_expand || (!parser_token.is_inline_element &&
-      !(last_tag_token.is_inline_element || last_tag_token.is_unformatted) &&
-      !(last_token.type === TOKEN.TAG_CLOSE && parser_token.start_tag_token === last_tag_token) &&
-      last_token.type !== 'TK_CONTENT'
-    );
-
-    if (parser_token.is_content_unformatted || parser_token.is_unformatted) {
-      do_end_expand = false;
-    }
-
-    if (do_end_expand) {
-      printer.print_newline(false);
-    }
-  } else { // it's a start-tag
-    parser_token.indent_content = !parser_token.custom_beautifier_name;
-
-    if (parser_token.tag_start_char === '<') {
-      if (parser_token.tag_name === 'html') {
-        parser_token.indent_content = this._options.indent_inner_html;
-      } else if (parser_token.tag_name === 'head') {
-        parser_token.indent_content = this._options.indent_head_inner_html;
-      } else if (parser_token.tag_name === 'body') {
-        parser_token.indent_content = this._options.indent_body_inner_html;
-      }
-    }
-
-    if (!(parser_token.is_inline_element || parser_token.is_unformatted) &&
-      (last_token.type !== 'TK_CONTENT' || parser_token.is_content_unformatted)) {
-      printer.print_newline(false);
-    }
-
-    this._calcluate_parent_multiline(printer, parser_token);
-  }
-};
-
-Beautifier.prototype._calcluate_parent_multiline = function(printer, parser_token) {
-  if (parser_token.parent && printer._output.just_added_newline() &&
-    !((parser_token.is_inline_element || parser_token.is_unformatted) && parser_token.parent.is_inline_element)) {
-    parser_token.parent.multiline_content = true;
-  }
-};
-
-//To be used for <p> tag special case:
-var p_closers = ['address', 'article', 'aside', 'blockquote', 'details', 'div', 'dl', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'main', 'menu', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul'];
-var p_parent_excludes = ['a', 'audio', 'del', 'ins', 'map', 'noscript', 'video'];
-
-Beautifier.prototype._do_optional_end_element = function(parser_token) {
-  var result = null;
-  // NOTE: cases of "if there is no more content in the parent element"
-  // are handled automatically by the beautifier.
-  // It assumes parent or ancestor close tag closes all children.
-  // https://www.w3.org/TR/html5/syntax.html#optional-tags
-  if (parser_token.is_empty_element || !parser_token.is_start_tag || !parser_token.parent) {
-    return;
-
-  }
-
-  if (parser_token.tag_name === 'body') {
-    // A head element’s end tag may be omitted if the head element is not immediately followed by a space character or a comment.
-    result = result || this._tag_stack.try_pop('head');
-
-    //} else if (parser_token.tag_name === 'body') {
-    // DONE: A body element’s end tag may be omitted if the body element is not immediately followed by a comment.
-
-  } else if (parser_token.tag_name === 'li') {
-    // An li element’s end tag may be omitted if the li element is immediately followed by another li element or if there is no more content in the parent element.
-    result = result || this._tag_stack.try_pop('li', ['ol', 'ul', 'menu']);
-
-  } else if (parser_token.tag_name === 'dd' || parser_token.tag_name === 'dt') {
-    // A dd element’s end tag may be omitted if the dd element is immediately followed by another dd element or a dt element, or if there is no more content in the parent element.
-    // A dt element’s end tag may be omitted if the dt element is immediately followed by another dt element or a dd element.
-    result = result || this._tag_stack.try_pop('dt', ['dl']);
-    result = result || this._tag_stack.try_pop('dd', ['dl']);
-
-
-  } else if (parser_token.parent.tag_name === 'p' && p_closers.indexOf(parser_token.tag_name) !== -1) {
-    // IMPORTANT: this else-if works because p_closers has no overlap with any other element we look for in this method
-    // check for the parent element is an HTML element that is not an <a>, <audio>, <del>, <ins>, <map>, <noscript>, or <video> element,  or an autonomous custom element.
-    // To do this right, this needs to be coded as an inclusion of the inverse of the exclusion above.
-    // But to start with (if we ignore "autonomous custom elements") the exclusion would be fine.
-    var p_parent = parser_token.parent.parent;
-    if (!p_parent || p_parent_excludes.indexOf(p_parent.tag_name) === -1) {
-      result = result || this._tag_stack.try_pop('p');
-    }
-  } else if (parser_token.tag_name === 'rp' || parser_token.tag_name === 'rt') {
-    // An rt element’s end tag may be omitted if the rt element is immediately followed by an rt or rp element, or if there is no more content in the parent element.
-    // An rp element’s end tag may be omitted if the rp element is immediately followed by an rt or rp element, or if there is no more content in the parent element.
-    result = result || this._tag_stack.try_pop('rt', ['ruby', 'rtc']);
-    result = result || this._tag_stack.try_pop('rp', ['ruby', 'rtc']);
-
-  } else if (parser_token.tag_name === 'optgroup') {
-    // An optgroup element’s end tag may be omitted if the optgroup element is immediately followed by another optgroup element, or if there is no more content in the parent element.
-    // An option element’s end tag may be omitted if the option element is immediately followed by another option element, or if it is immediately followed by an optgroup element, or if there is no more content in the parent element.
-    result = result || this._tag_stack.try_pop('optgroup', ['select']);
-    //result = result || this._tag_stack.try_pop('option', ['select']);
-
-  } else if (parser_token.tag_name === 'option') {
-    // An option element’s end tag may be omitted if the option element is immediately followed by another option element, or if it is immediately followed by an optgroup element, or if there is no more content in the parent element.
-    result = result || this._tag_stack.try_pop('option', ['select', 'datalist', 'optgroup']);
-
-  } else if (parser_token.tag_name === 'colgroup') {
-    // DONE: A colgroup element’s end tag may be omitted if the colgroup element is not immediately followed by a space character or a comment.
-    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
-    result = result || this._tag_stack.try_pop('caption', ['table']);
-
-  } else if (parser_token.tag_name === 'thead') {
-    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
-    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
-    result = result || this._tag_stack.try_pop('caption', ['table']);
-    result = result || this._tag_stack.try_pop('colgroup', ['table']);
-
-    //} else if (parser_token.tag_name === 'caption') {
-    // DONE: A caption element’s end tag may be omitted if the caption element is not immediately followed by a space character or a comment.
-
-  } else if (parser_token.tag_name === 'tbody' || parser_token.tag_name === 'tfoot') {
-    // A thead element’s end tag may be omitted if the thead element is immediately followed by a tbody or tfoot element.
-    // A tbody element’s end tag may be omitted if the tbody element is immediately followed by a tbody or tfoot element, or if there is no more content in the parent element.
-    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
-    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
-    result = result || this._tag_stack.try_pop('caption', ['table']);
-    result = result || this._tag_stack.try_pop('colgroup', ['table']);
-    result = result || this._tag_stack.try_pop('thead', ['table']);
-    result = result || this._tag_stack.try_pop('tbody', ['table']);
-
-    //} else if (parser_token.tag_name === 'tfoot') {
-    // DONE: A tfoot element’s end tag may be omitted if there is no more content in the parent element.
-
-  } else if (parser_token.tag_name === 'tr') {
-    // A tr element’s end tag may be omitted if the tr element is immediately followed by another tr element, or if there is no more content in the parent element.
-    // A colgroup element's end tag may be ommitted if a thead, tfoot, tbody, or tr element is started.
-    // A caption element's end tag may be ommitted if a colgroup, thead, tfoot, tbody, or tr element is started.
-    result = result || this._tag_stack.try_pop('caption', ['table']);
-    result = result || this._tag_stack.try_pop('colgroup', ['table']);
-    result = result || this._tag_stack.try_pop('tr', ['table', 'thead', 'tbody', 'tfoot']);
-
-  } else if (parser_token.tag_name === 'th' || parser_token.tag_name === 'td') {
-    // A td element’s end tag may be omitted if the td element is immediately followed by a td or th element, or if there is no more content in the parent element.
-    // A th element’s end tag may be omitted if the th element is immediately followed by a td or th element, or if there is no more content in the parent element.
-    result = result || this._tag_stack.try_pop('td', ['table', 'thead', 'tbody', 'tfoot', 'tr']);
-    result = result || this._tag_stack.try_pop('th', ['table', 'thead', 'tbody', 'tfoot', 'tr']);
-  }
-
-  // Start element omission not handled currently
-  // A head element’s start tag may be omitted if the element is empty, or if the first thing inside the head element is an element.
-  // A tbody element’s start tag may be omitted if the first thing inside the tbody element is a tr element, and if the element is not immediately preceded by a tbody, thead, or tfoot element whose end tag has been omitted. (It can’t be omitted if the element is empty.)
-  // A colgroup element’s start tag may be omitted if the first thing inside the colgroup element is a col element, and if the element is not immediately preceded by another colgroup element whose end tag has been omitted. (It can’t be omitted if the element is empty.)
-
-  // Fix up the parent of the parser token
-  parser_token.parent = this._tag_stack.get_parser_token();
-
-  return result;
-};
-
-module.exports.Beautifier = Beautifier;
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_92890__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var BaseOptions = (__nested_webpack_require_92890__(6).Options);
-
-function Options(options) {
-  BaseOptions.call(this, options, 'html');
-  if (this.templating.length === 1 && this.templating[0] === 'auto') {
-    this.templating = ['django', 'erb', 'handlebars', 'php'];
-  }
-
-  this.indent_inner_html = this._get_boolean('indent_inner_html');
-  this.indent_body_inner_html = this._get_boolean('indent_body_inner_html', true);
-  this.indent_head_inner_html = this._get_boolean('indent_head_inner_html', true);
-
-  this.indent_handlebars = this._get_boolean('indent_handlebars', true);
-  this.wrap_attributes = this._get_selection('wrap_attributes',
-    ['auto', 'force', 'force-aligned', 'force-expand-multiline', 'aligned-multiple', 'preserve', 'preserve-aligned']);
-  this.wrap_attributes_min_attrs = this._get_number('wrap_attributes_min_attrs', 2);
-  this.wrap_attributes_indent_size = this._get_number('wrap_attributes_indent_size', this.indent_size);
-  this.extra_liners = this._get_array('extra_liners', ['head', 'body', '/html']);
-
-  // Block vs inline elements
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements
-  // https://www.w3.org/TR/html5/dom.html#phrasing-content
-  this.inline = this._get_array('inline', [
-    'a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'br', 'button', 'canvas', 'cite',
-    'code', 'data', 'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
-    'input', 'ins', 'kbd', 'keygen', 'label', 'map', 'mark', 'math', 'meter', 'noscript',
-    'object', 'output', 'progress', 'q', 'ruby', 's', 'samp', /* 'script', */ 'select', 'small',
-    'span', 'strong', 'sub', 'sup', 'svg', 'template', 'textarea', 'time', 'u', 'var',
-    'video', 'wbr', 'text',
-    // obsolete inline tags
-    'acronym', 'big', 'strike', 'tt'
-  ]);
-  this.inline_custom_elements = this._get_boolean('inline_custom_elements', true);
-  this.void_elements = this._get_array('void_elements', [
-    // HTLM void elements - aka self-closing tags - aka singletons
-    // https://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
-    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen',
-    'link', 'menuitem', 'meta', 'param', 'source', 'track', 'wbr',
-    // NOTE: Optional tags are too complex for a simple list
-    // they are hard coded in _do_optional_end_element
-
-    // Doctype and xml elements
-    '!doctype', '?xml',
-
-    // obsolete tags
-    // basefont: https://www.computerhope.com/jargon/h/html-basefont-tag.htm
-    // isndex: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/isindex
-    'basefont', 'isindex'
-  ]);
-  this.unformatted = this._get_array('unformatted', []);
-  this.content_unformatted = this._get_array('content_unformatted', [
-    'pre', 'textarea'
-  ]);
-  this.unformatted_content_delimiter = this._get_characters('unformatted_content_delimiter');
-  this.indent_scripts = this._get_selection('indent_scripts', ['normal', 'keep', 'separate']);
-
-}
-Options.prototype = new BaseOptions();
-
-
-
-module.exports.Options = Options;
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_97257__) {
-
-/*jshint node:true */
-/*
-
-  The MIT License (MIT)
-
-  Copyright (c) 2007-2018 Einar Lielmanis, Liam Newman, and contributors.
-
-  Permission is hereby granted, free of charge, to any person
-  obtaining a copy of this software and associated documentation files
-  (the "Software"), to deal in the Software without restriction,
-  including without limitation the rights to use, copy, modify, merge,
-  publish, distribute, sublicense, and/or sell copies of the Software,
-  and to permit persons to whom the Software is furnished to do so,
-  subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be
-  included in all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
-*/
-
-
-
-var BaseTokenizer = (__nested_webpack_require_97257__(9).Tokenizer);
-var BASETOKEN = (__nested_webpack_require_97257__(9).TOKEN);
-var Directives = (__nested_webpack_require_97257__(13).Directives);
-var TemplatablePattern = (__nested_webpack_require_97257__(14).TemplatablePattern);
-var Pattern = (__nested_webpack_require_97257__(12).Pattern);
-
-var TOKEN = {
-  TAG_OPEN: 'TK_TAG_OPEN',
-  TAG_CLOSE: 'TK_TAG_CLOSE',
-  CONTROL_FLOW_OPEN: 'TK_CONTROL_FLOW_OPEN',
-  CONTROL_FLOW_CLOSE: 'TK_CONTROL_FLOW_CLOSE',
-  ATTRIBUTE: 'TK_ATTRIBUTE',
-  EQUALS: 'TK_EQUALS',
-  VALUE: 'TK_VALUE',
-  COMMENT: 'TK_COMMENT',
-  TEXT: 'TK_TEXT',
-  UNKNOWN: 'TK_UNKNOWN',
-  START: BASETOKEN.START,
-  RAW: BASETOKEN.RAW,
-  EOF: BASETOKEN.EOF
-};
-
-var directives_core = new Directives(/<\!--/, /-->/);
-
-var Tokenizer = function(input_string, options) {
-  BaseTokenizer.call(this, input_string, options);
-  this._current_tag_name = '';
-
-  // Words end at whitespace or when a tag starts
-  // if we are indenting handlebars, they are considered tags
-  var templatable_reader = new TemplatablePattern(this._input).read_options(this._options);
-  var pattern_reader = new Pattern(this._input);
-
-  this.__patterns = {
-    word: templatable_reader.until(/[\n\r\t <]/),
-    word_control_flow_close_excluded: templatable_reader.until(/[\n\r\t <}]/),
-    single_quote: templatable_reader.until_after(/'/),
-    double_quote: templatable_reader.until_after(/"/),
-    attribute: templatable_reader.until(/[\n\r\t =>]|\/>/),
-    element_name: templatable_reader.until(/[\n\r\t >\/]/),
-
-    angular_control_flow_start: pattern_reader.matching(/\@[a-zA-Z]+[^({]*[({]/),
-    handlebars_comment: pattern_reader.starting_with(/{{!--/).until_after(/--}}/),
-    handlebars: pattern_reader.starting_with(/{{/).until_after(/}}/),
-    handlebars_open: pattern_reader.until(/[\n\r\t }]/),
-    handlebars_raw_close: pattern_reader.until(/}}/),
-    comment: pattern_reader.starting_with(/<!--/).until_after(/-->/),
-    cdata: pattern_reader.starting_with(/<!\[CDATA\[/).until_after(/]]>/),
-    // https://en.wikipedia.org/wiki/Conditional_comment
-    conditional_comment: pattern_reader.starting_with(/<!\[/).until_after(/]>/),
-    processing: pattern_reader.starting_with(/<\?/).until_after(/\?>/)
-  };
-
-  if (this._options.indent_handlebars) {
-    this.__patterns.word = this.__patterns.word.exclude('handlebars');
-    this.__patterns.word_control_flow_close_excluded = this.__patterns.word_control_flow_close_excluded.exclude('handlebars');
-  }
-
-  this._unformatted_content_delimiter = null;
-
-  if (this._options.unformatted_content_delimiter) {
-    var literal_regexp = this._input.get_literal_regexp(this._options.unformatted_content_delimiter);
-    this.__patterns.unformatted_content_delimiter =
-      pattern_reader.matching(literal_regexp)
-      .until_after(literal_regexp);
-  }
-};
-Tokenizer.prototype = new BaseTokenizer();
-
-Tokenizer.prototype._is_comment = function(current_token) { // jshint unused:false
-  return false; //current_token.type === TOKEN.COMMENT || current_token.type === TOKEN.UNKNOWN;
-};
-
-Tokenizer.prototype._is_opening = function(current_token) {
-  return current_token.type === TOKEN.TAG_OPEN || current_token.type === TOKEN.CONTROL_FLOW_OPEN;
-};
-
-Tokenizer.prototype._is_closing = function(current_token, open_token) {
-  return (current_token.type === TOKEN.TAG_CLOSE &&
-    (open_token && (
-      ((current_token.text === '>' || current_token.text === '/>') && open_token.text[0] === '<') ||
-      (current_token.text === '}}' && open_token.text[0] === '{' && open_token.text[1] === '{')))
-  ) || (current_token.type === TOKEN.CONTROL_FLOW_CLOSE &&
-    (current_token.text === '}' && open_token.text.endsWith('{')));
-};
-
-Tokenizer.prototype._reset = function() {
-  this._current_tag_name = '';
-};
-
-Tokenizer.prototype._get_next_token = function(previous_token, open_token) { // jshint unused:false
-  var token = null;
-  this._readWhitespace();
-  var c = this._input.peek();
-
-  if (c === null) {
-    return this._create_token(TOKEN.EOF, '');
-  }
-
-  token = token || this._read_open_handlebars(c, open_token);
-  token = token || this._read_attribute(c, previous_token, open_token);
-  token = token || this._read_close(c, open_token);
-  token = token || this._read_script_and_style(c, previous_token);
-  token = token || this._read_control_flows(c, open_token);
-  token = token || this._read_raw_content(c, previous_token, open_token);
-  token = token || this._read_content_word(c, open_token);
-  token = token || this._read_comment_or_cdata(c);
-  token = token || this._read_processing(c);
-  token = token || this._read_open(c, open_token);
-  token = token || this._create_token(TOKEN.UNKNOWN, this._input.next());
-
-  return token;
-};
-
-Tokenizer.prototype._read_comment_or_cdata = function(c) { // jshint unused:false
-  var token = null;
-  var resulting_string = null;
-  var directives = null;
-
-  if (c === '<') {
-    var peek1 = this._input.peek(1);
-    // We treat all comments as literals, even more than preformatted tags
-    // we only look for the appropriate closing marker
-    if (peek1 === '!') {
-      resulting_string = this.__patterns.comment.read();
-
-      // only process directive on html comments
-      if (resulting_string) {
-        directives = directives_core.get_directives(resulting_string);
-        if (directives && directives.ignore === 'start') {
-          resulting_string += directives_core.readIgnored(this._input);
-        }
-      } else {
-        resulting_string = this.__patterns.cdata.read();
-      }
-    }
-
-    if (resulting_string) {
-      token = this._create_token(TOKEN.COMMENT, resulting_string);
-      token.directives = directives;
-    }
-  }
-
-  return token;
-};
-
-Tokenizer.prototype._read_processing = function(c) { // jshint unused:false
-  var token = null;
-  var resulting_string = null;
-  var directives = null;
-
-  if (c === '<') {
-    var peek1 = this._input.peek(1);
-    if (peek1 === '!' || peek1 === '?') {
-      resulting_string = this.__patterns.conditional_comment.read();
-      resulting_string = resulting_string || this.__patterns.processing.read();
-    }
-
-    if (resulting_string) {
-      token = this._create_token(TOKEN.COMMENT, resulting_string);
-      token.directives = directives;
-    }
-  }
-
-  return token;
-};
-
-Tokenizer.prototype._read_open = function(c, open_token) {
-  var resulting_string = null;
-  var token = null;
-  if (!open_token || open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
-    if (c === '<') {
-
-      resulting_string = this._input.next();
-      if (this._input.peek() === '/') {
-        resulting_string += this._input.next();
-      }
-      resulting_string += this.__patterns.element_name.read();
-      token = this._create_token(TOKEN.TAG_OPEN, resulting_string);
-    }
-  }
-  return token;
-};
-
-Tokenizer.prototype._read_open_handlebars = function(c, open_token) {
-  var resulting_string = null;
-  var token = null;
-  if (!open_token || open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
-    if ((this._options.templating.includes('angular') || this._options.indent_handlebars) && c === '{' && this._input.peek(1) === '{') {
-      if (this._options.indent_handlebars && this._input.peek(2) === '!') {
-        resulting_string = this.__patterns.handlebars_comment.read();
-        resulting_string = resulting_string || this.__patterns.handlebars.read();
-        token = this._create_token(TOKEN.COMMENT, resulting_string);
-      } else {
-        resulting_string = this.__patterns.handlebars_open.read();
-        token = this._create_token(TOKEN.TAG_OPEN, resulting_string);
-      }
-    }
-  }
-  return token;
-};
-
-Tokenizer.prototype._read_control_flows = function(c, open_token) {
-  var resulting_string = '';
-  var token = null;
-  // Only check for control flows if angular templating is set
-  if (!this._options.templating.includes('angular')) {
-    return token;
-  }
-
-  if (c === '@') {
-    resulting_string = this.__patterns.angular_control_flow_start.read();
-    if (resulting_string === '') {
-      return token;
-    }
-
-    var opening_parentheses_count = resulting_string.endsWith('(') ? 1 : 0;
-    var closing_parentheses_count = 0;
-    // The opening brace of the control flow is where the number of opening and closing parentheses equal
-    // e.g. @if({value: true} !== null) { 
-    while (!(resulting_string.endsWith('{') && opening_parentheses_count === closing_parentheses_count)) {
-      var next_char = this._input.next();
-      if (next_char === null) {
-        break;
-      } else if (next_char === '(') {
-        opening_parentheses_count++;
-      } else if (next_char === ')') {
-        closing_parentheses_count++;
-      }
-      resulting_string += next_char;
-    }
-    token = this._create_token(TOKEN.CONTROL_FLOW_OPEN, resulting_string);
-  } else if (c === '}' && open_token && open_token.type === TOKEN.CONTROL_FLOW_OPEN) {
-    resulting_string = this._input.next();
-    token = this._create_token(TOKEN.CONTROL_FLOW_CLOSE, resulting_string);
-  }
-  return token;
-};
-
-
-Tokenizer.prototype._read_close = function(c, open_token) {
-  var resulting_string = null;
-  var token = null;
-  if (open_token && open_token.type === TOKEN.TAG_OPEN) {
-    if (open_token.text[0] === '<' && (c === '>' || (c === '/' && this._input.peek(1) === '>'))) {
-      resulting_string = this._input.next();
-      if (c === '/') { //  for close tag "/>"
-        resulting_string += this._input.next();
-      }
-      token = this._create_token(TOKEN.TAG_CLOSE, resulting_string);
-    } else if (open_token.text[0] === '{' && c === '}' && this._input.peek(1) === '}') {
-      this._input.next();
-      this._input.next();
-      token = this._create_token(TOKEN.TAG_CLOSE, '}}');
-    }
-  }
-
-  return token;
-};
-
-Tokenizer.prototype._read_attribute = function(c, previous_token, open_token) {
-  var token = null;
-  var resulting_string = '';
-  if (open_token && open_token.text[0] === '<') {
-
-    if (c === '=') {
-      token = this._create_token(TOKEN.EQUALS, this._input.next());
-    } else if (c === '"' || c === "'") {
-      var content = this._input.next();
-      if (c === '"') {
-        content += this.__patterns.double_quote.read();
-      } else {
-        content += this.__patterns.single_quote.read();
-      }
-      token = this._create_token(TOKEN.VALUE, content);
-    } else {
-      resulting_string = this.__patterns.attribute.read();
-
-      if (resulting_string) {
-        if (previous_token.type === TOKEN.EQUALS) {
-          token = this._create_token(TOKEN.VALUE, resulting_string);
-        } else {
-          token = this._create_token(TOKEN.ATTRIBUTE, resulting_string);
-        }
-      }
-    }
-  }
-  return token;
-};
-
-Tokenizer.prototype._is_content_unformatted = function(tag_name) {
-  // void_elements have no content and so cannot have unformatted content
-  // script and style tags should always be read as unformatted content
-  // finally content_unformatted and unformatted element contents are unformatted
-  return this._options.void_elements.indexOf(tag_name) === -1 &&
-    (this._options.content_unformatted.indexOf(tag_name) !== -1 ||
-      this._options.unformatted.indexOf(tag_name) !== -1);
-};
-
-Tokenizer.prototype._read_raw_content = function(c, previous_token, open_token) { // jshint unused:false
-  var resulting_string = '';
-  if (open_token && open_token.text[0] === '{') {
-    resulting_string = this.__patterns.handlebars_raw_close.read();
-  } else if (previous_token.type === TOKEN.TAG_CLOSE &&
-    previous_token.opened.text[0] === '<' && previous_token.text[0] !== '/') {
-    // ^^ empty tag has no content 
-    var tag_name = previous_token.opened.text.substr(1).toLowerCase();
-    if (this._is_content_unformatted(tag_name)) {
-
-      resulting_string = this._input.readUntil(new RegExp('</' + tag_name + '[\\n\\r\\t ]*?>', 'ig'));
-    }
-  }
-
-  if (resulting_string) {
-    return this._create_token(TOKEN.TEXT, resulting_string);
-  }
-
-  return null;
-};
-
-Tokenizer.prototype._read_script_and_style = function(c, previous_token) { // jshint unused:false 
-  if (previous_token.type === TOKEN.TAG_CLOSE && previous_token.opened.text[0] === '<' && previous_token.text[0] !== '/') {
-    var tag_name = previous_token.opened.text.substr(1).toLowerCase();
-    if (tag_name === 'script' || tag_name === 'style') {
-      // Script and style tags are allowed to have comments wrapping their content
-      // or just have regular content.
-      var token = this._read_comment_or_cdata(c);
-      if (token) {
-        token.type = TOKEN.TEXT;
-        return token;
-      }
-      var resulting_string = this._input.readUntil(new RegExp('</' + tag_name + '[\\n\\r\\t ]*?>', 'ig'));
-      if (resulting_string) {
-        return this._create_token(TOKEN.TEXT, resulting_string);
-      }
-    }
-  }
-  return null;
-};
-
-Tokenizer.prototype._read_content_word = function(c, open_token) {
-  var resulting_string = '';
-  if (this._options.unformatted_content_delimiter) {
-    if (c === this._options.unformatted_content_delimiter[0]) {
-      resulting_string = this.__patterns.unformatted_content_delimiter.read();
-    }
-  }
-
-  if (!resulting_string) {
-    resulting_string = (open_token && open_token.type === TOKEN.CONTROL_FLOW_OPEN) ? this.__patterns.word_control_flow_close_excluded.read() : this.__patterns.word.read();
-  }
-  if (resulting_string) {
-    return this._create_token(TOKEN.TEXT, resulting_string);
-  }
-  return null;
-};
-
-module.exports.Tokenizer = Tokenizer;
-module.exports.TOKEN = TOKEN;
-
-
-/***/ })
-/******/ 	]);
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nested_webpack_require_112012__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_112012__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __nested_webpack_exports__ = __nested_webpack_require_112012__(18);
-/******/ 	legacy_beautify_html = __nested_webpack_exports__;
-/******/ 	
-/******/ })()
-;
-var style_html = legacy_beautify_html;
-/* Footer */
-if (true) {
-    // Add support for AMD ( https://github.com/amdjs/amdjs-api/wiki/AMD#defineamd-property- )
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, __webpack_require__(617), __webpack_require__(3)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(requireamd) {
-        var js_beautify = __webpack_require__(617);
-        var css_beautify = __webpack_require__(3);
-
-        return {
-            html_beautify: function(html_source, options) {
-                return style_html(html_source, options, js_beautify.js_beautify, css_beautify.css_beautify);
-            }
-        };
-    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-} else // removed by dead control flow
-{ var css_beautify, js_beautify; }
-
-}());
-
-
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -9123,7 +9123,7 @@ if (true) {
 /******/ 			__webpack_require__.r(ns);
 /******/ 			var def = {};
 /******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
-/******/ 			for(var current = mode & 2 && value; typeof current == 'object' && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
 /******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
 /******/ 			}
 /******/ 			def['default'] = () => (value);
@@ -9212,7 +9212,6 @@ if (true) {
 /******/ 				script = document.createElement('script');
 /******/ 		
 /******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
@@ -9675,7 +9674,7 @@ function check(code) {
 
 const ZWJ = 0x200d
 
-function src_findClusterBreak(str, pos, forward = true, includeExtending = true) {
+function findClusterBreak(str, pos, forward = true, includeExtending = true) {
   return (forward ? nextClusterBreak : prevClusterBreak)(str, pos, includeExtending)
 }
 
@@ -10297,7 +10296,7 @@ Moves across surrogate pairs, extending characters (when
 joiners, and flag emoji.
 */
 function dist_findClusterBreak(str, pos, forward = true, includeExtending = true) {
-    return src_findClusterBreak(str, pos, forward, includeExtending);
+    return findClusterBreak(str, pos, forward, includeExtending);
 }
 function dist_surrogateLow(ch) { return ch >= 0xDC00 && ch < 0xE000; }
 function dist_surrogateHigh(ch) { return ch >= 0xD800 && ch < 0xDC00; }
@@ -11052,9 +11051,9 @@ class SelectionRange {
     */
     extend(from, to = from) {
         if (from <= this.anchor && to >= this.anchor)
-            return dist_EditorSelection.range(from, to);
+            return EditorSelection.range(from, to);
         let head = Math.abs(from - this.anchor) > Math.abs(to - this.anchor) ? from : to;
-        return dist_EditorSelection.range(this.anchor, head);
+        return EditorSelection.range(this.anchor, head);
     }
     /**
     Compare this range to another range.
@@ -11074,7 +11073,7 @@ class SelectionRange {
     static fromJSON(json) {
         if (!json || typeof json.anchor != "number" || typeof json.head != "number")
             throw new RangeError("Invalid JSON representation for SelectionRange");
-        return dist_EditorSelection.range(json.anchor, json.head);
+        return EditorSelection.range(json.anchor, json.head);
     }
     /**
     @internal
@@ -11086,7 +11085,7 @@ class SelectionRange {
 /**
 An editor selection holds one or more selection ranges.
 */
-class dist_EditorSelection {
+class EditorSelection {
     constructor(
     /**
     The ranges in the selection, sorted by position. Ranges cannot
@@ -11108,7 +11107,7 @@ class dist_EditorSelection {
     map(change, assoc = -1) {
         if (change.empty)
             return this;
-        return dist_EditorSelection.create(this.ranges.map(r => r.map(change, assoc)), this.mainIndex);
+        return EditorSelection.create(this.ranges.map(r => r.map(change, assoc)), this.mainIndex);
     }
     /**
     Compare this selection to another selection. By default, ranges
@@ -11136,13 +11135,13 @@ class dist_EditorSelection {
     holding only the main range from this selection.
     */
     asSingle() {
-        return this.ranges.length == 1 ? this : new dist_EditorSelection([this.main], 0);
+        return this.ranges.length == 1 ? this : new EditorSelection([this.main], 0);
     }
     /**
     Extend this selection with an extra range.
     */
     addRange(range, main = true) {
-        return dist_EditorSelection.create([range].concat(this.ranges), main ? 0 : this.mainIndex + 1);
+        return EditorSelection.create([range].concat(this.ranges), main ? 0 : this.mainIndex + 1);
     }
     /**
     Replace a given range with another range, and then normalize the
@@ -11151,7 +11150,7 @@ class dist_EditorSelection {
     replaceRange(range, which = this.mainIndex) {
         let ranges = this.ranges.slice();
         ranges[which] = range;
-        return dist_EditorSelection.create(ranges, this.mainIndex);
+        return EditorSelection.create(ranges, this.mainIndex);
     }
     /**
     Convert this selection to an object that can be serialized to
@@ -11166,13 +11165,13 @@ class dist_EditorSelection {
     static fromJSON(json) {
         if (!json || !Array.isArray(json.ranges) || typeof json.main != "number" || json.main >= json.ranges.length)
             throw new RangeError("Invalid JSON representation for EditorSelection");
-        return new dist_EditorSelection(json.ranges.map((r) => SelectionRange.fromJSON(r)), json.main);
+        return new EditorSelection(json.ranges.map((r) => SelectionRange.fromJSON(r)), json.main);
     }
     /**
     Create a selection holding a single range.
     */
     static single(anchor, head = anchor) {
-        return new dist_EditorSelection([dist_EditorSelection.range(anchor, head)], 0);
+        return new EditorSelection([EditorSelection.range(anchor, head)], 0);
     }
     /**
     Sort and merge the given set of ranges, creating a valid
@@ -11184,10 +11183,10 @@ class dist_EditorSelection {
         for (let pos = 0, i = 0; i < ranges.length; i++) {
             let range = ranges[i];
             if (range.empty ? range.from <= pos : range.from < pos)
-                return dist_EditorSelection.normalized(ranges.slice(), mainIndex);
+                return EditorSelection.normalized(ranges.slice(), mainIndex);
             pos = range.to;
         }
-        return new dist_EditorSelection(ranges, mainIndex);
+        return new EditorSelection(ranges, mainIndex);
     }
     /**
     Create a cursor selection range at the given position. You can
@@ -11220,10 +11219,10 @@ class dist_EditorSelection {
                 let from = prev.from, to = Math.max(range.to, prev.to);
                 if (i <= mainIndex)
                     mainIndex--;
-                ranges.splice(--i, 2, range.anchor > range.head ? dist_EditorSelection.range(to, from) : dist_EditorSelection.range(from, to));
+                ranges.splice(--i, 2, range.anchor > range.head ? EditorSelection.range(to, from) : EditorSelection.range(from, to));
             }
         }
-        return new dist_EditorSelection(ranges, mainIndex);
+        return new EditorSelection(ranges, mainIndex);
     }
 }
 function checkSelection(selection, docLength) {
@@ -12111,7 +12110,7 @@ function resolveTransactionInner(state, spec, docSize) {
     return {
         changes: spec.changes instanceof ChangeSet ? spec.changes
             : ChangeSet.of(spec.changes || [], docSize, state.facet(lineSeparator)),
-        selection: sel && (sel instanceof dist_EditorSelection ? sel : dist_EditorSelection.single(sel.anchor, sel.head)),
+        selection: sel && (sel instanceof EditorSelection ? sel : EditorSelection.single(sel.anchor, sel.head)),
         effects: asArray(spec.effects),
         annotations,
         scrollIntoView: !!spec.scrollIntoView
@@ -12189,7 +12188,7 @@ The categories produced by a [character
 categorizer](https://codemirror.net/6/docs/ref/#state.EditorState.charCategorizer). These are used
 do things like selecting by word.
 */
-var dist_CharCategory = /*@__PURE__*/(function (CharCategory) {
+var CharCategory = /*@__PURE__*/(function (CharCategory) {
     /**
     Word characters.
     */
@@ -12202,7 +12201,7 @@ var dist_CharCategory = /*@__PURE__*/(function (CharCategory) {
     Anything else.
     */
     CharCategory[CharCategory["Other"] = 2] = "Other";
-return CharCategory})(dist_CharCategory || (dist_CharCategory = {}));
+return CharCategory})(CharCategory || (CharCategory = {}));
 const nonASCIISingleCaseWordChar = /[\u00df\u0587\u0590-\u05f4\u0600-\u06ff\u3040-\u309f\u30a0-\u30ff\u3400-\u4db5\u4e00-\u9fcc\uac00-\ud7af]/;
 let wordChar;
 try {
@@ -12222,13 +12221,13 @@ function hasWordChar(str) {
 function makeCategorizer(wordChars) {
     return (char) => {
         if (!/\S/.test(char))
-            return dist_CharCategory.Space;
+            return CharCategory.Space;
         if (hasWordChar(char))
-            return dist_CharCategory.Word;
+            return CharCategory.Word;
         for (let i = 0; i < wordChars.length; i++)
             if (char.indexOf(wordChars[i]) > -1)
-                return dist_CharCategory.Word;
-        return dist_CharCategory.Other;
+                return CharCategory.Word;
+        return CharCategory.Other;
     };
 }
 
@@ -12344,7 +12343,7 @@ class EditorState {
         if (typeof text == "string")
             text = this.toText(text);
         return this.changeByRange(range => ({ changes: { from: range.from, to: range.to, insert: text },
-            range: dist_EditorSelection.cursor(range.from + text.length) }));
+            range: EditorSelection.cursor(range.from + text.length) }));
     }
     /**
     Create a set of changes and a new selection by running the given
@@ -12374,7 +12373,7 @@ class EditorState {
         }
         return {
             changes,
-            selection: dist_EditorSelection.create(ranges, sel.mainIndex),
+            selection: EditorSelection.create(ranges, sel.mainIndex),
             effects
         };
     }
@@ -12450,7 +12449,7 @@ class EditorState {
             }
         return EditorState.create({
             doc: json.doc,
-            selection: dist_EditorSelection.fromJSON(json.selection),
+            selection: EditorSelection.fromJSON(json.selection),
             extensions: config.extensions ? fieldInit.concat([config.extensions]) : fieldInit
         });
     }
@@ -12463,9 +12462,9 @@ class EditorState {
         let configuration = Configuration.resolve(config.extensions || [], new Map);
         let doc = config.doc instanceof Text ? config.doc
             : Text.of((config.doc || "").split(configuration.staticFacet(EditorState.lineSeparator) || DefaultSplit));
-        let selection = !config.selection ? dist_EditorSelection.single(0)
-            : config.selection instanceof dist_EditorSelection ? config.selection
-                : dist_EditorSelection.single(config.selection.anchor, config.selection.head);
+        let selection = !config.selection ? EditorSelection.single(0)
+            : config.selection instanceof EditorSelection ? config.selection
+                : EditorSelection.single(config.selection.anchor, config.selection.head);
         checkSelection(selection, doc.length);
         if (!configuration.staticFacet(allowMultipleSelections))
             selection = selection.asSingle();
@@ -12564,17 +12563,17 @@ class EditorState {
         let start = pos - from, end = pos - from;
         while (start > 0) {
             let prev = dist_findClusterBreak(text, start, false);
-            if (cat(text.slice(prev, start)) != dist_CharCategory.Word)
+            if (cat(text.slice(prev, start)) != CharCategory.Word)
                 break;
             start = prev;
         }
         while (end < length) {
             let next = dist_findClusterBreak(text, end);
-            if (cat(text.slice(end, next)) != dist_CharCategory.Word)
+            if (cat(text.slice(end, next)) != CharCategory.Word)
                 break;
             end = next;
         }
-        return start == end ? null : dist_EditorSelection.range(start + from, end + from);
+        return start == end ? null : EditorSelection.range(start + from, end + from);
     }
 }
 /**
@@ -12845,7 +12844,7 @@ way that makes them efficient to [map](https://codemirror.net/6/docs/ref/#state.
 [update](https://codemirror.net/6/docs/ref/#state.RangeSet.update). This is an immutable data
 structure.
 */
-class dist_RangeSet {
+class RangeSet {
     constructor(
     /**
     @internal
@@ -12872,7 +12871,7 @@ class dist_RangeSet {
     @internal
     */
     static create(chunkPos, chunk, nextLayer, maxPoint) {
-        return new dist_RangeSet(chunkPos, chunk, nextLayer, maxPoint);
+        return new RangeSet(chunkPos, chunk, nextLayer, maxPoint);
     }
     /**
     @internal
@@ -12915,7 +12914,7 @@ class dist_RangeSet {
         if (sort)
             add = add.slice().sort(cmpRange);
         if (this.isEmpty)
-            return add.length ? dist_RangeSet.of(add) : this;
+            return add.length ? RangeSet.of(add) : this;
         let cur = new LayerCursor(this, null, -1).goto(0), i = 0, spill = [];
         let builder = new RangeSetBuilder();
         while (cur.value || i < add.length) {
@@ -12938,7 +12937,7 @@ class dist_RangeSet {
                 cur.next();
             }
         }
-        return builder.finishInner(this.nextLayer.isEmpty && !spill.length ? dist_RangeSet.empty
+        return builder.finishInner(this.nextLayer.isEmpty && !spill.length ? RangeSet.empty
             : this.nextLayer.update({ add: spill, filter, filterFrom, filterTo }));
     }
     /**
@@ -12966,7 +12965,7 @@ class dist_RangeSet {
             }
         }
         let next = this.nextLayer.map(changes);
-        return chunks.length == 0 ? next : new dist_RangeSet(chunkPos, chunks, next || dist_RangeSet.empty, maxPoint);
+        return chunks.length == 0 ? next : new RangeSet(chunkPos, chunks, next || RangeSet.empty, maxPoint);
     }
     /**
     Iterate over the ranges that touch the region `from` to `to`,
@@ -13106,11 +13105,11 @@ class dist_RangeSet {
     */
     static join(sets) {
         if (!sets.length)
-            return dist_RangeSet.empty;
+            return RangeSet.empty;
         let result = sets[sets.length - 1];
         for (let i = sets.length - 2; i >= 0; i--) {
-            for (let layer = sets[i]; layer != dist_RangeSet.empty; layer = layer.nextLayer)
-                result = new dist_RangeSet(layer.chunkPos, layer.chunk, result, Math.max(layer.maxPoint, result.maxPoint));
+            for (let layer = sets[i]; layer != RangeSet.empty; layer = layer.nextLayer)
+                result = new RangeSet(layer.chunkPos, layer.chunk, result, Math.max(layer.maxPoint, result.maxPoint));
         }
         return result;
     }
@@ -13118,7 +13117,7 @@ class dist_RangeSet {
 /**
 The empty set of ranges.
 */
-dist_RangeSet.empty = /*@__PURE__*/new dist_RangeSet([], [], null, -1);
+RangeSet.empty = /*@__PURE__*/new RangeSet([], [], null, -1);
 function lazySort(ranges) {
     if (ranges.length > 1)
         for (let prev = ranges[0], i = 1; i < ranges.length; i++) {
@@ -13129,7 +13128,7 @@ function lazySort(ranges) {
         }
     return ranges;
 }
-dist_RangeSet.empty.nextLayer = dist_RangeSet.empty;
+RangeSet.empty.nextLayer = RangeSet.empty;
 /**
 A range set builder is a data structure that helps build up a
 [range set](https://codemirror.net/6/docs/ref/#state.RangeSet) directly, without first allocating
@@ -13217,7 +13216,7 @@ class RangeSetBuilder {
     Finish the range set. Returns the new set. The builder can't be
     used anymore after this has been called.
     */
-    finish() { return this.finishInner(dist_RangeSet.empty); }
+    finish() { return this.finishInner(RangeSet.empty); }
     /**
     @internal
     */
@@ -13226,7 +13225,7 @@ class RangeSetBuilder {
             this.finishChunk(false);
         if (this.chunks.length == 0)
             return next;
-        let result = dist_RangeSet.create(this.chunkPos, this.chunks, this.nextLayer ? this.nextLayer.finishInner(next) : next, this.setMaxPoint);
+        let result = RangeSet.create(this.chunkPos, this.chunks, this.nextLayer ? this.nextLayer.finishInner(next) : next, this.setMaxPoint);
         this.from = null; // Make sure further `add` calls produce errors
         return result;
     }
@@ -14234,7 +14233,7 @@ class Decoration extends RangeValue {
     pass `true` for `sort` to make the library sort them for you.
     */
     static set(of, sort = false) {
-        return dist_RangeSet.of(of, sort);
+        return RangeSet.of(of, sort);
     }
     /**
     @internal
@@ -14244,7 +14243,7 @@ class Decoration extends RangeValue {
 /**
 The empty set of decorations.
 */
-Decoration.none = dist_RangeSet.empty;
+Decoration.none = RangeSet.empty;
 class MarkDecoration extends Decoration {
     constructor(spec) {
         let { start, end } = getInclusive(spec);
@@ -14355,7 +14354,7 @@ class BlockWrapper extends RangeValue {
     Create a range set from the given block wrapper ranges.
     */
     static set(of, sort = false) {
-        return dist_RangeSet.of(of, sort);
+        return RangeSet.of(of, sort);
     }
 }
 BlockWrapper.prototype.startSide = BlockWrapper.prototype.endSide = -1;
@@ -15219,8 +15218,8 @@ function moveVisually(line, order, dir, start, forward) {
     movedOver = line.text.slice(Math.min(startIndex, nextIndex), Math.max(startIndex, nextIndex));
     let nextSpan = spanI == (forward ? order.length - 1 : 0) ? null : order[spanI + (forward ? 1 : -1)];
     if (nextSpan && nextIndex == spanEnd && nextSpan.level + (forward ? 0 : 1) < span.level)
-        return dist_EditorSelection.cursor(nextSpan.side(!forward, dir) + line.from, nextSpan.forward(forward, dir) ? 1 : -1, nextSpan.level);
-    return dist_EditorSelection.cursor(nextIndex + line.from, span.forward(forward, dir) ? -1 : 1, span.level);
+        return EditorSelection.cursor(nextSpan.side(!forward, dir) + line.from, nextSpan.forward(forward, dir) ? 1 : -1, nextSpan.level);
+    return EditorSelection.cursor(nextIndex + line.from, span.forward(forward, dir) ? -1 : 1, span.level);
 }
 function autoDirection(text, from, to) {
     for (let i = from; i < to; i++) {
@@ -15271,7 +15270,7 @@ class ScrollTarget {
     }
     clip(state) {
         return this.range.to <= state.doc.length ? this :
-            new ScrollTarget(dist_EditorSelection.cursor(state.doc.length), this.y, this.x, this.yMargin, this.xMargin, this.isSnapshot);
+            new ScrollTarget(EditorSelection.cursor(state.doc.length), this.y, this.x, this.yMargin, this.xMargin, this.isSnapshot);
     }
 }
 const scrollIntoView = /*@__PURE__*/StateEffect.define({ map: (t, ch) => t.map(ch) });
@@ -15288,7 +15287,7 @@ Either calls a handler registered with
 `window.onerror`, if defined, or `console.error` (in which case
 it'll pass `context`, when given, as first argument).
 */
-function dist_logException(state, exception, context) {
+function logException(state, exception, context) {
     let handler = state.facet(exceptionSink);
     if (handler.length)
         handler[0](exception);
@@ -15318,7 +15317,7 @@ which case you need to call [`of`](https://codemirror.net/6/docs/ref/#view.ViewP
 an extension for the plugin. When the argument type is undefined,
 you can use the plugin instance as an extension directly.
 */
-class dist_ViewPlugin {
+class ViewPlugin {
     constructor(
     /**
     @internal
@@ -15355,7 +15354,7 @@ class dist_ViewPlugin {
     */
     static define(create, spec) {
         const { eventHandlers, eventObservers, provide, decorations: deco } = spec || {};
-        return new dist_ViewPlugin(nextPluginID++, create, eventHandlers, eventObservers, plugin => {
+        return new ViewPlugin(nextPluginID++, create, eventHandlers, eventObservers, plugin => {
             let ext = [];
             if (deco)
                 ext.push(decorations.of(view => {
@@ -15372,7 +15371,7 @@ class dist_ViewPlugin {
     editor view as argument.
     */
     static fromClass(cls, spec) {
-        return dist_ViewPlugin.define((view, arg) => new cls(view, arg), spec);
+        return ViewPlugin.define((view, arg) => new cls(view, arg), spec);
     }
 }
 class PluginInstance {
@@ -15395,7 +15394,7 @@ class PluginInstance {
                     this.value = this.spec.plugin.create(view, this.spec.arg);
                 }
                 catch (e) {
-                    dist_logException(view.state, e, "CodeMirror plugin crashed");
+                    logException(view.state, e, "CodeMirror plugin crashed");
                     this.deactivate();
                 }
             }
@@ -15408,7 +15407,7 @@ class PluginInstance {
                     this.value.update(update);
                 }
                 catch (e) {
-                    dist_logException(update.state, e, "CodeMirror plugin crashed");
+                    logException(update.state, e, "CodeMirror plugin crashed");
                     if (this.value.destroy)
                         try {
                             this.value.destroy();
@@ -15427,7 +15426,7 @@ class PluginInstance {
                 this.value.destroy();
             }
             catch (e) {
-                dist_logException(view.state, e, "CodeMirror plugin crashed");
+                logException(view.state, e, "CodeMirror plugin crashed");
             }
         }
     }
@@ -15449,7 +15448,7 @@ function getIsolatedRanges(view, line) {
         return isolates;
     let sets = isolates.map(i => i instanceof Function ? i(view) : i);
     let result = [];
-    dist_RangeSet.spans(sets, line.from, line.to, {
+    RangeSet.spans(sets, line.from, line.to, {
         point() { },
         span(fromDoc, toDoc, active, open) {
             let from = fromDoc - line.from, to = toDoc - line.from;
@@ -16520,7 +16519,7 @@ class TileUpdate {
         this.openMarks = 0;
         this.cache = new TileCache(view);
         this.text = new TextStream(view.state.doc);
-        this.builder = new TileBuilder(this.cache, new DocTile(view, view.contentDOM), dist_RangeSet.iter(blockWrappers));
+        this.builder = new TileBuilder(this.cache, new DocTile(view, view.contentDOM), RangeSet.iter(blockWrappers));
         this.cache.reused.set(old, 2 /* Reused.DOM */);
         this.old = new TilePointer(old);
         this.reuseWalker = {
@@ -16654,7 +16653,7 @@ class TileUpdate {
     emit(from, to) {
         let pendingLineAttrs = null;
         let b = this.builder, markCount = 0;
-        let openEnd = dist_RangeSet.spans(this.decorations, from, to, {
+        let openEnd = RangeSet.spans(this.decorations, from, to, {
             point: (from, to, deco, active, openStart, index) => {
                 if (deco instanceof PointDecoration) {
                     if (this.disallowBlockEffectsFor[index]) {
@@ -17316,7 +17315,7 @@ class DocView {
         });
         if (outerDeco.length) {
             this.dynamicDecorationMap[i++] = dynamicOuter;
-            allDeco.push(dist_RangeSet.join(outerDeco));
+            allDeco.push(RangeSet.join(outerDeco));
         }
         this.decorations = [
             this.editContextFormatting,
@@ -17341,7 +17340,7 @@ class DocView {
                     return true;
             }
             catch (e) {
-                dist_logException(this.view.state, e, "scroll handler");
+                logException(this.view.state, e, "scroll handler");
             }
         }
         let { range } = target;
@@ -17434,7 +17433,7 @@ let DecorationComparator$1 = class DecorationComparator {
 };
 function findChangedDeco(a, b, diff) {
     let comp = new DecorationComparator$1;
-    dist_RangeSet.compare(a, b, diff, comp);
+    RangeSet.compare(a, b, diff, comp);
     return comp.changes;
 }
 class WrapperComparator {
@@ -17447,7 +17446,7 @@ class WrapperComparator {
 }
 function findChangedWrappers(a, b, diff) {
     let comp = new WrapperComparator;
-    dist_RangeSet.compare(a, b, diff, comp);
+    RangeSet.compare(a, b, diff, comp);
     return comp.changes;
 }
 function inUneditable(node, inside) {
@@ -17492,7 +17491,7 @@ function groupAt(state, pos, bias = 1) {
     let categorize = state.charCategorizer(pos);
     let line = state.doc.lineAt(pos), linePos = pos - line.from;
     if (line.length == 0)
-        return dist_EditorSelection.cursor(pos);
+        return EditorSelection.cursor(pos);
     if (linePos == 0)
         bias = 1;
     else if (linePos == line.length)
@@ -17515,7 +17514,7 @@ function groupAt(state, pos, bias = 1) {
             break;
         to = next;
     }
-    return dist_EditorSelection.range(from + line.from, to + line.from);
+    return EditorSelection.range(from + line.from, to + line.from);
 }
 function posAtCoordsImprecise(view, contentRect, block, x, y) {
     let into = Math.round((x - contentRect.left) * view.defaultCharacterWidth);
@@ -17555,9 +17554,9 @@ function moveToLineBoundary(view, start, forward, includeWrap) {
         let pos = view.posAtCoords({ x: forward == (direction == Direction.LTR) ? editorRect.right - 1 : editorRect.left + 1,
             y: (coords.top + coords.bottom) / 2 });
         if (pos != null)
-            return dist_EditorSelection.cursor(pos, forward ? -1 : 1);
+            return EditorSelection.cursor(pos, forward ? -1 : 1);
     }
-    return dist_EditorSelection.cursor(forward ? line.to : line.from, forward ? -1 : 1);
+    return EditorSelection.cursor(forward ? line.to : line.from, forward ? -1 : 1);
 }
 function moveByChar(view, start, forward, by) {
     let line = view.state.doc.lineAt(start.head), spans = view.bidiSpans(line);
@@ -17588,7 +17587,7 @@ function byGroup(view, pos, start) {
     let cat = categorize(start);
     return (next) => {
         let nextCat = categorize(next);
-        if (cat == dist_CharCategory.Space)
+        if (cat == CharCategory.Space)
             cat = nextCat;
         return cat == nextCat;
     };
@@ -17596,7 +17595,7 @@ function byGroup(view, pos, start) {
 function moveVertically(view, start, forward, distance) {
     let startPos = start.head, dir = forward ? 1 : -1;
     if (startPos == (forward ? view.state.doc.length : 0))
-        return dist_EditorSelection.cursor(startPos, start.assoc);
+        return EditorSelection.cursor(startPos, start.assoc);
     let goal = start.goalColumn, startY;
     let rect = view.contentDOM.getBoundingClientRect();
     let startCoords = view.coordsAtPos(startPos, start.assoc || -1), docTop = view.documentTop;
@@ -17614,7 +17613,7 @@ function moveVertically(view, start, forward, distance) {
     let resolvedGoal = rect.left + goal;
     let dist = distance !== null && distance !== void 0 ? distance : (view.viewState.heightOracle.textHeight >> 1);
     let pos = posAtCoords(view, { x: resolvedGoal, y: startY + dist * dir }, false, dir);
-    return dist_EditorSelection.cursor(pos.pos, pos.assoc, undefined, goal);
+    return EditorSelection.cursor(pos.pos, pos.assoc, undefined, goal);
 }
 function skipAtomicRanges(atoms, pos, bias) {
     for (;;) {
@@ -17639,13 +17638,13 @@ function skipAtomsForSelection(atoms, sel) {
         if (range.empty) {
             let pos = skipAtomicRanges(atoms, range.from, 0);
             if (pos != range.from)
-                updated = dist_EditorSelection.cursor(pos, -1);
+                updated = EditorSelection.cursor(pos, -1);
         }
         else {
             let from = skipAtomicRanges(atoms, range.from, -1);
             let to = skipAtomicRanges(atoms, range.to, 1);
             if (from != range.from || to != range.to)
-                updated = dist_EditorSelection.range(range.from == range.anchor ? from : to, range.from == range.head ? from : to);
+                updated = EditorSelection.range(range.from == range.anchor ? from : to, range.from == range.head ? from : to);
         }
         if (updated) {
             if (!ranges)
@@ -17653,11 +17652,11 @@ function skipAtomsForSelection(atoms, sel) {
             ranges[i] = updated;
         }
     }
-    return ranges ? dist_EditorSelection.create(ranges, sel.mainIndex) : sel;
+    return ranges ? EditorSelection.create(ranges, sel.mainIndex) : sel;
 }
 function skipAtoms(view, oldPos, pos) {
     let newPos = skipAtomicRanges(view.state.facet(atomicRanges).map(f => f(view)), pos.from, oldPos.head > pos.from ? -1 : 1);
-    return newPos == pos.from ? pos : dist_EditorSelection.cursor(newPos, newPos < pos.from ? 1 : -1);
+    return newPos == pos.from ? pos : EditorSelection.cursor(newPos, newPos < pos.from ? 1 : -1);
 }
 class PosAssoc {
     constructor(pos, assoc) {
@@ -17964,9 +17963,9 @@ class DOMChange {
                 }
             }
             if (view.inputState.composing > -1 && view.state.selection.ranges.length > 1)
-                this.newSel = view.state.selection.replaceRange(dist_EditorSelection.range(anchor, head));
+                this.newSel = view.state.selection.replaceRange(EditorSelection.range(anchor, head));
             else
-                this.newSel = dist_EditorSelection.single(anchor, head);
+                this.newSel = EditorSelection.single(anchor, head);
         }
     }
 }
@@ -18038,7 +18037,7 @@ function applyDOMChange(view, domChange) {
         // Detect insert-period-on-double-space Mac and Android behavior,
         // and transform it into a regular space insert.
         if (newSel && change.insert.length == 2)
-            newSel = dist_EditorSelection.single(newSel.main.anchor - 1, newSel.main.head - 1);
+            newSel = EditorSelection.single(newSel.main.anchor - 1, newSel.main.head - 1);
         change = { from: change.from, to: change.to, insert: Text.of([change.insert.toString().replace(".", " ")]) };
     }
     else if (change && change.from >= sel.from && change.to <= sel.to &&
@@ -18070,7 +18069,7 @@ function applyDOMChange(view, domChange) {
         // line, it will actually insert a newline and a space, causing a
         // bogus new line to be created in CodeMirror (#968)
         if (newSel)
-            newSel = dist_EditorSelection.single(newSel.main.anchor - 1, newSel.main.head - 1);
+            newSel = EditorSelection.single(newSel.main.anchor - 1, newSel.main.head - 1);
         change = { from: sel.from, to: sel.to, insert: Text.of([" "]) };
     }
     if (change) {
@@ -18135,7 +18134,7 @@ function applyDefaultInsert(view, change, newSel) {
     if (inAtomic > -1) {
         tr = {
             changes: change,
-            selection: dist_EditorSelection.cursor(change.from + change.insert.length, -1)
+            selection: EditorSelection.cursor(change.from + change.insert.length, -1)
         };
     }
     else if (change.from >= sel.from && change.to <= sel.to && change.to - change.from >= (sel.to - sel.from) / 3 &&
@@ -18176,7 +18175,7 @@ function applyDefaultInsert(view, change, newSel) {
                 return {
                     changes: rangeChanges,
                     range: !mainSel ? range.map(rangeChanges) :
-                        dist_EditorSelection.range(Math.max(0, mainSel.anchor + selOff), Math.max(0, mainSel.head + selOff))
+                        EditorSelection.range(Math.max(0, mainSel.anchor + selOff), Math.max(0, mainSel.head + selOff))
                 };
             });
         }
@@ -18245,7 +18244,7 @@ function selectionFromPoints(points, base) {
     if (points.length == 0)
         return null;
     let anchor = points[0].pos, head = points.length == 2 ? points[1].pos : anchor;
-    return anchor > -1 && head > -1 ? dist_EditorSelection.single(anchor + base, head + base) : null;
+    return anchor > -1 && head > -1 ? EditorSelection.single(anchor + base, head + base) : null;
 }
 function sameSelPos(selection, range) {
     return range.head == selection.main.head && range.anchor == selection.main.anchor;
@@ -18446,7 +18445,7 @@ function bindHandler(plugin, handler) {
             return handler.call(plugin, event, view);
         }
         catch (e) {
-            dist_logException(view.state, e);
+            logException(view.state, e);
         }
     };
 }
@@ -18671,14 +18670,14 @@ function doPaste(view, input) {
             lastLine = line.from;
             let insert = state.toText((byLine ? text.line(i++).text : input) + state.lineBreak);
             return { changes: { from: line.from, insert },
-                range: dist_EditorSelection.cursor(range.from + insert.length) };
+                range: EditorSelection.cursor(range.from + insert.length) };
         });
     }
     else if (byLine) {
         changes = state.changeByRange(range => {
             let line = text.line(i++);
             return { changes: { from: range.from, to: range.to, insert: line.text },
-                range: dist_EditorSelection.cursor(range.from + line.length) };
+                range: EditorSelection.cursor(range.from + line.length) };
         });
     }
     else {
@@ -18741,7 +18740,7 @@ handlers.mousedown = (view, event) => {
 };
 function rangeForClick(view, pos, bias, type) {
     if (type == 1) { // Single click
-        return dist_EditorSelection.cursor(pos, bias);
+        return EditorSelection.cursor(pos, bias);
     }
     else if (type == 2) { // Double click
         return groupAt(view.state, pos, bias);
@@ -18751,7 +18750,7 @@ function rangeForClick(view, pos, bias, type) {
         let from = visual ? visual.posAtStart : line.from, to = visual ? visual.posAtEnd : line.to;
         if (to < view.state.doc.length && to == line.to)
             to++;
-        return dist_EditorSelection.range(from, to);
+        return EditorSelection.range(from, to);
     }
 }
 const BadMouseDetail = browser.ie && browser.ie_version <= 11;
@@ -18781,7 +18780,7 @@ function basicMouseSelection(view, event) {
             if (start.pos != cur.pos && !extend) {
                 let startRange = rangeForClick(view, start.pos, start.assoc, type);
                 let from = Math.min(startRange.from, range.from), to = Math.max(startRange.to, range.to);
-                range = from < range.from ? dist_EditorSelection.range(from, to) : dist_EditorSelection.range(to, from);
+                range = from < range.from ? EditorSelection.range(from, to) : EditorSelection.range(to, from);
             }
             if (extend)
                 return startSel.replaceRange(startSel.main.extend(range.from, range.to));
@@ -18790,7 +18789,7 @@ function basicMouseSelection(view, event) {
             else if (multiple)
                 return startSel.addRange(range);
             else
-                return dist_EditorSelection.create([range]);
+                return EditorSelection.create([range]);
         }
     };
 }
@@ -18798,7 +18797,7 @@ function removeRangeAround(sel, pos) {
     for (let i = 0; i < sel.ranges.length; i++) {
         let { from, to } = sel.ranges[i];
         if (from <= pos && to >= pos)
-            return dist_EditorSelection.create(sel.ranges.slice(0, i).concat(sel.ranges.slice(i + 1)), sel.mainIndex == i ? 0 : sel.mainIndex - (sel.mainIndex > i ? 1 : 0));
+            return EditorSelection.create(sel.ranges.slice(0, i).concat(sel.ranges.slice(i + 1)), sel.mainIndex == i ? 0 : sel.mainIndex - (sel.mainIndex > i ? 1 : 0));
     }
     return null;
 }
@@ -18809,7 +18808,7 @@ handlers.dragstart = (view, event) => {
         if (tile && tile.isWidget()) {
             let from = tile.posAtStart, to = from + tile.length;
             if (from >= range.to || to <= range.from)
-                range = dist_EditorSelection.range(from, to);
+                range = EditorSelection.range(from, to);
         }
     }
     let { inputState } = view;
@@ -19830,13 +19829,13 @@ class NodeBuilder {
     // to each other.
     static build(oracle, decorations, from, to) {
         let builder = new NodeBuilder(from, oracle);
-        dist_RangeSet.spans(decorations, from, to, builder, 0);
+        RangeSet.spans(decorations, from, to, builder, 0);
         return builder.finish(from);
     }
 }
 function heightRelevantDecoChanges(a, b, diff) {
     let comp = new DecorationComparator;
-    dist_RangeSet.compare(a, b, diff, comp, 0);
+    RangeSet.compare(a, b, diff, comp, 0);
     return comp.changes;
 }
 class DecorationComparator {
@@ -20250,7 +20249,7 @@ class ViewState {
                 // When scrolling down, snap gap ends to line starts to avoid shifts in wrapping
                 if (to < line.to && mayMeasure && wrapping &&
                     mayMeasure.visibleRanges.some(r => r.from <= to && r.to >= to)) {
-                    let lineStart = mayMeasure.moveToLineBoundary(dist_EditorSelection.cursor(to), false, true).head;
+                    let lineStart = mayMeasure.moveToLineBoundary(EditorSelection.cursor(to), false, true).head;
                     if (lineStart > from)
                         to = lineStart;
                 }
@@ -20342,7 +20341,7 @@ class ViewState {
         if (this.lineGaps.length)
             deco = deco.concat(this.lineGapDeco);
         let ranges = [];
-        dist_RangeSet.spans(deco, this.viewport.from, this.viewport.to, {
+        RangeSet.spans(deco, this.viewport.from, this.viewport.to, {
             span(from, to) { ranges.push({ from, to }); },
             point() { }
         }, 20);
@@ -20395,7 +20394,7 @@ class Viewport {
 }
 function lineStructure(from, to, stateDeco) {
     let ranges = [], pos = from, total = 0;
-    dist_RangeSet.spans(stateDeco, from, to, {
+    RangeSet.spans(stateDeco, from, to, {
         span() { },
         point(from, to) {
             if (from > pos) {
@@ -20453,7 +20452,7 @@ function staticDeco(state) {
     let deco = state.facet(decorations).filter(d => typeof d != "function");
     let outer = state.facet(outerDecorations).filter(d => typeof d != "function");
     if (outer.length)
-        deco.push(dist_RangeSet.join(outer));
+        deco.push(RangeSet.join(outer));
     return deco;
 }
 // When the height is too big (> VP.MaxDOMHeight), scale down the
@@ -21335,7 +21334,7 @@ class EditContextManager {
             let diff = findDiff(view.state.sliceDoc(from, to), e.text, (deletes ? main.from : main.to) - from, deletes ? "end" : null);
             // Edit contexts sometimes fire empty changes
             if (!diff) {
-                let newSel = dist_EditorSelection.single(this.toEditorPos(e.selectionStart), this.toEditorPos(e.selectionEnd));
+                let newSel = EditorSelection.single(this.toEditorPos(e.selectionStart), this.toEditorPos(e.selectionEnd));
                 if (!sameSelPos(newSel, main))
                     view.dispatch({ selection: newSel, userEvent: "select" });
                 return;
@@ -21348,7 +21347,7 @@ class EditContextManager {
             this.pendingContextChange = change;
             if (!view.state.readOnly) {
                 let newLen = this.to - this.from + (change.to - change.from + change.insert.length);
-                applyDOMChangeInner(view, change, dist_EditorSelection.single(this.toEditorPos(e.selectionStart, newLen), this.toEditorPos(e.selectionEnd, newLen)));
+                applyDOMChangeInner(view, change, EditorSelection.single(this.toEditorPos(e.selectionStart, newLen), this.toEditorPos(e.selectionEnd, newLen)));
             }
             // If the transaction didn't flush our change, revert it so
             // that the context is in sync with the editor state again.
@@ -21711,7 +21710,7 @@ class EditorView {
                     scrollTarget = scrollTarget.map(tr.changes);
                 if (tr.scrollIntoView) {
                     let { main } = tr.state.selection;
-                    scrollTarget = new ScrollTarget(main.empty ? main : dist_EditorSelection.cursor(main.head, main.head > main.anchor ? -1 : 1));
+                    scrollTarget = new ScrollTarget(main.empty ? main : EditorSelection.cursor(main.head, main.head > main.anchor ? -1 : 1));
                 }
                 for (let e of tr.effects)
                     if (e.is(scrollIntoView))
@@ -21745,7 +21744,7 @@ class EditorView {
                     listener(update);
                 }
                 catch (e) {
-                    dist_logException(this.state, e, "update listener");
+                    logException(this.state, e, "update listener");
                 }
             }
         if (dispatchFocus || domChange)
@@ -21834,7 +21833,7 @@ class EditorView {
                     val.docViewUpdate(this);
                 }
                 catch (e) {
-                    dist_logException(this.state, e, "doc view update listener");
+                    logException(this.state, e, "doc view update listener");
                 }
             }
         }
@@ -21893,7 +21892,7 @@ class EditorView {
                         return m.read(this);
                     }
                     catch (e) {
-                        dist_logException(this.state, e);
+                        logException(this.state, e);
                         return BadMeasure;
                     }
                 });
@@ -21920,7 +21919,7 @@ class EditorView {
                                 m.write(measured[i], this);
                         }
                         catch (e) {
-                            dist_logException(this.state, e);
+                            logException(this.state, e);
                         }
                     }
                 if (redrawn)
@@ -22157,7 +22156,7 @@ class EditorView {
     visualLineSide(line, end) {
         let order = this.bidiSpans(line), dir = this.textDirectionAt(line.from);
         let span = order[end ? order.length - 1 : 0];
-        return dist_EditorSelection.cursor(span.side(end, dir) + line.from, span.forward(!end, dir) ? 1 : -1);
+        return EditorSelection.cursor(span.side(end, dir) + line.from, span.forward(!end, dir) ? 1 : -1);
     }
     /**
     Move to the next line boundary in the given direction. If
@@ -22363,7 +22362,7 @@ class EditorView {
     cause it to scroll the given position or range into view.
     */
     static scrollIntoView(pos, options = {}) {
-        return scrollIntoView.of(new ScrollTarget(typeof pos == "number" ? dist_EditorSelection.cursor(pos) : pos, options.y, options.x, options.yMargin, options.xMargin));
+        return scrollIntoView.of(new ScrollTarget(typeof pos == "number" ? EditorSelection.cursor(pos) : pos, options.y, options.x, options.yMargin, options.xMargin));
     }
     /**
     Return an effect that resets the editor to its current (at the
@@ -22380,7 +22379,7 @@ class EditorView {
     scrollSnapshot() {
         let { scrollTop, scrollLeft } = this.scrollDOM;
         let ref = this.viewState.scrollAnchorAt(scrollTop);
-        return scrollIntoView.of(new ScrollTarget(dist_EditorSelection.cursor(ref.from), "start", "start", ref.top - scrollTop, scrollLeft, true));
+        return scrollIntoView.of(new ScrollTarget(EditorSelection.cursor(ref.from), "start", "start", ref.top - scrollTop, scrollLeft, true));
     }
     /**
     Enable or disable tab-focus mode, which disables key bindings
@@ -22414,7 +22413,7 @@ class EditorView {
     its parent nodes is scrolled.
     */
     static domEventHandlers(handlers) {
-        return dist_ViewPlugin.define(() => ({}), { eventHandlers: handlers });
+        return ViewPlugin.define(() => ({}), { eventHandlers: handlers });
     }
     /**
     Create an extension that registers DOM event observers. Contrary
@@ -22425,7 +22424,7 @@ class EditorView {
     call `preventDefault`.
     */
     static domEventObservers(observers) {
-        return dist_ViewPlugin.define(() => ({}), { eventObservers: observers });
+        return ViewPlugin.define(() => ({}), { eventObservers: observers });
     }
     /**
     Create a theme extension. The first argument can be a
@@ -23178,7 +23177,7 @@ Define a layer.
 */
 function dist_layer(config) {
     return [
-        dist_ViewPlugin.define(v => new LayerView(v, config)),
+        ViewPlugin.define(v => new LayerView(v, config)),
         layerOrder.of(config)
     ];
 }
@@ -23241,7 +23240,7 @@ const cursorLayer = /*@__PURE__*/dist_layer({
             let prim = r == state.selection.main;
             if (r.empty || conf.drawRangeCursor) {
                 let className = prim ? "cm-cursor cm-cursor-primary" : "cm-cursor cm-cursor-secondary";
-                let cursor = r.empty ? r : dist_EditorSelection.cursor(r.head, r.head > r.anchor ? -1 : 1);
+                let cursor = r.empty ? r : EditorSelection.cursor(r.head, r.head > r.anchor ? -1 : 1);
                 for (let piece of RectangleMarker.forRange(view, className, cursor))
                     cursors.push(piece);
             }
@@ -23302,7 +23301,7 @@ const dropCursorPos = /*@__PURE__*/StateField.define({
         return tr.effects.reduce((pos, e) => e.is(setDropCursorPos) ? e.value : pos, pos);
     }
 });
-const drawDropCursor = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const drawDropCursor = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.cursor = null;
@@ -23570,7 +23569,7 @@ config = {}) {
 }
 let _plugin = null;
 function specialCharPlugin() {
-    return _plugin || (_plugin = dist_ViewPlugin.fromClass(class {
+    return _plugin || (_plugin = ViewPlugin.fromClass(class {
         constructor(view) {
             this.view = view;
             this.decorations = Decoration.none;
@@ -23659,7 +23658,7 @@ class TabWidget extends WidgetType {
     ignoreEvent() { return false; }
 }
 
-const dist_plugin = /*@__PURE__*/(/* unused pure expression or super */ null && (dist_ViewPlugin.fromClass(class {
+const dist_plugin = /*@__PURE__*/(/* unused pure expression or super */ null && (ViewPlugin.fromClass(class {
     constructor() {
         this.height = 1000;
         this.attrs = { style: "padding-bottom: 1000px" };
@@ -23695,7 +23694,7 @@ function highlightActiveLine() {
     return activeLineHighlighter;
 }
 const lineDeco = /*@__PURE__*/Decoration.line({ class: "cm-activeLine" });
-const activeLineHighlighter = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const activeLineHighlighter = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.decorations = this.getDeco(view);
     }
@@ -23751,7 +23750,7 @@ Extension that enables a placeholder—a piece of example content
 to show when the editor is empty.
 */
 function placeholder(content) {
-    let plugin = dist_ViewPlugin.fromClass(class {
+    let plugin = ViewPlugin.fromClass(class {
         constructor(view) {
             this.view = view;
             this.placeholder = content
@@ -23776,7 +23775,7 @@ function rectangleFor(state, a, b) {
         for (let i = startLine; i <= endLine; i++) {
             let line = state.doc.line(i);
             if (line.length <= endOff)
-                ranges.push(dist_EditorSelection.range(line.from + startOff, line.to + endOff));
+                ranges.push(EditorSelection.range(line.from + startOff, line.to + endOff));
         }
     }
     else {
@@ -23785,11 +23784,11 @@ function rectangleFor(state, a, b) {
             let line = state.doc.line(i);
             let start = findColumn(line.text, startCol, state.tabSize, true);
             if (start < 0) {
-                ranges.push(dist_EditorSelection.cursor(line.to));
+                ranges.push(EditorSelection.cursor(line.to));
             }
             else {
                 let end = findColumn(line.text, endCol, state.tabSize);
-                ranges.push(dist_EditorSelection.range(line.from + start, line.from + end));
+                ranges.push(EditorSelection.range(line.from + start, line.from + end));
             }
         }
     }
@@ -23828,9 +23827,9 @@ function rectangleSelectionStyle(view, event) {
             if (!ranges.length)
                 return startSel;
             if (multiple)
-                return dist_EditorSelection.create(ranges.concat(startSel.ranges));
+                return EditorSelection.create(ranges.concat(startSel.ranges));
             else
-                return dist_EditorSelection.create(ranges);
+                return EditorSelection.create(ranges);
         }
     };
 }
@@ -23861,7 +23860,7 @@ going to happen when paired with
 */
 function crosshairCursor(options = {}) {
     let [code, getter] = keys[options.key || "Alt"];
-    let plugin = dist_ViewPlugin.fromClass(class {
+    let plugin = ViewPlugin.fromClass(class {
         constructor(view) {
             this.view = view;
             this.isDown = false;
@@ -23972,7 +23971,7 @@ const tooltipConfig = /*@__PURE__*/Facet.define({
     }
 });
 const knownHeight = /*@__PURE__*/new WeakMap();
-const tooltipPlugin = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const tooltipPlugin = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.above = [];
@@ -24439,7 +24438,7 @@ class HoverPlugin {
                     if (result && !(Array.isArray(result) && !result.length))
                         view.dispatch({ effects: this.setHover.of(Array.isArray(result) ? result : [result]) });
                 }
-            }, e => dist_logException(view.state, e, "hover tooltip"));
+            }, e => logException(view.state, e, "hover tooltip"));
         }
         else if (open && !(Array.isArray(open) && !open.length)) {
             view.dispatch({ effects: this.setHover.of(Array.isArray(open) ? open : [open]) });
@@ -24569,7 +24568,7 @@ function hoverTooltip(source, options = {}) {
         active: hoverState,
         extension: [
             hoverState,
-            dist_ViewPlugin.define(view => new HoverPlugin(view, source, hoverState, setHover, options.hoverTime || 300 /* Hover.Time */)),
+            ViewPlugin.define(view => new HoverPlugin(view, source, hoverState, setHover, options.hoverTime || 300 /* Hover.Time */)),
             showHoverTooltipHost
         ]
     };
@@ -24633,7 +24632,7 @@ function getPanel(view, panel) {
     let index = plugin ? plugin.specs.indexOf(panel) : -1;
     return index > -1 ? plugin.panels[index] : null;
 }
-const panelPlugin = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const panelPlugin = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.input = view.state.facet(showPanel);
         this.specs = this.input.filter(s => s);
@@ -24954,7 +24953,7 @@ const defaults = {
     class: "",
     renderEmptyElements: false,
     elementStyle: "",
-    markers: () => dist_RangeSet.empty,
+    markers: () => RangeSet.empty,
     lineMarker: () => null,
     widgetMarker: () => null,
     lineMarkerChange: null,
@@ -24992,7 +24991,7 @@ function gutters(config) {
         result.push(unfixGutters.of(true));
     return result;
 }
-const gutterView = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const gutterView = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.domAfter = null;
@@ -25059,7 +25058,7 @@ const gutterView = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
             if (this.domAfter)
                 this.domAfter.remove();
         }
-        let lineClasses = dist_RangeSet.iter(this.view.state.facet(gutterLineClass), this.view.viewport.from);
+        let lineClasses = RangeSet.iter(this.view.state.facet(gutterLineClass), this.view.viewport.from);
         let classSet = [];
         let contexts = this.gutters.map(gutter => new UpdateContext(gutter, this.view.viewport, -this.view.documentPadding.top));
         for (let line of this.view.viewportLineBlocks) {
@@ -25101,7 +25100,7 @@ const gutterView = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
     updateGutters(update) {
         let prev = update.startState.facet(activeGutters), cur = update.state.facet(activeGutters);
         let change = update.docChanged || update.heightChanged || update.viewportChanged ||
-            !dist_RangeSet.eq(update.startState.facet(gutterLineClass), update.state.facet(gutterLineClass), update.view.viewport.from, update.view.viewport.to);
+            !RangeSet.eq(update.startState.facet(gutterLineClass), update.state.facet(gutterLineClass), update.view.viewport.from, update.view.viewport.to);
         if (prev == cur) {
             for (let gutter of this.gutters)
                 if (gutter.update(update))
@@ -25166,7 +25165,7 @@ class UpdateContext {
         this.gutter = gutter;
         this.height = height;
         this.i = 0;
-        this.cursor = dist_RangeSet.iter(gutter.markers, viewport.from);
+        this.cursor = RangeSet.iter(gutter.markers, viewport.from);
     }
     addElement(view, block, markers) {
         let { gutter } = this, above = (block.top - this.height) / view.scaleY, height = block.height / view.scaleY;
@@ -25254,7 +25253,7 @@ class SingleGutterView {
                 this.spacer.update(update.view, 0, 0, [updated]);
         }
         let vp = update.view.viewport;
-        return !dist_RangeSet.eq(this.markers, prevMarkers, vp.from, vp.to) ||
+        return !RangeSet.eq(this.markers, prevMarkers, vp.from, vp.to) ||
             (this.config.lineMarkerChange ? this.config.lineMarkerChange(update) : false);
     }
     destroy() {
@@ -25426,7 +25425,7 @@ const activeLineGutterHighlighter = /*@__PURE__*/gutterLineClass.compute(["selec
             marks.push(activeLineGutterMarker.range(linePos));
         }
     }
-    return dist_RangeSet.of(marks);
+    return RangeSet.of(marks);
 });
 /**
 Returns an extension that adds a `cm-activeLineGutter` class to
@@ -25438,7 +25437,7 @@ function highlightActiveLineGutter() {
 }
 
 function matcher(decorator) {
-    return dist_ViewPlugin.define(view => ({
+    return ViewPlugin.define(view => ({
         decorations: decorator.createDeco(view),
         update(u) {
             this.decorations = decorator.updateDeco(u, this.decorations);
@@ -25447,13 +25446,13 @@ function matcher(decorator) {
         decorations: v => v.decorations
     });
 }
-const tabDeco = /*@__PURE__*/Decoration.mark({ class: "cm-highlightTab" });
-const spaceDeco = /*@__PURE__*/Decoration.mark({ class: "cm-highlightSpace" });
-const whitespaceHighlighter = /*@__PURE__*/matcher(/*@__PURE__*/new MatchDecorator({
+const tabDeco = /*@__PURE__*/(/* unused pure expression or super */ null && (Decoration.mark({ class: "cm-highlightTab" })));
+const spaceDeco = /*@__PURE__*/(/* unused pure expression or super */ null && (Decoration.mark({ class: "cm-highlightSpace" })));
+const whitespaceHighlighter = /*@__PURE__*/(/* unused pure expression or super */ null && (matcher(/*@__PURE__*/new MatchDecorator({
     regexp: /\t| /g,
     decoration: match => match[0] == "\t" ? tabDeco : spaceDeco,
     boundary: /\S/,
-}));
+}))));
 /**
 Returns an extension that highlights whitespace, adding a
 `cm-highlightSpace` class to stretches of spaces, and a
@@ -25463,10 +25462,10 @@ the former are shown as faint dots, and the latter as arrows.
 function highlightWhitespace() {
     return whitespaceHighlighter;
 }
-const trailingHighlighter = /*@__PURE__*/matcher(/*@__PURE__*/new MatchDecorator({
+const trailingHighlighter = /*@__PURE__*/(/* unused pure expression or super */ null && (matcher(/*@__PURE__*/new MatchDecorator({
     regexp: /\s+$/g,
     decoration: /*@__PURE__*/Decoration.mark({ class: "cm-trailingSpace" })
-}));
+}))));
 /**
 Returns an extension that adds a `cm-trailingSpace` class to all
 trailing whitespace.
@@ -25478,8 +25477,8 @@ function highlightTrailingWhitespace() {
 /**
 @internal
 */
-const __test = { HeightMap, HeightOracle, MeasuredHeights, QueryType, ChangedRange, computeOrder,
-    moveVisually, clearHeightChangeFlag, getHeightChangeFlag: () => heightChangeFlag };
+const __test = (/* unused pure expression or super */ null && ({ HeightMap, HeightOracle, MeasuredHeights, QueryType, ChangedRange, computeOrder,
+    moveVisually, clearHeightChangeFlag, getHeightChangeFlag: () => heightChangeFlag }));
 
 
 
@@ -28611,6 +28610,15 @@ const classHighlighter = tagHighlighter([
 
 
 ;// ./node_modules/@codemirror/language/dist/index.js
+/* unused harmony import specifier */ var dist_NodeProp;
+/* unused harmony import specifier */ var dist_RangeSet;
+/* unused harmony import specifier */ var dist_Facet;
+/* unused harmony import specifier */ var dist_Prec;
+/* unused harmony import specifier */ var dist_RangeSetBuilder;
+/* unused harmony import specifier */ var dist_ViewPlugin;
+/* unused harmony import specifier */ var dist_Direction;
+/* unused harmony import specifier */ var dist_EditorView;
+/* unused harmony import specifier */ var dist_Decoration;
 
 
 
@@ -28674,7 +28682,7 @@ class Language {
         // without the EditorState package actually knowing about
         // languages and lezer trees.
         if (!EditorState.prototype.hasOwnProperty("tree"))
-            Object.defineProperty(EditorState.prototype, "tree", { get() { return dist_syntaxTree(this); } });
+            Object.defineProperty(EditorState.prototype, "tree", { get() { return syntaxTree(this); } });
         this.parser = parser;
         this.extension = [
             language.of(this),
@@ -28741,7 +28749,7 @@ class Language {
                     explore(ch, tree.positions[i] + from);
             }
         };
-        explore(dist_syntaxTree(state), 0);
+        explore(syntaxTree(state), 0);
         return result;
     }
     /**
@@ -28755,7 +28763,7 @@ class Language {
 */
 Language.setState = /*@__PURE__*/StateEffect.define();
 function topNodeAt(state, pos, side) {
-    let topLang = state.facet(language), tree = dist_syntaxTree(state).topNode;
+    let topLang = state.facet(language), tree = syntaxTree(state).topNode;
     if (!topLang || topLang.allowsNesting) {
         for (let node = tree; node; node = node.enter(pos, side, IterMode.ExcludeBuffers | IterMode.EnterBracketed))
             if (node.type.isTop)
@@ -28797,7 +28805,7 @@ incomplete) parse tree of the active
 [language](https://codemirror.net/6/docs/ref/#language.Language), or the empty tree if there is no
 language available.
 */
-function dist_syntaxTree(state) {
+function syntaxTree(state) {
     let field = state.field(Language.state, false);
     return field ? field.tree : Tree.empty;
 }
@@ -28838,7 +28846,7 @@ position in that time.
 */
 function forceParsing(view, upto = view.viewport.to, timeout = 100) {
     let success = ensureSyntaxTree(view.state, upto, timeout);
-    if (success != dist_syntaxTree(view.state))
+    if (success != syntaxTree(view.state))
         view.dispatch({});
     return !!success;
 }
@@ -29183,7 +29191,7 @@ if (typeof requestIdleCallback != "undefined")
     };
 const isInputPending = typeof navigator != "undefined" && ((_a = navigator.scheduling) === null || _a === void 0 ? void 0 : _a.isInputPending)
     ? () => navigator.scheduling.isInputPending() : null;
-const parseWorker = /*@__PURE__*/dist_ViewPlugin.fromClass(class ParseWorker {
+const parseWorker = /*@__PURE__*/ViewPlugin.fromClass(class ParseWorker {
     constructor(view) {
         this.view = view;
         this.working = null;
@@ -29244,7 +29252,7 @@ const parseWorker = /*@__PURE__*/dist_ViewPlugin.fromClass(class ParseWorker {
             this.workScheduled++;
             cx.scheduleOn
                 .then(() => this.scheduleWork())
-                .catch(err => dist_logException(this.view.state, err))
+                .catch(err => logException(this.view.state, err))
                 .then(() => this.workScheduled--);
             cx.scheduleOn = null;
         }
@@ -29473,7 +29481,7 @@ function getIndentation(context, pos) {
         if (result !== undefined)
             return result;
     }
-    let tree = dist_syntaxTree(context.state);
+    let tree = syntaxTree(context.state);
     return tree.length >= pos ? syntaxIndentation(context, tree, pos) : null;
 }
 /**
@@ -29852,7 +29860,7 @@ function foldInside(node) {
     return first && first.to < last.from ? { from: first.to, to: last.type.isError ? node.to : last.from } : null;
 }
 function syntaxFolding(state, start, end) {
-    let tree = dist_syntaxTree(state);
+    let tree = syntaxTree(state);
     if (tree.length < end)
         return null;
     let stack = tree.resolveStack(end, 1);
@@ -29983,7 +29991,7 @@ Get a [range set](https://codemirror.net/6/docs/ref/#state.RangeSet) containing 
 in the given state.
 */
 function foldedRanges(state) {
-    return state.field(foldState, false) || RangeSet.empty;
+    return state.field(foldState, false) || dist_RangeSet.empty;
 }
 function findFold(state, from, to) {
     var _a;
@@ -30196,7 +30204,7 @@ to fold or unfold the line).
 function foldGutter(config = {}) {
     let fullConfig = { ...foldGutterDefaults, ...config };
     let canFold = new FoldMarker(fullConfig, true), canUnfold = new FoldMarker(fullConfig, false);
-    let markers = dist_ViewPlugin.fromClass(class {
+    let markers = ViewPlugin.fromClass(class {
         constructor(view) {
             this.from = view.viewport.from;
             this.markers = this.buildMarkers(view);
@@ -30205,7 +30213,7 @@ function foldGutter(config = {}) {
             if (update.docChanged || update.viewportChanged ||
                 update.startState.facet(language) != update.state.facet(language) ||
                 update.startState.field(foldState, false) != update.state.field(foldState, false) ||
-                dist_syntaxTree(update.startState) != dist_syntaxTree(update.state) ||
+                syntaxTree(update.startState) != syntaxTree(update.state) ||
                 fullConfig.foldingChanged(update))
                 this.markers = this.buildMarkers(update.view);
         }
@@ -30225,7 +30233,7 @@ function foldGutter(config = {}) {
         markers,
         gutter({
             class: "cm-foldGutter",
-            markers(view) { var _a; return ((_a = view.plugin(markers)) === null || _a === void 0 ? void 0 : _a.markers) || dist_RangeSet.empty; },
+            markers(view) { var _a; return ((_a = view.plugin(markers)) === null || _a === void 0 ? void 0 : _a.markers) || RangeSet.empty; },
             initialSpacer() {
                 return new FoldMarker(fullConfig, false);
             },
@@ -30371,12 +30379,12 @@ function highlightingFor(state, tags, scope) {
 class TreeHighlighter {
     constructor(view) {
         this.markCache = Object.create(null);
-        this.tree = dist_syntaxTree(view.state);
+        this.tree = syntaxTree(view.state);
         this.decorations = this.buildDeco(view, getHighlighters(view.state));
         this.decoratedTo = view.viewport.to;
     }
     update(update) {
-        let tree = dist_syntaxTree(update.state), highlighters = getHighlighters(update.state);
+        let tree = syntaxTree(update.state), highlighters = getHighlighters(update.state);
         let styleChange = highlighters != getHighlighters(update.startState);
         let { viewport } = update.view, decoratedToMapped = update.changes.mapPos(this.decoratedTo, 1);
         if (tree.length < viewport.to && !styleChange && tree.type == this.tree.type && decoratedToMapped >= viewport.to) {
@@ -30401,7 +30409,7 @@ class TreeHighlighter {
         return builder.finish();
     }
 }
-const treeHighlighter = /*@__PURE__*/Prec.high(/*@__PURE__*/dist_ViewPlugin.fromClass(TreeHighlighter, {
+const treeHighlighter = /*@__PURE__*/Prec.high(/*@__PURE__*/ViewPlugin.fromClass(TreeHighlighter, {
     decorations: v => v.decorations
 }));
 /**
@@ -30540,7 +30548,7 @@ bracket was found at `pos`, or a match result otherwise.
 */
 function matchBrackets(state, pos, dir, config = {}) {
     let maxScanDistance = config.maxScanDistance || DefaultScanDist, brackets = config.brackets || DefaultBrackets;
-    let tree = dist_syntaxTree(state), node = tree.resolveInner(pos, dir);
+    let tree = syntaxTree(state), node = tree.resolveInner(pos, dir);
     for (let cur = node; cur; cur = cur.parent) {
         let matches = matchingNodes(cur.type, dir, brackets);
         if (matches && cur.from < cur.to) {
@@ -31183,7 +31191,7 @@ function changeAddsRTL(change) {
     });
     return added;
 }
-const alwaysIsolate = /*@__PURE__*/Facet.define({ combine: values => values.some(x => x) });
+const alwaysIsolate = /*@__PURE__*/(/* unused pure expression or super */ null && (dist_Facet.define({ combine: values => values.some(x => x) })));
 /**
 Make sure nodes
 [marked](https://lezer.codemirror.net/docs/ref/#common.NodeProp^isolate)
@@ -31196,24 +31204,24 @@ function bidiIsolates(options = {}) {
         extensions.push(alwaysIsolate.of(true));
     return extensions;
 }
-const isolateMarks = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const isolateMarks = /*@__PURE__*/(/* unused pure expression or super */ null && (dist_ViewPlugin.fromClass(class {
     constructor(view) {
         this.always = view.state.facet(alwaysIsolate) ||
-            view.textDirection != Direction.LTR ||
-            view.state.facet(EditorView.perLineTextDirection);
+            view.textDirection != dist_Direction.LTR ||
+            view.state.facet(dist_EditorView.perLineTextDirection);
         this.hasRTL = !this.always && textHasRTL(view.state.doc);
-        this.tree = dist_syntaxTree(view.state);
-        this.decorations = this.always || this.hasRTL ? buildDeco(view, this.tree, this.always) : Decoration.none;
+        this.tree = syntaxTree(view.state);
+        this.decorations = this.always || this.hasRTL ? buildDeco(view, this.tree, this.always) : dist_Decoration.none;
     }
     update(update) {
         let always = update.state.facet(alwaysIsolate) ||
-            update.view.textDirection != Direction.LTR ||
-            update.state.facet(EditorView.perLineTextDirection);
+            update.view.textDirection != dist_Direction.LTR ||
+            update.state.facet(dist_EditorView.perLineTextDirection);
         if (!always && !this.hasRTL && changeAddsRTL(update.changes))
             this.hasRTL = true;
         if (!always && !this.hasRTL)
             return;
-        let tree = dist_syntaxTree(update.state);
+        let tree = syntaxTree(update.state);
         if (always != this.always || tree != this.tree || update.docChanged || update.viewportChanged) {
             this.tree = tree;
             this.always = always;
@@ -31224,21 +31232,21 @@ const isolateMarks = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
     provide: plugin => {
         function access(view) {
             var _a, _b;
-            return (_b = (_a = view.plugin(plugin)) === null || _a === void 0 ? void 0 : _a.decorations) !== null && _b !== void 0 ? _b : Decoration.none;
+            return (_b = (_a = view.plugin(plugin)) === null || _a === void 0 ? void 0 : _a.decorations) !== null && _b !== void 0 ? _b : dist_Decoration.none;
         }
-        return [EditorView.outerDecorations.of(access),
-            Prec.lowest(EditorView.bidiIsolatedRanges.of(access))];
+        return [dist_EditorView.outerDecorations.of(access),
+            dist_Prec.lowest(dist_EditorView.bidiIsolatedRanges.of(access))];
     }
-});
+})));
 function buildDeco(view, tree, always) {
-    let deco = new RangeSetBuilder();
+    let deco = new dist_RangeSetBuilder();
     let ranges = view.visibleRanges;
     if (!always)
         ranges = clipRTLLines(ranges, view.state.doc);
     for (let { from, to } of ranges) {
         tree.iterate({
             enter: node => {
-                let iso = node.type.prop(NodeProp.isolate);
+                let iso = node.type.prop(dist_NodeProp.isolate);
                 if (iso)
                     deco.add(node.from, node.to, marks[iso]);
             },
@@ -31284,6 +31292,9 @@ const marks = {
 
 
 ;// ./node_modules/@codemirror/commands/dist/index.js
+/* unused harmony import specifier */ var commands_dist_findClusterBreak;
+/* unused harmony import specifier */ var dist_EditorSelection;
+/* unused harmony import specifier */ var dist_CharCategory;
 
 
 
@@ -31654,7 +31665,7 @@ class HistEvent {
         };
     }
     static fromJSON(json) {
-        return new HistEvent(json.changes && ChangeSet.fromJSON(json.changes), [], json.mapped && ChangeDesc.fromJSON(json.mapped), json.startSelection && dist_EditorSelection.fromJSON(json.startSelection), json.selectionsAfter.map(dist_EditorSelection.fromJSON));
+        return new HistEvent(json.changes && ChangeSet.fromJSON(json.changes), [], json.mapped && ChangeDesc.fromJSON(json.mapped), json.startSelection && EditorSelection.fromJSON(json.startSelection), json.selectionsAfter.map(EditorSelection.fromJSON));
     }
     // This does not check `addToHistory` and such, it assumes the
     // transaction needs to be converted to an item. Returns null when
@@ -31841,7 +31852,7 @@ const historyKeymap = [
 ];
 
 function updateSel(sel, by) {
-    return dist_EditorSelection.create(sel.ranges.map(by), sel.mainIndex);
+    return EditorSelection.create(sel.ranges.map(by), sel.mainIndex);
 }
 function setSel(state, selection) {
     return state.update({ selection, scrollIntoView: true, userEvent: "select" });
@@ -31854,7 +31865,7 @@ function moveSel({ state, dispatch }, how) {
     return true;
 }
 function rangeEnd(range, forward) {
-    return dist_EditorSelection.cursor(forward ? range.to : range.from);
+    return EditorSelection.cursor(forward ? range.to : range.from);
 }
 function cursorByChar(view, forward) {
     return moveSel(view, range => range.empty ? view.moveByChar(range, forward) : rangeEnd(range, forward));
@@ -31884,8 +31895,8 @@ function byCharLogical(state, range, forward) {
     if (pos == (forward ? line.to : line.from))
         pos = forward ? Math.min(state.doc.length, line.to + 1) : Math.max(0, line.from - 1);
     else
-        pos = line.from + findClusterBreak(line.text, pos - line.from, forward);
-    return EditorSelection.cursor(pos, forward ? -1 : 1);
+        pos = line.from + commands_dist_findClusterBreak(line.text, pos - line.from, forward);
+    return dist_EditorSelection.cursor(pos, forward ? -1 : 1);
 }
 function moveByCharLogical(target, forward) {
     return moveSel(target, range => range.empty ? byCharLogical(target.state, range, forward) : rangeEnd(range, forward));
@@ -31922,10 +31933,10 @@ Move the selection one group backward.
 const cursorGroupBackward = view => cursorByGroup(view, false);
 function toGroupStart(view, pos, start) {
     let categorize = view.state.charCategorizer(pos);
-    let cat = categorize(start), initial = cat != CharCategory.Space;
+    let cat = categorize(start), initial = cat != dist_CharCategory.Space;
     return (next) => {
         let nextCat = categorize(next);
-        if (nextCat != CharCategory.Space)
+        if (nextCat != dist_CharCategory.Space)
             return initial && nextCat == cat;
         initial = false;
         return true;
@@ -31944,20 +31955,20 @@ const segmenter = typeof Intl != "undefined" && Intl.Segmenter ?
     /*@__PURE__*/new (Intl.Segmenter)(undefined, { granularity: "word" }) : null;
 function moveBySubword(view, range, forward) {
     let categorize = view.state.charCategorizer(range.from);
-    let cat = CharCategory.Space, pos = range.from, steps = 0;
+    let cat = dist_CharCategory.Space, pos = range.from, steps = 0;
     let done = false, sawUpper = false, sawLower = false;
     let step = (next) => {
         if (done)
             return false;
         pos += forward ? next.length : -next.length;
         let nextCat = categorize(next), ahead;
-        if (nextCat == CharCategory.Word && next.charCodeAt(0) < 128 && /[\W_]/.test(next))
+        if (nextCat == dist_CharCategory.Word && next.charCodeAt(0) < 128 && /[\W_]/.test(next))
             nextCat = -1; // Treat word punctuation specially
-        if (cat == CharCategory.Space)
+        if (cat == dist_CharCategory.Space)
             cat = nextCat;
         if (cat != nextCat)
             return false;
-        if (cat == CharCategory.Word) {
+        if (cat == dist_CharCategory.Word) {
             if (next.toLowerCase() == next) {
                 if (!forward && sawUpper)
                     return false;
@@ -31969,7 +31980,7 @@ function moveBySubword(view, range, forward) {
                 done = true;
             }
             else {
-                if (sawUpper && forward && categorize(ahead = view.state.sliceDoc(pos, pos + 1)) == CharCategory.Word &&
+                if (sawUpper && forward && categorize(ahead = view.state.sliceDoc(pos, pos + 1)) == dist_CharCategory.Word &&
                     ahead.toLowerCase() == ahead)
                     return false;
                 sawUpper = true;
@@ -31982,15 +31993,15 @@ function moveBySubword(view, range, forward) {
         step(start);
         return step;
     });
-    if (segmenter && cat == CharCategory.Word && end.from == range.from + steps * (forward ? 1 : -1)) {
+    if (segmenter && cat == dist_CharCategory.Word && end.from == range.from + steps * (forward ? 1 : -1)) {
         let from = Math.min(range.head, end.head), to = Math.max(range.head, end.head);
         let skipped = view.state.sliceDoc(from, to);
         if (skipped.length > 1 && /[\u4E00-\uffff]/.test(skipped)) {
             let segments = Array.from(segmenter.segment(skipped));
             if (segments.length > 1) {
                 if (forward)
-                    return EditorSelection.cursor(range.head + segments[1].index, -1);
-                return EditorSelection.cursor(end.head + segments[segments.length - 1].index, 1);
+                    return dist_EditorSelection.cursor(range.head + segments[1].index, -1);
+                return dist_EditorSelection.cursor(end.head + segments[segments.length - 1].index, 1);
             }
         }
     }
@@ -32014,7 +32025,7 @@ function interestingNode(state, node, bracketProp) {
     return len && (len > 2 || /[^\s,.;:]/.test(state.sliceDoc(node.from, node.to))) || node.firstChild;
 }
 function moveBySyntax(state, start, forward) {
-    let pos = dist_syntaxTree(state).resolveInner(start.head);
+    let pos = syntaxTree(state).resolveInner(start.head);
     let bracketProp = forward ? NodeProp.closedBy : NodeProp.openedBy;
     // Scan forward through child nodes to see if there's an interesting
     // node ahead.
@@ -32032,7 +32043,7 @@ function moveBySyntax(state, start, forward) {
         newPos = forward ? match.end.to : match.end.from;
     else
         newPos = forward ? pos.to : pos.from;
-    return dist_EditorSelection.cursor(newPos, forward ? -1 : 1);
+    return EditorSelection.cursor(newPos, forward ? -1 : 1);
 }
 /**
 Move the cursor over the next syntactic element to the left.
@@ -32111,7 +32122,7 @@ function moveByLineBoundary(view, start, forward) {
     if (!forward && moved.head == line.from && line.length) {
         let space = /^\s*/.exec(view.state.sliceDoc(line.from, Math.min(line.from + 100, line.to)))[0].length;
         if (space && start.head != line.from + space)
-            moved = dist_EditorSelection.cursor(line.from + space);
+            moved = EditorSelection.cursor(line.from + space);
     }
     return moved;
 }
@@ -32138,11 +32149,11 @@ const cursorLineBoundaryRight = view => moveSel(view, range => moveByLineBoundar
 /**
 Move the selection to the start of the line.
 */
-const cursorLineStart = view => moveSel(view, range => dist_EditorSelection.cursor(view.lineBlockAt(range.head).from, 1));
+const cursorLineStart = view => moveSel(view, range => EditorSelection.cursor(view.lineBlockAt(range.head).from, 1));
 /**
 Move the selection to the end of the line.
 */
-const cursorLineEnd = view => moveSel(view, range => dist_EditorSelection.cursor(view.lineBlockAt(range.head).to, -1));
+const cursorLineEnd = view => moveSel(view, range => EditorSelection.cursor(view.lineBlockAt(range.head).to, -1));
 function toMatchingBracket(state, dispatch, extend) {
     let found = false, selection = updateSel(state.selection, range => {
         let matching = matchBrackets(state, range.head, -1)
@@ -32153,7 +32164,7 @@ function toMatchingBracket(state, dispatch, extend) {
             return range;
         found = true;
         let head = matching.start.from == range.head ? matching.end.to : matching.end.from;
-        return extend ? dist_EditorSelection.range(range.anchor, head) : dist_EditorSelection.cursor(head);
+        return extend ? EditorSelection.range(range.anchor, head) : EditorSelection.cursor(head);
     });
     if (!found)
         return false;
@@ -32173,7 +32184,7 @@ const selectMatchingBracket = ({ state, dispatch }) => toMatchingBracket(state, 
 function extendSel(target, how) {
     let selection = updateSel(target.state.selection, range => {
         let head = how(range);
-        return dist_EditorSelection.range(range.anchor, head.head, head.goalColumn, head.bidiLevel || undefined);
+        return EditorSelection.range(range.anchor, head.head, head.goalColumn, head.bidiLevel || undefined);
     });
     if (selection.eq(target.state.selection))
         return false;
@@ -32297,11 +32308,11 @@ const selectLineBoundaryRight = view => extendSel(view, range => moveByLineBound
 /**
 Move the selection head to the start of the line.
 */
-const selectLineStart = view => extendSel(view, range => dist_EditorSelection.cursor(view.lineBlockAt(range.head).from));
+const selectLineStart = view => extendSel(view, range => EditorSelection.cursor(view.lineBlockAt(range.head).from));
 /**
 Move the selection head to the end of the line.
 */
-const selectLineEnd = view => extendSel(view, range => dist_EditorSelection.cursor(view.lineBlockAt(range.head).to));
+const selectLineEnd = view => extendSel(view, range => EditorSelection.cursor(view.lineBlockAt(range.head).to));
 /**
 Move the selection to the start of the document.
 */
@@ -32341,8 +32352,8 @@ const selectAll = ({ state, dispatch }) => {
 Expand the selection to cover entire lines.
 */
 const selectLine = ({ state, dispatch }) => {
-    let ranges = selectedLineBlocks(state).map(({ from, to }) => dist_EditorSelection.range(from, Math.min(to + 1, state.doc.length)));
-    dispatch(state.update({ selection: dist_EditorSelection.create(ranges), userEvent: "select" }));
+    let ranges = selectedLineBlocks(state).map(({ from, to }) => EditorSelection.range(from, Math.min(to + 1, state.doc.length)));
+    dispatch(state.update({ selection: EditorSelection.create(ranges), userEvent: "select" }));
     return true;
 };
 /**
@@ -32353,7 +32364,7 @@ syntax tree.
 */
 const selectParentSyntax = ({ state, dispatch }) => {
     let selection = updateSel(state.selection, range => {
-        let tree = dist_syntaxTree(state), stack = tree.resolveStack(range.from, 1);
+        let tree = syntaxTree(state), stack = tree.resolveStack(range.from, 1);
         if (range.empty) {
             let stackBefore = tree.resolveStack(range.from, -1);
             if (stackBefore.node.from >= stack.node.from && stackBefore.node.to <= stack.node.to)
@@ -32364,7 +32375,7 @@ const selectParentSyntax = ({ state, dispatch }) => {
             if (((node.from < range.from && node.to >= range.to) ||
                 (node.to > range.to && node.from <= range.from)) &&
                 cur.next)
-                return dist_EditorSelection.range(node.to, node.from);
+                return EditorSelection.range(node.to, node.from);
         }
         return range;
     });
@@ -32395,7 +32406,7 @@ function addCursorVertically(view, forward) {
     }
     if (ranges.length == sel.ranges.length)
         return false;
-    view.dispatch(setSel(state, dist_EditorSelection.create(ranges, ranges.length - 1)));
+    view.dispatch(setSel(state, EditorSelection.create(ranges, ranges.length - 1)));
     return true;
 }
 /**
@@ -32416,9 +32427,9 @@ non-empty, convert it to a cursor selection.
 const simplifySelection = ({ state, dispatch }) => {
     let cur = state.selection, selection = null;
     if (cur.ranges.length > 1)
-        selection = dist_EditorSelection.create([cur.main]);
+        selection = EditorSelection.create([cur.main]);
     else if (!cur.main.empty)
-        selection = dist_EditorSelection.create([dist_EditorSelection.cursor(cur.main.head)]);
+        selection = EditorSelection.create([EditorSelection.cursor(cur.main.head)]);
     if (!selection)
         return false;
     dispatch(setSel(state, selection));
@@ -32447,7 +32458,7 @@ function deleteBy(target, by) {
             from = skipAtomic(target, from, false);
             to = skipAtomic(target, to, true);
         }
-        return from == to ? { range } : { changes: { from, to }, range: dist_EditorSelection.cursor(from, from < range.head ? -1 : 1) };
+        return from == to ? { range } : { changes: { from, to }, range: EditorSelection.cursor(from, from < range.head ? -1 : 1) };
     });
     if (changes.changes.empty)
         return false;
@@ -32609,7 +32620,7 @@ const splitLine = ({ state, dispatch }) => {
         return false;
     let changes = state.changeByRange(range => {
         return { changes: { from: range.from, to: range.to, insert: Text.of(["", ""]) },
-            range: dist_EditorSelection.cursor(range.from) };
+            range: EditorSelection.cursor(range.from) };
     });
     dispatch(state.update(changes, { scrollIntoView: true, userEvent: "input" }));
     return true;
@@ -32627,7 +32638,7 @@ const transposeChars = ({ state, dispatch }) => {
         let from = pos == line.from ? pos - 1 : dist_findClusterBreak(line.text, pos - line.from, false) + line.from;
         let to = pos == line.to ? pos + 1 : dist_findClusterBreak(line.text, pos - line.from, true) + line.from;
         return { changes: { from, to, insert: state.doc.slice(pos, to).append(state.doc.slice(from, pos)) },
-            range: dist_EditorSelection.cursor(to) };
+            range: EditorSelection.cursor(to) };
     });
     if (changes.changes.empty)
         return false;
@@ -32664,12 +32675,12 @@ function moveLine(state, dispatch, forward) {
         if (forward) {
             changes.push({ from: block.to, to: nextLine.to }, { from: block.from, insert: nextLine.text + state.lineBreak });
             for (let r of block.ranges)
-                ranges.push(dist_EditorSelection.range(Math.min(state.doc.length, r.anchor + size), Math.min(state.doc.length, r.head + size)));
+                ranges.push(EditorSelection.range(Math.min(state.doc.length, r.anchor + size), Math.min(state.doc.length, r.head + size)));
         }
         else {
             changes.push({ from: nextLine.from, to: block.from }, { from: block.to, insert: state.lineBreak + nextLine.text });
             for (let r of block.ranges)
-                ranges.push(dist_EditorSelection.range(r.anchor - size, r.head - size));
+                ranges.push(EditorSelection.range(r.anchor - size, r.head - size));
         }
     }
     if (!changes.length)
@@ -32677,7 +32688,7 @@ function moveLine(state, dispatch, forward) {
     dispatch(state.update({
         changes,
         scrollIntoView: true,
-        selection: dist_EditorSelection.create(ranges, state.selection.mainIndex),
+        selection: EditorSelection.create(ranges, state.selection.mainIndex),
         userEvent: "move.line"
     }));
     return true;
@@ -32758,7 +32769,7 @@ const insertNewlineKeepIndent = ({ state, dispatch }) => {
         let indent = /^\s*/.exec(state.doc.lineAt(range.from).text)[0];
         return {
             changes: { from: range.from, to: range.to, insert: state.lineBreak + indent },
-            range: EditorSelection.cursor(range.from + indent.length + 1)
+            range: dist_EditorSelection.cursor(range.from + indent.length + 1)
         };
     }), { scrollIntoView: true, userEvent: "input" }));
     return true;
@@ -32766,7 +32777,7 @@ const insertNewlineKeepIndent = ({ state, dispatch }) => {
 function isBetweenBrackets(state, pos) {
     if (/\(\)|\[\]|\{\}/.test(state.sliceDoc(pos - 1, pos + 1)))
         return { from: pos, to: pos };
-    let context = dist_syntaxTree(state).resolveInner(pos);
+    let context = syntaxTree(state).resolveInner(pos);
     let before = context.childBefore(pos), after = context.childAfter(pos), closedBy;
     if (before && after && before.to <= pos && after.from >= pos &&
         (closedBy = before.type.prop(NodeProp.closedBy)) && closedBy.indexOf(after.name) > -1 &&
@@ -32810,7 +32821,7 @@ function newlineAndIndent(atEof) {
             if (explode)
                 insert.push(indentString(state, cx.lineIndent(line.from, -1)));
             return { changes: { from, to, insert: Text.of(insert) },
-                range: dist_EditorSelection.cursor(from + 1 + insert[1].length) };
+                range: EditorSelection.cursor(from + 1 + insert[1].length) };
         });
         dispatch(state.update(changes, { scrollIntoView: true, userEvent: "input" }));
         return true;
@@ -32830,7 +32841,7 @@ function changeBySelectedLine(state, f) {
         }
         let changeSet = state.changes(changes);
         return { changes,
-            range: dist_EditorSelection.range(changeSet.mapPos(range.anchor, 1), changeSet.mapPos(range.head, 1)) };
+            range: EditorSelection.range(changeSet.mapPos(range.anchor, 1), changeSet.mapPos(range.head, 1)) };
     });
 }
 /**
@@ -33073,11 +33084,12 @@ Shift-Tab to [`indentLess`](https://codemirror.net/6/docs/ref/#commands.indentLe
 Please see the [Tab example](../../examples/tab/) before using
 this.
 */
-const indentWithTab = { key: "Tab", run: indentMore, shift: indentLess };
+const indentWithTab = (/* unused pure expression or super */ null && ({ key: "Tab", run: indentMore, shift: indentLess }));
 
 
 
 ;// ./node_modules/@codemirror/autocomplete/dist/index.js
+/* unused harmony import specifier */ var dist_syntaxTree;
 
 
 
@@ -33133,7 +33145,7 @@ class CompletionContext {
     token before `this.pos`.
     */
     tokenBefore(types) {
-        let token = dist_syntaxTree(this.state).resolveInner(this.pos, -1);
+        let token = syntaxTree(this.state).resolveInner(this.pos, -1);
         while (token && types.indexOf(token.name) < 0)
             token = token.parent;
         return token ? { from: token.from, to: this.pos,
@@ -33212,7 +33224,7 @@ cursor is in a syntax node with one of the given names.
 */
 function ifIn(nodes, source) {
     return (context) => {
-        for (let pos = syntaxTree(context.state).resolveInner(context.pos, -1); pos; pos = pos.parent) {
+        for (let pos = dist_syntaxTree(context.state).resolveInner(context.pos, -1); pos; pos = pos.parent) {
             if (nodes.indexOf(pos.name) > -1)
                 return source(context);
             if (pos.type.isTop)
@@ -33227,7 +33239,7 @@ cursor is in a syntax node with one of the given names.
 */
 function ifNotIn(nodes, source) {
     return (context) => {
-        for (let pos = dist_syntaxTree(context.state).resolveInner(context.pos, -1); pos; pos = pos.parent) {
+        for (let pos = syntaxTree(context.state).resolveInner(context.pos, -1); pos; pos = pos.parent) {
             if (nodes.indexOf(pos.name) > -1)
                 return null;
             if (pos.type.isTop)
@@ -33275,7 +33287,7 @@ function insertCompletionText(state, text, from, to) {
             let lines = state.toText(text);
             return {
                 changes: { from: range.from + fromOff, to: to == main.from ? range.to : range.from + toOff, insert: lines },
-                range: dist_EditorSelection.cursor(range.from + fromOff + lines.length)
+                range: EditorSelection.cursor(range.from + fromOff + lines.length)
             };
         }),
         scrollIntoView: true,
@@ -33682,7 +33694,7 @@ class CompletionTooltip {
                 infoResult.then(obj => {
                     if (obj && this.view.state.field(this.stateField, false) == cState)
                         this.addInfoPane(obj, completion);
-                }).catch(e => dist_logException(this.view.state, e, "completion info"));
+                }).catch(e => logException(this.view.state, e, "completion info"));
             }
             else {
                 this.addInfoPane(infoResult, completion);
@@ -34202,7 +34214,7 @@ class RunningQuery {
     }
 }
 const MaxUpdateCount = 50, MinAbortTime = 1000;
-const completionPlugin = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const completionPlugin = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.debounceUpdate = -1;
@@ -34233,7 +34245,7 @@ const completionPlugin = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
                         handler();
                     }
                     catch (e) {
-                        dist_logException(this.view.state, e);
+                        logException(this.view.state, e);
                     }
                 }
                 query.context.abortListeners = null;
@@ -34281,7 +34293,7 @@ const completionPlugin = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
             }
         }, err => {
             this.view.dispatch({ effects: closeCompletionEffect.of(null) });
-            dist_logException(this.view.state, err);
+            logException(this.view.state, err);
         });
     }
     scheduleAccept() {
@@ -34636,7 +34648,7 @@ const snippetState = /*@__PURE__*/StateField.define({
     provide: f => EditorView.decorations.from(f, val => val ? val.deco : Decoration.none)
 });
 function fieldSelection(ranges, field) {
-    return dist_EditorSelection.create(ranges.filter(r => r.field == field).map(r => dist_EditorSelection.range(r.from, r.to)));
+    return EditorSelection.create(ranges.filter(r => r.field == field).map(r => EditorSelection.range(r.from, r.to)));
 }
 /**
 Convert a snippet template to a function that can
@@ -34871,7 +34883,7 @@ const closedBracket = /*@__PURE__*/new class extends RangeValue {
 closedBracket.startSide = 1;
 closedBracket.endSide = -1;
 const bracketState = /*@__PURE__*/StateField.define({
-    create() { return dist_RangeSet.empty; },
+    create() { return RangeSet.empty; },
     update(value, tr) {
         value = value.map(tr.changes);
         if (tr.selection) {
@@ -34933,7 +34945,7 @@ const deleteBracketPair = ({ state, dispatch }) => {
             for (let token of tokens) {
                 if (token == before && nextChar(state.doc, range.head) == closing(dist_codePointAt(token, 0)))
                     return { changes: { from: range.head - token.length, to: range.head + token.length },
-                        range: dist_EditorSelection.cursor(range.head - token.length) };
+                        range: EditorSelection.cursor(range.head - token.length) };
             }
         }
         return { range: dont = range };
@@ -34994,12 +35006,12 @@ function handleOpen(state, open, close, closeBefore) {
         if (!range.empty)
             return { changes: [{ insert: open, from: range.from }, { insert: close, from: range.to }],
                 effects: closeBracketEffect.of(range.to + open.length),
-                range: dist_EditorSelection.range(range.anchor + open.length, range.head + open.length) };
+                range: EditorSelection.range(range.anchor + open.length, range.head + open.length) };
         let next = nextChar(state.doc, range.head);
         if (!next || /\s/.test(next) || closeBefore.indexOf(next) > -1)
             return { changes: { insert: open + close, from: range.head },
                 effects: closeBracketEffect.of(range.head + open.length),
-                range: dist_EditorSelection.cursor(range.head + open.length) };
+                range: EditorSelection.cursor(range.head + open.length) };
         return { range: dont = range };
     });
     return dont ? null : state.update(changes, {
@@ -35011,7 +35023,7 @@ function handleClose(state, _open, close) {
     let dont = null, changes = state.changeByRange(range => {
         if (range.empty && nextChar(state.doc, range.head) == close)
             return { changes: { from: range.head, to: range.head + close.length, insert: close },
-                range: dist_EditorSelection.cursor(range.head + close.length) };
+                range: EditorSelection.cursor(range.head + close.length) };
         return dont = { range };
     });
     return dont ? null : state.update(changes, {
@@ -35027,19 +35039,19 @@ function handleSame(state, token, allowTriple, config) {
         if (!range.empty)
             return { changes: [{ insert: token, from: range.from }, { insert: token, from: range.to }],
                 effects: closeBracketEffect.of(range.to + token.length),
-                range: dist_EditorSelection.range(range.anchor + token.length, range.head + token.length) };
+                range: EditorSelection.range(range.anchor + token.length, range.head + token.length) };
         let pos = range.head, next = nextChar(state.doc, pos), start;
         if (next == token) {
             if (nodeStart(state, pos)) {
                 return { changes: { insert: token + token, from: pos },
                     effects: closeBracketEffect.of(pos + token.length),
-                    range: dist_EditorSelection.cursor(pos + token.length) };
+                    range: EditorSelection.cursor(pos + token.length) };
             }
             else if (closedBracketAt(state, pos)) {
                 let isTriple = allowTriple && state.sliceDoc(pos, pos + token.length * 3) == token + token + token;
                 let content = isTriple ? token + token + token : token;
                 return { changes: { from: pos, to: pos + content.length, insert: content },
-                    range: dist_EditorSelection.cursor(pos + content.length) };
+                    range: EditorSelection.cursor(pos + content.length) };
             }
         }
         else if (allowTriple && state.sliceDoc(pos - 2 * token.length, pos) == token + token &&
@@ -35047,13 +35059,13 @@ function handleSame(state, token, allowTriple, config) {
             nodeStart(state, start)) {
             return { changes: { insert: token + token + token + token, from: pos },
                 effects: closeBracketEffect.of(pos + token.length),
-                range: dist_EditorSelection.cursor(pos + token.length) };
+                range: EditorSelection.cursor(pos + token.length) };
         }
-        else if (state.charCategorizer(pos)(next) != dist_CharCategory.Word) {
+        else if (state.charCategorizer(pos)(next) != CharCategory.Word) {
             if (canStartStringAt(state, pos, stringPrefixes) > -1 && !probablyInString(state, pos, token, stringPrefixes))
                 return { changes: { insert: token + token, from: pos },
                     effects: closeBracketEffect.of(pos + token.length),
-                    range: dist_EditorSelection.cursor(pos + token.length) };
+                    range: EditorSelection.cursor(pos + token.length) };
         }
         return { range: dont = range };
     });
@@ -35063,11 +35075,11 @@ function handleSame(state, token, allowTriple, config) {
     });
 }
 function nodeStart(state, pos) {
-    let tree = dist_syntaxTree(state).resolveInner(pos + 1);
+    let tree = syntaxTree(state).resolveInner(pos + 1);
     return tree.parent && tree.from == pos;
 }
 function probablyInString(state, pos, quoteToken, prefixes) {
-    let node = dist_syntaxTree(state).resolveInner(pos, -1);
+    let node = syntaxTree(state).resolveInner(pos, -1);
     let maxPrefix = prefixes.reduce((m, p) => Math.max(m, p.length), 0);
     for (let i = 0; i < 5; i++) {
         let start = state.sliceDoc(node.from, Math.min(node.to, node.from + quoteToken.length + maxPrefix));
@@ -35090,11 +35102,11 @@ function probablyInString(state, pos, quoteToken, prefixes) {
 }
 function canStartStringAt(state, pos, prefixes) {
     let charCat = state.charCategorizer(pos);
-    if (charCat(state.sliceDoc(pos - 1, pos)) != dist_CharCategory.Word)
+    if (charCat(state.sliceDoc(pos - 1, pos)) != CharCategory.Word)
         return pos;
     for (let prefix of prefixes) {
         let start = pos - prefix.length;
-        if (state.sliceDoc(start, pos) == prefix && charCat(state.sliceDoc(start - 1, start)) != dist_CharCategory.Word)
+        if (state.sliceDoc(start, pos) == prefix && charCat(state.sliceDoc(start - 1, start)) != CharCategory.Word)
             return start;
     }
     return -1;
@@ -35147,7 +35159,7 @@ function completionStatus(state) {
     return cState && cState.active.some(a => a.isPending) ? "pending"
         : cState && cState.active.some(a => a.state != 0 /* State.Inactive */) ? "active" : null;
 }
-const completionArrayCache = /*@__PURE__*/new WeakMap;
+const completionArrayCache = /*@__PURE__*/(/* unused pure expression or super */ null && (new WeakMap));
 /**
 Returns the available completions as an array.
 */
@@ -35535,7 +35547,7 @@ const gotoLine = view => {
             line = line * (sign == "-" ? -1 : 1) + startLine.number;
         }
         let docLine = state.doc.line(Math.max(1, Math.min(state.doc.lines, line)));
-        let selection = dist_EditorSelection.cursor(docLine.from + Math.max(0, Math.min(col, docLine.length)));
+        let selection = EditorSelection.cursor(docLine.from + Math.max(0, Math.min(col, docLine.length)));
         view.dispatch({
             effects: [close, EditorView.scrollIntoView(selection.from, { y: 'center' })],
             selection,
@@ -35575,15 +35587,15 @@ const matchDeco = /*@__PURE__*/Decoration.mark({ class: "cm-selectionMatch" });
 const mainMatchDeco = /*@__PURE__*/Decoration.mark({ class: "cm-selectionMatch cm-selectionMatch-main" });
 // Whether the characters directly outside the given positions are non-word characters
 function insideWordBoundaries(check, state, from, to) {
-    return (from == 0 || check(state.sliceDoc(from - 1, from)) != dist_CharCategory.Word) &&
-        (to == state.doc.length || check(state.sliceDoc(to, to + 1)) != dist_CharCategory.Word);
+    return (from == 0 || check(state.sliceDoc(from - 1, from)) != CharCategory.Word) &&
+        (to == state.doc.length || check(state.sliceDoc(to, to + 1)) != CharCategory.Word);
 }
 // Whether the characters directly at the given positions are word characters
 function insideWord(check, state, from, to) {
-    return check(state.sliceDoc(from, from + 1)) == dist_CharCategory.Word
-        && check(state.sliceDoc(to - 1, to)) == dist_CharCategory.Word;
+    return check(state.sliceDoc(from, from + 1)) == CharCategory.Word
+        && check(state.sliceDoc(to - 1, to)) == CharCategory.Word;
 }
-const matchHighlighter = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const matchHighlighter = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.decorations = this.getDeco(view);
     }
@@ -35650,7 +35662,7 @@ const defaultTheme = /*@__PURE__*/EditorView.baseTheme({
 // Select the words around the cursors.
 const selectWord = ({ state, dispatch }) => {
     let { selection } = state;
-    let newSel = dist_EditorSelection.create(selection.ranges.map(range => state.wordAt(range.head) || dist_EditorSelection.cursor(range.head)), selection.mainIndex);
+    let newSel = EditorSelection.create(selection.ranges.map(range => state.wordAt(range.head) || EditorSelection.cursor(range.head)), selection.mainIndex);
     if (newSel.eq(selection))
         return false;
     dispatch(state.update({ selection: newSel }));
@@ -35696,7 +35708,7 @@ const selectNextOccurrence = ({ state, dispatch }) => {
     if (!range)
         return false;
     dispatch(state.update({
-        selection: state.selection.addRange(dist_EditorSelection.range(range.from, range.to), false),
+        selection: state.selection.addRange(EditorSelection.range(range.from, range.to), false),
         effects: EditorView.scrollIntoView(range.to)
     }));
     return true;
@@ -35803,10 +35815,10 @@ function stringWordTest(doc, categorizer) {
             bufPos = Math.max(0, from - 2);
             buf = doc.sliceString(bufPos, Math.min(doc.length, to + 2));
         }
-        return (categorizer(charBefore(buf, from - bufPos)) != dist_CharCategory.Word ||
-            categorizer(charAfter(buf, from - bufPos)) != dist_CharCategory.Word) &&
-            (categorizer(charAfter(buf, to - bufPos)) != dist_CharCategory.Word ||
-                categorizer(charBefore(buf, to - bufPos)) != dist_CharCategory.Word);
+        return (categorizer(charBefore(buf, from - bufPos)) != CharCategory.Word ||
+            categorizer(charAfter(buf, from - bufPos)) != CharCategory.Word) &&
+            (categorizer(charAfter(buf, to - bufPos)) != CharCategory.Word ||
+                categorizer(charBefore(buf, to - bufPos)) != CharCategory.Word);
     };
 }
 class StringQuery extends dist_QueryType {
@@ -35879,10 +35891,10 @@ function charAfter(str, index) {
 }
 function regexpWordTest(categorizer) {
     return (_from, _to, match) => !match[0].length ||
-        (categorizer(charBefore(match.input, match.index)) != dist_CharCategory.Word ||
-            categorizer(charAfter(match.input, match.index)) != dist_CharCategory.Word) &&
-            (categorizer(charAfter(match.input, match.index + match[0].length)) != dist_CharCategory.Word ||
-                categorizer(charBefore(match.input, match.index + match[0].length)) != dist_CharCategory.Word);
+        (categorizer(charBefore(match.input, match.index)) != CharCategory.Word ||
+            categorizer(charAfter(match.input, match.index)) != CharCategory.Word) &&
+            (categorizer(charAfter(match.input, match.index + match[0].length)) != CharCategory.Word ||
+                categorizer(charBefore(match.input, match.index + match[0].length)) != CharCategory.Word);
 }
 class RegExpQuery extends dist_QueryType {
     nextMatch(state, curFrom, curTo) {
@@ -35981,7 +35993,7 @@ class SearchState {
     }
 }
 const matchMark = /*@__PURE__*/Decoration.mark({ class: "cm-searchMatch" }), selectedMatchMark = /*@__PURE__*/Decoration.mark({ class: "cm-searchMatch cm-searchMatch-selected" });
-const searchHighlighter = /*@__PURE__*/dist_ViewPlugin.fromClass(class {
+const searchHighlighter = /*@__PURE__*/ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.decorations = this.highlight(view.state.field(searchState));
@@ -36027,7 +36039,7 @@ const findNext = /*@__PURE__*/searchCommand((view, { query }) => {
     let next = query.nextMatch(view.state, to, to);
     if (!next)
         return false;
-    let selection = dist_EditorSelection.single(next.from, next.to);
+    let selection = EditorSelection.single(next.from, next.to);
     let config = view.state.facet(searchConfigFacet);
     view.dispatch({
         selection,
@@ -36047,7 +36059,7 @@ const findPrevious = /*@__PURE__*/searchCommand((view, { query }) => {
     let prev = query.prevMatch(state, from, from);
     if (!prev)
         return false;
-    let selection = dist_EditorSelection.single(prev.from, prev.to);
+    let selection = EditorSelection.single(prev.from, prev.to);
     let config = view.state.facet(searchConfigFacet);
     view.dispatch({
         selection,
@@ -36065,7 +36077,7 @@ const selectMatches = /*@__PURE__*/searchCommand((view, { query }) => {
     if (!ranges || !ranges.length)
         return false;
     view.dispatch({
-        selection: dist_EditorSelection.create(ranges.map(r => dist_EditorSelection.range(r.from, r.to))),
+        selection: EditorSelection.create(ranges.map(r => EditorSelection.range(r.from, r.to))),
         userEvent: "select.search.matches"
     });
     return true;
@@ -36084,10 +36096,10 @@ const selectSelectionMatches = ({ state, dispatch }) => {
             return false;
         if (cur.value.from == from)
             main = ranges.length;
-        ranges.push(dist_EditorSelection.range(cur.value.from, cur.value.to));
+        ranges.push(EditorSelection.range(cur.value.from, cur.value.to));
     }
     dispatch(state.update({
-        selection: dist_EditorSelection.create(ranges, main),
+        selection: EditorSelection.create(ranges, main),
         userEvent: "select.search.matches"
     }));
     return true;
@@ -36113,7 +36125,7 @@ const replaceNext = /*@__PURE__*/searchCommand((view, { query }) => {
     }
     let changeSet = view.state.changes(changes);
     if (next) {
-        selection = dist_EditorSelection.single(next.from, next.to).map(changeSet);
+        selection = EditorSelection.single(next.from, next.to).map(changeSet);
         effects.push(announceMatch(view, next));
         effects.push(state.facet(searchConfigFacet).scrollToMatch(selection.main, view));
     }
@@ -36408,6 +36420,12 @@ const searchExtensions = [
 
 
 ;// ./node_modules/@codemirror/lint/dist/index.js
+/* unused harmony import specifier */ var lint_dist_ViewPlugin;
+/* unused harmony import specifier */ var dist_logException;
+/* unused harmony import specifier */ var dist_gutter;
+/* unused harmony import specifier */ var lint_dist_EditorView;
+/* unused harmony import specifier */ var lint_dist_RangeSet;
+/* unused harmony import specifier */ var dist_StateField;
 
 
 
@@ -36694,7 +36712,7 @@ const lintKeymap = [
     { key: "Mod-Shift-m", run: openLintPanel, preventDefault: true },
     { key: "F8", run: nextDiagnostic }
 ];
-const lintPlugin = /*@__PURE__*/(/* unused pure expression or super */ null && (ViewPlugin.fromClass(class {
+const lintPlugin = /*@__PURE__*/(/* unused pure expression or super */ null && (lint_dist_ViewPlugin.fromClass(class {
     constructor(view) {
         this.view = view;
         this.timeout = -1;
@@ -36717,7 +36735,7 @@ const lintPlugin = /*@__PURE__*/(/* unused pure expression or super */ null && (
                 batchResults(sources.map(s => Promise.resolve(s(this.view))), annotations => {
                     if (this.view.state.doc == state.doc)
                         this.view.dispatch(setDiagnostics(this.view.state, annotations.reduce((a, b) => a.concat(b))));
-                }, error => { logException(this.view.state, error); });
+                }, error => { dist_logException(this.view.state, error); });
         }
     }
     update(update) {
@@ -37223,9 +37241,9 @@ function markersForDiagnostics(doc, diagnostics) {
     for (let line in byLine) {
         markers.push(new LintGutterMarker(byLine[line]).range(+line));
     }
-    return dist_RangeSet.of(markers, true);
+    return lint_dist_RangeSet.of(markers, true);
 }
-const lintGutterExtension = /*@__PURE__*/gutter({
+const lintGutterExtension = /*@__PURE__*/(/* unused pure expression or super */ null && (dist_gutter({
     class: "cm-gutter-lint",
     markers: view => view.state.field(lintGutterMarkers),
     widgetMarker: (view, widget, block) => {
@@ -37236,10 +37254,10 @@ const lintGutterExtension = /*@__PURE__*/gutter({
         });
         return diagnostics.length ? new LintGutterMarker(diagnostics) : null;
     }
-});
-const lintGutterMarkers = /*@__PURE__*/StateField.define({
+})));
+const lintGutterMarkers = /*@__PURE__*/(/* unused pure expression or super */ null && (dist_StateField.define({
     create() {
-        return dist_RangeSet.empty;
+        return lint_dist_RangeSet.empty;
     },
     update(markers, tr) {
         markers = markers.map(tr.changes);
@@ -37254,7 +37272,7 @@ const lintGutterMarkers = /*@__PURE__*/StateField.define({
         }
         return markers;
     }
-});
+})));
 const setLintGutterTooltip = /*@__PURE__*/StateEffect.define();
 const lintGutterTooltip = /*@__PURE__*/StateField.define({
     create() { return null; },
@@ -37265,7 +37283,7 @@ const lintGutterTooltip = /*@__PURE__*/StateField.define({
     },
     provide: field => showTooltip.from(field)
 });
-const lintGutterTheme = /*@__PURE__*/EditorView.baseTheme({
+const lintGutterTheme = /*@__PURE__*/(/* unused pure expression or super */ null && (lint_dist_EditorView.baseTheme({
     ".cm-gutter-lint": {
         width: "1.4em",
         "& .cm-gutterElement": {
@@ -37285,7 +37303,7 @@ const lintGutterTheme = /*@__PURE__*/EditorView.baseTheme({
     ".cm-lint-marker-error": {
         content: /*@__PURE__*/svg(`<circle cx="20" cy="20" r="15" fill="#f87" stroke="#f43" stroke-width="6"/>`)
     },
-});
+})));
 const lintExtensions = [
     lintState,
     /*@__PURE__*/EditorView.decorations.compute([lintState], state => {
@@ -37325,7 +37343,7 @@ function forEachDiagnostic(state, f) {
     let lState = state.field(lintState, false);
     if (lState && lState.diagnostics.size) {
         let pending = [], pendingStart = [], lastEnd = -1;
-        for (let iter = RangeSet.iter([lState.diagnostics]);; iter.next()) {
+        for (let iter = lint_dist_RangeSet.iter([lState.diagnostics]);; iter.next()) {
             for (let i = 0; i < pending.length; i++)
                 if (!iter.value || iter.value.spec.diagnostics.indexOf(pending[i]) < 0) {
                     f(pending[i], pendingStart[i], lastEnd);
@@ -39926,7 +39944,7 @@ completable variable. This is used by language modes like Sass and
 Less to reuse this package's completion logic.
 */
 const defineCSSCompletionSource = (isVariable) => context => {
-    let { state, pos } = context, node = dist_syntaxTree(state).resolveInner(pos, -1);
+    let { state, pos } = context, node = syntaxTree(state).resolveInner(pos, -1);
     let isDash = node.type.isError && node.from == node.to - 1 && state.doc.sliceString(node.from, node.to) == "-";
     if (node.name == "PropertyName" ||
         (isDash || node.name == "TagName") && /^(Block|Styles)$/.test(node.resolve(node.to).name))
@@ -40190,6 +40208,7 @@ const javascript_dist_parser = LRParser.deserialize({
 
 
 ;// ./node_modules/@codemirror/lang-javascript/dist/index.js
+/* unused harmony import specifier */ var lang_javascript_dist_syntaxTree;
 
 
 
@@ -40350,7 +40369,7 @@ Completion source that looks up locally defined names in
 JavaScript code.
 */
 function localCompletionSource(context) {
-    let inner = dist_syntaxTree(context.state).resolveInner(context.pos, -1);
+    let inner = syntaxTree(context.state).resolveInner(context.pos, -1);
     if (dontComplete.indexOf(inner.name) > -1)
         return null;
     let isWord = inner.name == "VariableName" ||
@@ -40398,7 +40417,7 @@ name, it will return null if `context.explicit` is false, and
 */
 function completionPath(context) {
     let read = (node) => context.state.doc.sliceString(node.from, node.to);
-    let inner = syntaxTree(context.state).resolveInner(context.pos, -1);
+    let inner = lang_javascript_dist_syntaxTree(context.state).resolveInner(context.pos, -1);
     if (inner.name == "PropertyName") {
         return pathFor(read, inner.parent, read(inner));
     }
@@ -40593,7 +40612,7 @@ const autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((view, from, to, t
     let base = defaultInsert(), { state } = base;
     let closeTags = state.changeByRange(range => {
         var _a;
-        let { head } = range, around = dist_syntaxTree(state).resolveInner(head - 1, -1), name;
+        let { head } = range, around = syntaxTree(state).resolveInner(head - 1, -1), name;
         if (around.name == "JSXStartTag")
             around = around.parent;
         if (state.doc.sliceString(head - 1, head) != text || around.name == "JSXAttributeValue" && around.to > head) ;
@@ -40605,7 +40624,7 @@ const autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((view, from, to, t
             if (base && empty.from == head - 2 &&
                 ((name = elementName(state.doc, base.firstChild, head)) || ((_a = base.firstChild) === null || _a === void 0 ? void 0 : _a.name) == "JSXFragmentTag")) {
                 let insert = `${name}>`;
-                return { range: dist_EditorSelection.cursor(head + insert.length, -1), changes: { from: head, insert } };
+                return { range: EditorSelection.cursor(head + insert.length, -1), changes: { from: head, insert } };
             }
         }
         else if (text == ">") {
@@ -41142,7 +41161,7 @@ function completeAttrValue(state, schema, tree, from, to) {
     return { from, to, options, validFor: token };
 }
 function htmlCompletionFor(schema, context) {
-    let { state, pos } = context, tree = dist_syntaxTree(state).resolveInner(pos, -1), around = tree.resolve(pos);
+    let { state, pos } = context, tree = syntaxTree(state).resolveInner(pos, -1), around = tree.resolve(pos);
     for (let scan = pos, before; around == tree && (before = tree.childBefore(scan));) {
         let last = before.lastChild;
         if (!last || !last.type.isError || last.from < last.to)
@@ -41313,7 +41332,7 @@ const dist_autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((view, from, 
     let closeTags = state.changeByRange(range => {
         var _a, _b, _c;
         let didType = state.doc.sliceString(range.from - 1, range.to) == text;
-        let { head } = range, after = dist_syntaxTree(state).resolveInner(head, -1), name;
+        let { head } = range, after = syntaxTree(state).resolveInner(head, -1), name;
         if (didType && text == ">" && after.name == "EndTag") {
             let tag = after.parent;
             if (((_b = (_a = tag.parent) === null || _a === void 0 ? void 0 : _a.lastChild) === null || _b === void 0 ? void 0 : _b.name) != "CloseTag" &&
@@ -41331,7 +41350,7 @@ const dist_autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((view, from, 
                 let to = head + (state.doc.sliceString(head, head + 1) === ">" ? 1 : 0);
                 let insert = `${name}>`;
                 return {
-                    range: dist_EditorSelection.cursor(head + insert.length, -1),
+                    range: EditorSelection.cursor(head + insert.length, -1),
                     changes: { from: head, to, insert }
                 };
             }
@@ -41516,7 +41535,7 @@ function dist_findParentElement(tree) {
 }
 function findLocation(state, pos) {
     var _a;
-    let at = dist_syntaxTree(state).resolveInner(pos, -1), inTag = null;
+    let at = syntaxTree(state).resolveInner(pos, -1), inTag = null;
     for (let cur = at; !inTag && cur.parent; cur = cur.parent)
         if (cur.name == "OpenTag" || cur.name == "CloseTag" || cur.name == "SelfClosingTag" || cur.name == "MismatchedCloseTag")
             inTag = cur;
@@ -41762,7 +41781,7 @@ const lang_xml_dist_autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((vie
         var _a, _b, _c;
         let { head } = range;
         let didType = state.doc.sliceString(head - 1, head) == text;
-        let after = dist_syntaxTree(state).resolveInner(head, -1), name;
+        let after = syntaxTree(state).resolveInner(head, -1), name;
         if (didType && text == ">" && after.name == "EndTag") {
             let tag = after.parent;
             if (((_b = (_a = tag.parent) === null || _a === void 0 ? void 0 : _a.lastChild) === null || _b === void 0 ? void 0 : _b.name) != "CloseTag" &&
@@ -41779,7 +41798,7 @@ const lang_xml_dist_autoCloseTags = /*@__PURE__*/EditorView.inputHandler.of((vie
                 let to = head + (state.doc.sliceString(head, head + 1) === ">" ? 1 : 0);
                 let insert = `${name}>`;
                 return {
-                    range: dist_EditorSelection.cursor(head + insert.length, -1),
+                    range: EditorSelection.cursor(head + insert.length, -1),
                     changes: { from: head, to, insert }
                 };
             }
@@ -42508,6 +42527,7 @@ if (!customElements.get("ss-icon")) {
 
 class SWO {
     constructor(targetOrOptions, optionsIfTarget) {
+        this._boundWindowMessageHandler = null;
         let targetElement = null;
         let mergedOptions;
         if (typeof targetOrOptions === "string" ||
@@ -42602,15 +42622,29 @@ class SWO {
             el.toggleCodeEditorBtn.addEventListener("click", () => this.ui.toggleCodeEditor());
         if (el.toggleConsoleBtn)
             el.toggleConsoleBtn.addEventListener("click", () => this.ui.toggleConsole());
-        // Listen for messages from iframe (console bridge & SW)
-        window.addEventListener("message", (event) => {
-            // Handle Console Messages
+        // Only accept console messages from this instance's preview iframe.
+        this._boundWindowMessageHandler = (event) => {
+            var _a;
+            const previewWindow = (_a = el.previewFrame) === null || _a === void 0 ? void 0 : _a.contentWindow;
+            if (!previewWindow || event.source !== previewWindow)
+                return;
             this.consoleBridge.handleMessage(event.data);
-        });
+        };
+        window.addEventListener("message", this._boundWindowMessageHandler);
     }
     // Public Methods Proxy
     formatCode() { this.editor.formatCode(); }
+    openPreviewInNewTab() { this.preview.openNewTab(this.editor.getCode()); }
+    toggleCodeEditor() { this.ui.toggleCodeEditor(); }
+    toggleConsole() { this.ui.toggleConsole(); }
+    resizePreviewDevice(width, height) {
+        this.preview.resizeDevice(width, height);
+    }
     destroy() {
+        if (this._boundWindowMessageHandler) {
+            window.removeEventListener("message", this._boundWindowMessageHandler);
+            this._boundWindowMessageHandler = null;
+        }
         this.editor.destroy();
         this.preview.destroy();
         // Clean up target

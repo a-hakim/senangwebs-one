@@ -27,6 +27,7 @@ class SWO {
   editor: EditorManager;
   preview: PreviewManager;
   consoleBridge: ConsoleBridge;
+  private _boundWindowMessageHandler: ((event: MessageEvent) => void) | null = null;
 
   constructor(targetOrOptions?: string | HTMLElement | SWOOptions, optionsIfTarget?: SWOOptions) {
     let targetElement: HTMLElement | null = null;
@@ -147,16 +148,28 @@ class SWO {
     if (el.toggleCodeEditorBtn) el.toggleCodeEditorBtn.addEventListener("click", () => this.ui.toggleCodeEditor());
     if (el.toggleConsoleBtn) el.toggleConsoleBtn.addEventListener("click", () => this.ui.toggleConsole());
 
-    // Listen for messages from iframe (console bridge & SW)
-    window.addEventListener("message", (event) => {
-        // Handle Console Messages
+    // Only accept console messages from this instance's preview iframe.
+    this._boundWindowMessageHandler = (event: MessageEvent) => {
+        const previewWindow = el.previewFrame?.contentWindow;
+        if (!previewWindow || event.source !== previewWindow) return;
         this.consoleBridge.handleMessage(event.data);
-    });
+    };
+    window.addEventListener("message", this._boundWindowMessageHandler);
   }
 
   // Public Methods Proxy
   formatCode() { this.editor.formatCode(); }
+  openPreviewInNewTab() { this.preview.openNewTab(this.editor.getCode()); }
+  toggleCodeEditor() { this.ui.toggleCodeEditor(); }
+  toggleConsole() { this.ui.toggleConsole(); }
+  resizePreviewDevice(width: string, height: string) {
+      this.preview.resizeDevice(width, height);
+  }
   destroy() { 
+      if (this._boundWindowMessageHandler) {
+          window.removeEventListener("message", this._boundWindowMessageHandler);
+          this._boundWindowMessageHandler = null;
+      }
       this.editor.destroy(); 
       this.preview.destroy();
       // Clean up target
